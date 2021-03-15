@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Weather Comparer</string>
     <string name="title_places">Places</string>
-    <string name="title_dailyForecast">Daily forecast</string>
-    <string name="title_hourlyForecast">Hourly forecast</string>
+    <string name="title_forecast">Forecast</string>
+    <string name="title_map">Map</string>
+    <string name="title_settings">Settings</string>
 </resources>

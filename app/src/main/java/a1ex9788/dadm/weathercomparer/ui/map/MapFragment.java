@@ -1,4 +1,4 @@
-package a1ex9788.dadm.weathercomparer.ui.hourlyForecast;
+package a1ex9788.dadm.weathercomparer.ui.map;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import a1ex9788.dadm.weathercomparer.R;
 
-public class HourlyForecastFragment extends Fragment {
+public class MapFragment extends Fragment {
 
-    private HourlyForecastViewModel hourlyForecastViewModel;
+    private MapViewModel mapViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        hourlyForecastViewModel =
-                new ViewModelProvider(this).get(HourlyForecastViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_hourly_forecast, container, false);
-        final TextView textView = root.findViewById(R.id.text_hourlyForecast);
-        hourlyForecastViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        mapViewModel =
+                new ViewModelProvider(this).get(MapViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_map, container, false);
+        final TextView textView = root.findViewById(R.id.text_map);
+        mapViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

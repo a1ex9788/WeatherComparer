@@ -1,16 +1,16 @@
-package a1ex9788.dadm.weathercomparer.ui.dailyForecast;
+package a1ex9788.dadm.weathercomparer.ui.map;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class DailyForecastViewModel extends ViewModel {
+public class MapViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public DailyForecastViewModel() {
+    public MapViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is daily forecast fragment");
+        mText.setValue("This is map fragment");
     }
 
     public LiveData<String> getText() {
