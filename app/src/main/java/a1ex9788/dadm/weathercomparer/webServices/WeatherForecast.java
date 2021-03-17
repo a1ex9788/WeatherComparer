@@ -3,10 +3,17 @@ package a1ex9788.dadm.weathercomparer.webServices;
 import a1ex9788.dadm.weathercomparer.model.DailyForecast;
 import a1ex9788.dadm.weathercomparer.model.HourlyForecast;
 
-public interface WeatherForecast {
+public abstract class WeatherForecast {
 
-    public DailyForecast GetDailyForecast();
+    protected double latitude, longitude;
 
-    public HourlyForecast GetHourlyForecast();
+    public WeatherForecast(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public abstract DailyForecast getDailyForecast() throws Exception;
+
+    public abstract HourlyForecast getHourlyForecast() throws Exception;
 
 }
