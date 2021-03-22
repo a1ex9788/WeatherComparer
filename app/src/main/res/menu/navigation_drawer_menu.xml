@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/navigation_forecast"
+        android:icon="@drawable/ic_forecast"
+        android:title="@string/title_forecast"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/navigation_places"
+        android:icon="@drawable/ic_places"
+        android:title="@string/title_places"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/navigation_map"
+        android:icon="@drawable/ic_map"
+        android:title="@string/title_map"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/title_settings"
+        app:showAsAction="ifRoom"/>
+
+</menu>
