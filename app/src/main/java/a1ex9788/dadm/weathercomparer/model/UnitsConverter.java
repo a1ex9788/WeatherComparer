@@ -12,6 +12,10 @@ public class UnitsConverter {
         return null;
     }
 
+    public static WeatherCondition accuWeatherConditionToStandard(int icon) {
+        return null;
+    }
+
     public static double metersPerSecondToKilometersPerHour(double metersPerSecondValue) {
         return (metersPerSecondValue / 1000.0) * 3600.0;
     }
