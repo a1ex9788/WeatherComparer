@@ -16,7 +16,7 @@ import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.model.DailyForecast;
 import a1ex9788.dadm.weathercomparer.model.HourlyForecast;
 import a1ex9788.dadm.weathercomparer.webServices.WeatherForecast;
-import a1ex9788.dadm.weathercomparer.webServices.weatherBit.WeatherBitForecast;
+import a1ex9788.dadm.weathercomparer.webServices.accuWeather.AccuWeatherForecast;
 
 public class ForecastFragment extends Fragment {
 
@@ -48,10 +48,13 @@ public class ForecastFragment extends Fragment {
 
         @Override
         public void run() {
-            WeatherForecast weatherForecast = new WeatherBitForecast(39.289, -0.799);
             try {
+                WeatherForecast weatherForecast = new AccuWeatherForecast(39.289, -0.799);
+                //WeatherForecast weatherForecast = new OpenWeatherForecast(39.289, -0.799);
+                //WeatherForecast weatherForecast = new WeatherBitForecast(39.289, -0.799);
                 DailyForecast dailyForecast = weatherForecast.getDailyForecast();
                 HourlyForecast hourlyForecast = weatherForecast.getHourlyForecast();
+                int nothing = 0;
             } catch (Exception e) {
                 e.printStackTrace();
             }

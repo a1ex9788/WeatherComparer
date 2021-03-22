@@ -8,11 +8,15 @@ public class UnitsConverter {
         return new Date((long) unixUtcTimestamp * 1000);
     }
 
-    public static WeatherCondition weatherBitConditionToStandard(int code) {
+    public static WeatherCondition accuWeatherConditionToStandard(int icon) {
         return null;
     }
 
-    public static WeatherCondition accuWeatherConditionToStandard(int icon) {
+    public static WeatherCondition openWeatherConditionToStandard(int id) {
+        return null;
+    }
+
+    public static WeatherCondition weatherBitConditionToStandard(int code) {
         return null;
     }
 
