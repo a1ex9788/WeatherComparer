@@ -4,10 +4,14 @@ import java.util.List;
 
 public class HourlyForecast {
 
-    List<HourForecast> hourForecasts;
+    private List<HourForecast> hourForecasts;
 
     public HourlyForecast(List<HourForecast> hourForecasts) {
         this.hourForecasts = hourForecasts;
+    }
+
+    public List<HourForecast> getHourForecasts() {
+        return hourForecasts;
     }
 
 }

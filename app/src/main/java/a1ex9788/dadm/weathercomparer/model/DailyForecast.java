@@ -4,10 +4,14 @@ import java.util.List;
 
 public class DailyForecast {
 
-    List<DayForecast> dayForecasts;
+    private List<DayForecast> dayForecasts;
 
     public DailyForecast(List<DayForecast> dayForecasts) {
         this.dayForecasts = dayForecasts;
+    }
+
+    public List<DayForecast> getDayForecasts() {
+        return dayForecasts;
     }
 
 }
