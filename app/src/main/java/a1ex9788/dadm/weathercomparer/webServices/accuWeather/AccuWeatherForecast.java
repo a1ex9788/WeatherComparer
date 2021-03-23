@@ -5,10 +5,8 @@ import android.net.Uri;
 import java.util.ArrayList;
 import java.util.List;
 
-import a1ex9788.dadm.weathercomparer.model.DailyForecast;
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
-import a1ex9788.dadm.weathercomparer.model.HourlyForecast;
 import a1ex9788.dadm.weathercomparer.model.UnitsConverter;
 import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 import a1ex9788.dadm.weathercomparer.webServices.WeatherForecast;
@@ -23,7 +21,7 @@ public class AccuWeatherForecast extends WeatherForecast {
     }
 
     @Override
-    public DailyForecast getDailyForecast() throws Exception {
+    public List<DayForecast> getDailyForecast() throws Exception {
         if (locationKey == null) {
             getLocationKey();
         }
@@ -36,7 +34,7 @@ public class AccuWeatherForecast extends WeatherForecast {
     }
 
     @Override
-    public HourlyForecast getHourlyForecast() throws Exception {
+    public List<HourForecast> getHourlyForecast() throws Exception {
         if (locationKey == null) {
             getLocationKey();
         }
@@ -81,11 +79,11 @@ public class AccuWeatherForecast extends WeatherForecast {
         return uriBuilder;
     }
 
-    private DailyForecast convertToStandard(AccuWeatherDailyForecast accuWeatherDailyForecast) {
-        List<DayForecast> dayForecasts = new ArrayList();
+    private List<DayForecast> convertToStandard(AccuWeatherDailyForecast accuWeatherDailyForecast) {
+        List<DayForecast> dailyForecast = new ArrayList();
 
         for (AccuWeatherDailyForecast.AccuWeatherDayForecast accuWeatherDayForecast : accuWeatherDailyForecast.DailyForecasts) {
-            dayForecasts.add(new DayForecast(
+            dailyForecast.add(new DayForecast(
                     accuWeatherDayForecast.Date,
                     accuWeatherDayForecast.Day == null || accuWeatherDayForecast.Day.Icon == null
                             ? null : UnitsConverter.accuWeatherConditionToStandard(accuWeatherDayForecast.Day.Icon),
@@ -119,14 +117,14 @@ public class AccuWeatherForecast extends WeatherForecast {
             ));
         }
 
-        return new DailyForecast(dayForecasts);
+        return dailyForecast;
     }
 
-    private HourlyForecast convertToStandard(AccuWeatherHourlyForecast.AccuWeatherHourForecast[] accuWeatherHourForecasts) {
-        List<HourForecast> hourForecasts = new ArrayList();
+    private List<HourForecast> convertToStandard(AccuWeatherHourlyForecast.AccuWeatherHourForecast[] accuWeatherHourForecasts) {
+        List<HourForecast> hourlyForecast = new ArrayList();
 
         for (AccuWeatherHourlyForecast.AccuWeatherHourForecast accuWeatherHourForecast : accuWeatherHourForecasts) {
-            hourForecasts.add(new HourForecast(
+            hourlyForecast.add(new HourForecast(
                     accuWeatherHourForecast.DateTime,
                     accuWeatherHourForecast.WeatherIcon == null ? null : UnitsConverter.accuWeatherConditionToStandard(accuWeatherHourForecast.WeatherIcon),
                     accuWeatherHourForecast.Temperature == null ? null : accuWeatherHourForecast.Temperature.Value,
@@ -140,7 +138,7 @@ public class AccuWeatherForecast extends WeatherForecast {
             ));
         }
 
-        return new HourlyForecast(hourForecasts);
+        return hourlyForecast;
     }
 
 }

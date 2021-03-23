@@ -5,10 +5,8 @@ import android.net.Uri;
 import java.util.ArrayList;
 import java.util.List;
 
-import a1ex9788.dadm.weathercomparer.model.DailyForecast;
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
-import a1ex9788.dadm.weathercomparer.model.HourlyForecast;
 import a1ex9788.dadm.weathercomparer.model.UnitsConverter;
 import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 import a1ex9788.dadm.weathercomparer.webServices.WeatherForecast;
@@ -23,7 +21,7 @@ public class OpenWeatherForecast extends WeatherForecast {
     }
 
     @Override
-    public DailyForecast getDailyForecast() throws Exception {
+    public List<DayForecast> getDailyForecast() throws Exception {
         if (openWeatherCompleteForecast == null) {
             GetOpenWeatherCompleteForecast();
         }
@@ -32,7 +30,7 @@ public class OpenWeatherForecast extends WeatherForecast {
     }
 
     @Override
-    public HourlyForecast getHourlyForecast() throws Exception {
+    public List<HourForecast> getHourlyForecast() throws Exception {
         if (openWeatherCompleteForecast == null) {
             GetOpenWeatherCompleteForecast();
         }
@@ -55,11 +53,11 @@ public class OpenWeatherForecast extends WeatherForecast {
         openWeatherCompleteForecast = WebServicesHelper.getWebServiceAnswer(uriBuilder, OpenWeatherCompleteForecast.class);
     }
 
-    private DailyForecast convertToDailyStandard(OpenWeatherCompleteForecast openWeatherCompleteForecast) {
-        List<DayForecast> dayForecasts = new ArrayList();
+    private List<DayForecast> convertToDailyStandard(OpenWeatherCompleteForecast openWeatherCompleteForecast) {
+        List<DayForecast> dailyForecast = new ArrayList();
 
         for (OpenWeatherCompleteForecast.OpenWeatherDayForecast openWeatherDayForecast : openWeatherCompleteForecast.daily) {
-            dayForecasts.add(new DayForecast(
+            dailyForecast.add(new DayForecast(
                     openWeatherDayForecast.dt == null ? null : UnitsConverter.unixUtcToDate(openWeatherDayForecast.dt),
                     openWeatherDayForecast.weather == null || openWeatherDayForecast.weather.get(0) == null || openWeatherDayForecast.weather.get(0).id == null
                             ? null : UnitsConverter.openWeatherConditionToStandard(openWeatherDayForecast.weather.get(0).id),
@@ -78,14 +76,14 @@ public class OpenWeatherForecast extends WeatherForecast {
             ));
         }
 
-        return new DailyForecast(dayForecasts);
+        return dailyForecast;
     }
 
-    private HourlyForecast convertToHourlyStandard(OpenWeatherCompleteForecast openWeatherCompleteForecast) {
-        List<HourForecast> hourForecasts = new ArrayList();
+    private List<HourForecast> convertToHourlyStandard(OpenWeatherCompleteForecast openWeatherCompleteForecast) {
+        List<HourForecast> hourlyForecast = new ArrayList();
 
         for (OpenWeatherCompleteForecast.OpenWeatherHourForecast openWeatherHourForecast : openWeatherCompleteForecast.hourly) {
-            hourForecasts.add(new HourForecast(
+            hourlyForecast.add(new HourForecast(
                     openWeatherHourForecast.dt == null ? null : UnitsConverter.unixUtcToDate(openWeatherHourForecast.dt),
                     openWeatherHourForecast.weather == null || openWeatherHourForecast.weather.get(0) == null || openWeatherHourForecast.weather.get(0).id == null
                             ? null : UnitsConverter.openWeatherConditionToStandard(openWeatherHourForecast.weather.get(0).id),
@@ -100,7 +98,7 @@ public class OpenWeatherForecast extends WeatherForecast {
             ));
         }
 
-        return new HourlyForecast(hourForecasts);
+        return hourlyForecast;
     }
 
 }

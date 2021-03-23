@@ -7,10 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import a1ex9788.dadm.weathercomparer.model.DailyForecast;
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
-import a1ex9788.dadm.weathercomparer.model.HourlyForecast;
 import a1ex9788.dadm.weathercomparer.model.UnitsConverter;
 import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 import a1ex9788.dadm.weathercomparer.webServices.WeatherForecast;
@@ -23,7 +21,7 @@ public class WeatherBitForecast extends WeatherForecast {
     }
 
     @Override
-    public DailyForecast getDailyForecast() throws Exception {
+    public List<DayForecast> getDailyForecast() throws Exception {
         Uri.Builder uriBuilder = prepareUriBuilder("daily");
 
         WeatherBitDailyForecast weatherBitDailyForecast = WebServicesHelper.getWebServiceAnswer(uriBuilder, WeatherBitDailyForecast.class);
@@ -32,7 +30,7 @@ public class WeatherBitForecast extends WeatherForecast {
     }
 
     @Override
-    public HourlyForecast getHourlyForecast() throws Exception {
+    public List<HourForecast> getHourlyForecast() throws Exception {
         Uri.Builder uriBuilder = prepareUriBuilder("hourly");
 
         WeatherBitHourlyForecast weatherBitHourlyForecast = WebServicesHelper.getWebServiceAnswer(uriBuilder, WeatherBitHourlyForecast.class);
@@ -54,11 +52,11 @@ public class WeatherBitForecast extends WeatherForecast {
         return uriBuilder;
     }
 
-    private DailyForecast convertToStandard(WeatherBitDailyForecast weatherBitDailyForecast) {
-        List<DayForecast> dayForecasts = new ArrayList();
+    private List<DayForecast> convertToStandard(WeatherBitDailyForecast weatherBitDailyForecast) {
+        List<DayForecast> dailyForecast = new ArrayList();
 
         for (WeatherBitDailyForecast.WeatherBitDayForecast weatherBitDayForecast : weatherBitDailyForecast.data) {
-            dayForecasts.add(new DayForecast(
+            dailyForecast.add(new DayForecast(
                     weatherBitDayForecast.datetime,
                     weatherBitDayForecast.weather == null || weatherBitDayForecast.weather.code == null
                             ? null : UnitsConverter.weatherBitConditionToStandard(weatherBitDayForecast.weather.code),
@@ -78,14 +76,14 @@ public class WeatherBitForecast extends WeatherForecast {
             ));
         }
 
-        return new DailyForecast(dayForecasts);
+        return dailyForecast;
     }
 
-    private HourlyForecast convertToStandard(WeatherBitHourlyForecast weatherBitHourlyForecast) throws ParseException {
-        List<HourForecast> hourForecasts = new ArrayList();
+    private List<HourForecast> convertToStandard(WeatherBitHourlyForecast weatherBitHourlyForecast) throws ParseException {
+        List<HourForecast> hourlyForecast = new ArrayList();
 
         for (WeatherBitHourlyForecast.WeatherBitHourForecast weatherBitHourForecast : weatherBitHourlyForecast.data) {
-            hourForecasts.add(new HourForecast(
+            hourlyForecast.add(new HourForecast(
                     weatherBitHourForecast.datetime == null ? null : new SimpleDateFormat("yyyy-MM-dd:HH").parse(weatherBitHourForecast.datetime),
                     weatherBitHourForecast.weather == null || weatherBitHourForecast.weather.code == null
                             ? null : UnitsConverter.weatherBitConditionToStandard(weatherBitHourForecast.weather.code),
@@ -100,7 +98,7 @@ public class WeatherBitForecast extends WeatherForecast {
             ));
         }
 
-        return new HourlyForecast(hourForecasts);
+        return hourlyForecast;
     }
 
 }

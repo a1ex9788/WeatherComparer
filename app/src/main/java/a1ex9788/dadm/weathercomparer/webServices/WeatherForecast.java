@@ -1,7 +1,9 @@
 package a1ex9788.dadm.weathercomparer.webServices;
 
-import a1ex9788.dadm.weathercomparer.model.DailyForecast;
-import a1ex9788.dadm.weathercomparer.model.HourlyForecast;
+import java.util.List;
+
+import a1ex9788.dadm.weathercomparer.model.DayForecast;
+import a1ex9788.dadm.weathercomparer.model.HourForecast;
 
 public abstract class WeatherForecast {
 
@@ -12,8 +14,8 @@ public abstract class WeatherForecast {
         this.longitude = longitude;
     }
 
-    public abstract DailyForecast getDailyForecast() throws Exception;
+    public abstract List<DayForecast> getDailyForecast() throws Exception;
 
-    public abstract HourlyForecast getHourlyForecast() throws Exception;
+    public abstract List<HourForecast> getHourlyForecast() throws Exception;
 
 }
