@@ -1,4 +1,4 @@
-package a1ex9788.dadm.weathercomparer.webServices;
+package a1ex9788.dadm.weathercomparer.webServices.forecasts;
 
 import java.util.List;
 

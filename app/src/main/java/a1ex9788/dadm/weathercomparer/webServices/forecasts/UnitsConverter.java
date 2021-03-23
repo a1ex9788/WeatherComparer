@@ -1,6 +1,9 @@
-package a1ex9788.dadm.weathercomparer.model;
+package a1ex9788.dadm.weathercomparer.webServices.forecasts;
 
 import java.util.Date;
+
+import a1ex9788.dadm.weathercomparer.model.UvIndex;
+import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
 
 public class UnitsConverter {
 

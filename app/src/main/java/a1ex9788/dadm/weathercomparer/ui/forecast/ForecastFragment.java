@@ -17,8 +17,8 @@ import java.util.List;
 import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
-import a1ex9788.dadm.weathercomparer.webServices.WeatherForecast;
-import a1ex9788.dadm.weathercomparer.webServices.accuWeather.AccuWeatherForecast;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecast;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeatherForecast;
 
 public class ForecastFragment extends Fragment {
 

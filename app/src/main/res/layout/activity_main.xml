@@ -17,13 +17,13 @@
             android:layout_height="wrap_content"
             android:background="@color/blueVioletCrayola"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fcv_navigation_drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/activity_horizontal_margin"/>
+            android:padding="@dimen/activity_horizontal_margin" />
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -32,6 +32,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/header_navigation_drawer"
-        app:menu="@menu/navigation_drawer_menu"/>
+        app:menu="@menu/navigation_drawer_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

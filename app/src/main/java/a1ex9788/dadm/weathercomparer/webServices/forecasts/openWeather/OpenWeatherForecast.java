@@ -1,4 +1,4 @@
-package a1ex9788.dadm.weathercomparer.webServices.openWeather;
+package a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather;
 
 import android.net.Uri;
 
@@ -7,13 +7,13 @@ import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
-import a1ex9788.dadm.weathercomparer.model.UnitsConverter;
-import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
-import a1ex9788.dadm.weathercomparer.webServices.WeatherForecast;
 import a1ex9788.dadm.weathercomparer.webServices.WebServicesHelper;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.UnitsConverter;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecast;
 
 public class OpenWeatherForecast extends WeatherForecast {
 
+    public static final String API_KEY = "29351929fe3ab873d5ba07eeab75f5d8";
     private OpenWeatherCompleteForecast openWeatherCompleteForecast;
 
     public OpenWeatherForecast(double latitude, double longitude) {
@@ -48,7 +48,7 @@ public class OpenWeatherForecast extends WeatherForecast {
         uriBuilder.appendQueryParameter("lat", latitude + "");
         uriBuilder.appendQueryParameter("lon", longitude + "");
         uriBuilder.appendQueryParameter("units", "metric");
-        uriBuilder.appendQueryParameter("appid", ApiKeys.OPEN_WEATHER);
+        uriBuilder.appendQueryParameter("appid", API_KEY);
 
         openWeatherCompleteForecast = WebServicesHelper.getWebServiceAnswer(uriBuilder, OpenWeatherCompleteForecast.class);
     }

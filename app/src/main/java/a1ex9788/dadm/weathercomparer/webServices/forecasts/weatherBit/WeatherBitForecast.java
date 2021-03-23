@@ -1,4 +1,4 @@
-package a1ex9788.dadm.weathercomparer.webServices.weatherBit;
+package a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit;
 
 import android.net.Uri;
 
@@ -9,12 +9,13 @@ import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
-import a1ex9788.dadm.weathercomparer.model.UnitsConverter;
-import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
-import a1ex9788.dadm.weathercomparer.webServices.WeatherForecast;
 import a1ex9788.dadm.weathercomparer.webServices.WebServicesHelper;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.UnitsConverter;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecast;
 
 public class WeatherBitForecast extends WeatherForecast {
+
+    public static final String API_KEY = "65e807b828e44105b3f8a64cb5e82604";
 
     public WeatherBitForecast(double latitude, double longitude) {
         super(latitude, longitude);
@@ -47,7 +48,7 @@ public class WeatherBitForecast extends WeatherForecast {
         uriBuilder.appendPath(forecastType);
         uriBuilder.appendQueryParameter("lat", latitude + "");
         uriBuilder.appendQueryParameter("lon", longitude + "");
-        uriBuilder.appendQueryParameter("key", ApiKeys.WEATHER_BIT);
+        uriBuilder.appendQueryParameter("key", API_KEY);
 
         return uriBuilder;
     }

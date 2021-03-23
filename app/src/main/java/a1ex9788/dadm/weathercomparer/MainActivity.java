@@ -1,11 +1,7 @@
 package a1ex9788.dadm.weathercomparer;
 
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.MenuItem;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,10 +9,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.navigation.NavigationView;
 
 import a1ex9788.dadm.weathercomparer.ui.forecast.ForecastFragment;
 import a1ex9788.dadm.weathercomparer.ui.map.MapFragment;
@@ -27,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private Toolbar tbNavigationDrawer;
     private DrawerLayout dlNavigationDrawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             this.dlNavigationDrawer.openDrawer(GravityCompat.START);
             return true;
         }
@@ -53,10 +48,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if(this.dlNavigationDrawer.isDrawerOpen(GravityCompat.START)){
+        if (this.dlNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
             this.dlNavigationDrawer.closeDrawer(GravityCompat.START);
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
@@ -65,21 +59,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         this.dlNavigationDrawer.closeDrawer(GravityCompat.START);
         Class<? extends Fragment> fragmentClass = null;
-        if(item.getItemId() == R.id.navigation_forecast){
+        if (item.getItemId() == R.id.navigation_forecast) {
             fragmentClass = ForecastFragment.class;
             getSupportActionBar().setTitle(R.string.title_forecast);
-        }else if(item.getItemId() == R.id.navigation_places){
+        } else if (item.getItemId() == R.id.navigation_places) {
             fragmentClass = PlacesFragment.class;
             getSupportActionBar().setTitle(R.string.title_places);
-        }else if(item.getItemId() == R.id.navigation_map) {
+        } else if (item.getItemId() == R.id.navigation_map) {
             fragmentClass = MapFragment.class;
             getSupportActionBar().setTitle(R.string.title_map);
-        }else if(item.getItemId() == R.id.navigation_settings) {
+        } else if (item.getItemId() == R.id.navigation_settings) {
             fragmentClass = SettingsFragment.class;
             getSupportActionBar().setTitle(R.string.title_settings);
         }
 
-        if(fragmentClass != null){
+        if (fragmentClass != null) {
 
             getSupportFragmentManager()
                     .beginTransaction()
@@ -90,4 +84,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return false;
     }
+
 }

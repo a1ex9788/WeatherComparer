@@ -1,4 +1,4 @@
-package a1ex9788.dadm.weathercomparer.webServices.weatherBit;
+package a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit;
 
 import java.util.ArrayList;
 import java.util.List;

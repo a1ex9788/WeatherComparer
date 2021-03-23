@@ -1,4 +1,4 @@
-package a1ex9788.dadm.weathercomparer.webServices.accuWeather;
+package a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather;
 
 import android.net.Uri;
 
@@ -7,13 +7,13 @@ import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
-import a1ex9788.dadm.weathercomparer.model.UnitsConverter;
-import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
-import a1ex9788.dadm.weathercomparer.webServices.WeatherForecast;
 import a1ex9788.dadm.weathercomparer.webServices.WebServicesHelper;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.UnitsConverter;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecast;
 
 public class AccuWeatherForecast extends WeatherForecast {
 
+    public static final String API_KEY = "yOLINkCqLbJQEg8YcjA1juHumFGgpIp0";
     private String locationKey;
 
     public AccuWeatherForecast(double latitude, double longitude) {
@@ -56,7 +56,7 @@ public class AccuWeatherForecast extends WeatherForecast {
         uriBuilder.appendPath("geoposition");
         uriBuilder.appendPath("search");
         uriBuilder.appendQueryParameter("q", latitude + "," + longitude);
-        uriBuilder.appendQueryParameter("apikey", ApiKeys.ACCU_WEATHER);
+        uriBuilder.appendQueryParameter("apikey", API_KEY);
 
         AccuWeatherLocation accuWeatherLocation = WebServicesHelper.getWebServiceAnswer(uriBuilder, AccuWeatherLocation.class);
 
@@ -74,7 +74,7 @@ public class AccuWeatherForecast extends WeatherForecast {
         uriBuilder.appendPath(locationKey);
         uriBuilder.appendQueryParameter("details", "true");
         uriBuilder.appendQueryParameter("metric", "true");
-        uriBuilder.appendQueryParameter("apikey", ApiKeys.ACCU_WEATHER);
+        uriBuilder.appendQueryParameter("apikey", API_KEY);
 
         return uriBuilder;
     }
