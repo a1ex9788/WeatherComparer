@@ -6,17 +6,102 @@
     android:layout_height="match_parent"
     tools:context=".ui.forecast.ForecastFragment">
 
-    <TextView
-        android:id="@+id/text_forecast"
+    <com.airbnb.lottie.LottieAnimationView
+
+        android:id="@+id/animationViewWeather"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="256dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_speed="1.1"
+        />
+
+    <ImageView
+        android:id="@+id/windIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:contentDescription="@string/windPhoto"
+        android:src="@drawable/wind"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintRight_toLeftOf="@id/temperatureIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/animationViewWeather" />
+
+    <ImageView
+        android:id="@+id/temperatureIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:contentDescription="@string/thermometerPhoto"
+        android:src="@drawable/thermometer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/animationViewWeather" />
+
+    <ImageView
+        android:id="@+id/humidityIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:contentDescription="@string/humidityPhoto"
+        android:src="@drawable/humidity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@id/animationViewWeather" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:text="30 km/h"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/windIcon"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/windIcon" />
+
+    <View
+        android:id="@+id/firstVerticalLigne"
+        android:layout_width="3dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/grey"
+        app:layout_constraintEnd_toStartOf="@+id/humidityIcon"
+        app:layout_constraintStart_toEndOf="@+id/temperatureIcon"
+        app:layout_constraintTop_toBottomOf="@id/animationViewWeather" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:text="22°"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/temperatureIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/temperatureIcon" />
+
+    <View
+        android:id="@+id/secondVerticalLigne"
+        android:layout_width="3dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/grey"
+        app:layout_constraintEnd_toStartOf="@+id/temperatureIcon"
+        app:layout_constraintStart_toEndOf="@+id/windIcon"
+        app:layout_constraintTop_toBottomOf="@id/animationViewWeather" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:text="15%"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/humidityIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="@+id/humidityIcon" />
 </androidx.constraintlayout.widget.ConstraintLayout>
