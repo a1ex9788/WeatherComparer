@@ -8,11 +8,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +28,7 @@ import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeath
 public class ForecastFragment extends Fragment {
 
     private ForecastViewModel forecastViewModel;
+    private ConstraintLayout clBottomSheet;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -91,6 +94,9 @@ public class ForecastFragment extends Fragment {
                 break;
         }
 
+        this.clBottomSheet = root.findViewById(R.id.clBottomSheet);
+        final BottomSheetBehavior clBottomSheetBehaviour = BottomSheetBehavior.from(this.clBottomSheet);
+        clBottomSheetBehaviour.setState(BottomSheetBehavior.STATE_DRAGGING);
         return root;
     }
 
