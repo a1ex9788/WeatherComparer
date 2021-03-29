@@ -10,6 +10,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import a1ex9788.dadm.weathercomparer.ui.map.MapPlace;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

@@ -8,4 +8,6 @@ public class ApiKeys {
 
     public static final String ACCU_WEATHER = "yOLINkCqLbJQEg8YcjA1juHumFGgpIp0";
 
+    public static final String GOOGLE = "AIzaSyAiKQz6mYGVdAYfIWDxkTiOIa0x86e2ntA";
+
 }
