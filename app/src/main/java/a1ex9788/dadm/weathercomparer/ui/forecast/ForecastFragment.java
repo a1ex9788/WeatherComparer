@@ -1,10 +1,12 @@
 package a1ex9788.dadm.weathercomparer.ui.forecast;
 
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,29 +28,29 @@ public class ForecastFragment extends Fragment {
     private ImageButton ibNavigationDrawer;
     private FragmentForecastBinding binding;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentForecastBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         // Set default data
-        binding.setWeatherConditionText(WeatherCondition.Clear.getText());
+        setWeatherConditionAnimation(root, WeatherCondition.UnknownPrecipitation);
+        binding.setWeatherConditionText("No data");
         binding.setWindSpeed("0 km/h");
         binding.setAverageTemperature("0 ºC");
-        binding.setRainProbability("0%");
+        binding.setRainProbability("0 %");
 
         forecastViewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
 
         new Thread() {
             @Override
             public void run() {
+                Looper.prepare();
+
                 try {
                     List<DayForecast> dailyForecast = forecastViewModel.getAverageDailyForecast();
-
                     setDailyForecastData(root, dailyForecast.get(0));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Toast.makeText(getActivity().getBaseContext(), R.string.toast_forecastError, Toast.LENGTH_LONG).show();
                 }
             }
         }.start();
@@ -61,15 +63,19 @@ public class ForecastFragment extends Fragment {
 
     private void setDailyForecastData(View root, DayForecast dayForecast) {
         binding.setWeatherConditionText(dayForecast.getWeatherCondition().getText());
-        binding.setWindSpeed(dayForecast.getWindSpeed_kilometersPerHour() + " km/ h");
-        binding.setAverageTemperature(dayForecast.getAvgTemperature_celsius() + " ºC");
-        binding.setRainProbability(dayForecast.getPrecipitationProbability() + " 0%");
+        binding.setWindSpeed(roundToTwoDecimals(dayForecast.getWindSpeed_kilometersPerHour()) + " km/ h");
+        binding.setAverageTemperature(roundToTwoDecimals(dayForecast.getAvgTemperature_celsius()) + " ºC");
+        binding.setRainProbability(roundToTwoDecimals(dayForecast.getPrecipitationProbability()) + " %");
 
         setWeatherConditionAnimation(root, dayForecast.getWeatherCondition());
     }
 
+    private double roundToTwoDecimals(double d) {
+        return Math.round(d * 100 / 100);
+    }
+
     private void setWeatherConditionAnimation(View root, WeatherCondition weatherCondition) {
-        final LottieAnimationView animationView = root.findViewById(R.id.animationViewWeather);
+        LottieAnimationView animationView = root.findViewById(R.id.animationViewWeather);
         animationView.setAnimationFromUrl(weatherCondition.getIconAddress());
     }
 
