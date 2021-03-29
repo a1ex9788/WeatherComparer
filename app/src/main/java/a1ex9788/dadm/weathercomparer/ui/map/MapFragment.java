@@ -1,6 +1,7 @@
 package a1ex9788.dadm.weathercomparer.ui.map;
 
 import android.database.Observable;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +11,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -23,6 +26,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -109,6 +113,13 @@ public class MapFragment extends Fragment{
                 autocompleteFragment.getView().findViewById(R.id.places_autocomplete_clear_button).setVisibility(View.INVISIBLE);
                 place = null;
                 binding.setPlace(place);
+            });
+
+            ImageView ivSearchIcon = (ImageView)autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_button);
+
+            ivSearchIcon.setImageIcon(Icon.createWithResource(getContext(),R.drawable.ic_menu));
+            ivSearchIcon.setOnClickListener(view -> {
+                ((DrawerLayout)getActivity().findViewById(R.id.nd_layout)).openDrawer(GravityCompat.START);
             });
         });
 

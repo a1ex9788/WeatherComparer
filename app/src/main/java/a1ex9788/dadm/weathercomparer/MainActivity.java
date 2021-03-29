@@ -26,11 +26,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nd_layout, ForecastFragment.class, null)
-                .commit();
         this.tbNavigationDrawer = findViewById(R.id.tb_navigation_drawer);
         setSupportActionBar(this.tbNavigationDrawer);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

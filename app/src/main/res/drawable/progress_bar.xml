@@ -6,8 +6,8 @@
         android:thicknessRatio="9" android:useLevel="false">
         <size android:width="76dip" android:height="76dip" />
         <gradient android:type="sweep" android:useLevel="false"
-            android:startColor="@color/purple_200"
-            android:endColor="@color/purple_700"
+            android:startColor="@color/blueVioletCrayola"
+            android:endColor="@color/lavenderWeb"
             android:angle="0"/>
     </shape>
 </rotate>
