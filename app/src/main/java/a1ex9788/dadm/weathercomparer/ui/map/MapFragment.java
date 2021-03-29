@@ -1,8 +1,13 @@
 package a1ex9788.dadm.weathercomparer.ui.map;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.database.Observable;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
+import android.transition.Fade;
+import android.transition.Transition;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,18 +61,20 @@ public class MapFragment extends Fragment{
         mapViewModel =
                 new ViewModelProvider(this).get(MapViewModel.class);
 
-
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
 
         ((MainActivity) getActivity()).getSupportActionBar().hide();
 
-
-
         supportMapFragment.getMapAsync(googleMap -> {
             map = googleMap;
             Log.i(MAP_TAG, map.toString());
             Places.initialize(getContext(), ApiKeys.GOOGLE);
+
+            map.setOnCameraMoveStartedListener(latLng -> {
+               resetInfo(container);
+            });
+
             autocompleteFragment = (AutocompleteSupportFragment)
                     getChildFragmentManager().findFragmentById(R.id.f_autocomplete);
 
@@ -109,10 +116,7 @@ public class MapFragment extends Fragment{
             });
 
             autocompleteFragment.getView().findViewById(R.id.places_autocomplete_clear_button).setOnClickListener(view -> {
-                ((EditText) autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setText(null);
-                autocompleteFragment.getView().findViewById(R.id.places_autocomplete_clear_button).setVisibility(View.INVISIBLE);
-                place = null;
-                binding.setPlace(place);
+                resetInfo(container);
             });
 
             ImageView ivSearchIcon = (ImageView)autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_button);
@@ -123,6 +127,19 @@ public class MapFragment extends Fragment{
             });
         });
 
+
         return root;
+    }
+
+    void resetInfo(ViewGroup container){
+        Transition transition = new Fade();
+        transition.setDuration(600);
+        transition.addTarget(R.id.map_fragment_place_card);
+
+        TransitionManager.beginDelayedTransition(container, transition);
+        ((EditText) autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setText(null);
+        autocompleteFragment.getView().findViewById(R.id.places_autocomplete_clear_button).setVisibility(View.GONE);
+        place = null;
+        binding.setPlace(place);
     }
 }

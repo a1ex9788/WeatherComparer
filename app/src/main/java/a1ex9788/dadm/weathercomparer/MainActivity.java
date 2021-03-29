@@ -27,10 +27,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.tbNavigationDrawer = findViewById(R.id.tb_navigation_drawer);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fcv_navigation_drawer, ForecastFragment.class, null)
+                .commit();
         setSupportActionBar(this.tbNavigationDrawer);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
-        getSupportActionBar().setTitle(R.string.app_name);
+        getSupportActionBar().hide();
         this.dlNavigationDrawer = findViewById(R.id.nd_layout);
         NavigationView nvNavigationDrawer = findViewById(R.id.nv_navigation_drawer);
         nvNavigationDrawer.setNavigationItemSelectedListener(this);
@@ -60,15 +65,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Class<? extends Fragment> fragmentClass = null;
         if (item.getItemId() == R.id.navigation_forecast) {
             fragmentClass = ForecastFragment.class;
-            getSupportActionBar().setTitle(R.string.title_forecast);
+            getSupportActionBar().hide();
         } else if (item.getItemId() == R.id.navigation_places) {
             fragmentClass = PlacesFragment.class;
+            getSupportActionBar().show();
             getSupportActionBar().setTitle(R.string.title_places);
         } else if (item.getItemId() == R.id.navigation_map) {
             fragmentClass = MapFragment.class;
             getSupportActionBar().setTitle(R.string.title_map);
         } else if (item.getItemId() == R.id.navigation_settings) {
             fragmentClass = SettingsFragment.class;
+            getSupportActionBar().show();
             getSupportActionBar().setTitle(R.string.title_settings);
         }
 
@@ -84,4 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
+    public void openNavigationDrawer(){
+        this.dlNavigationDrawer.openDrawer(GravityCompat.START);
+    }
 }

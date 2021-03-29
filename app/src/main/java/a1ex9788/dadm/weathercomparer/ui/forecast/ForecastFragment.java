@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.HashMap;
 
+import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
 
@@ -23,6 +25,7 @@ public class ForecastFragment extends Fragment {
 
     private ForecastViewModel forecastViewModel;
     private ConstraintLayout clBottomSheet;
+    private ImageButton ibNavigationDrawer;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +48,8 @@ public class ForecastFragment extends Fragment {
         dicWeatherCondition.put(WeatherCondition.ThunderstormWithRain, "https://assets7.lottiefiles.com/temp/lf20_XkF78Y.json");
         dicWeatherCondition.put(WeatherCondition.UnknownPrecipitation, "https://assets10.lottiefiles.com/temp/lf20_9gY9Yf.json");
 
+        forecastViewModel =
+                new ViewModelProvider(this).get(ForecastViewModel.class);
         View root = inflater.inflate(R.layout.fragment_forecast, container, false);
 
         // All the different cases of WeatherCondition
@@ -101,10 +106,16 @@ public class ForecastFragment extends Fragment {
                 break;
         }
 
+        this.ibNavigationDrawer = root.findViewById(R.id.ibNavigationDrawer);
+        this.ibNavigationDrawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).openNavigationDrawer();
+            }
+        });
         this.clBottomSheet = root.findViewById(R.id.clBottomSheet);
         final BottomSheetBehavior clBottomSheetBehaviour = BottomSheetBehavior.from(this.clBottomSheet);
         clBottomSheetBehaviour.setState(BottomSheetBehavior.STATE_DRAGGING);
-
         return root;
     }
 
