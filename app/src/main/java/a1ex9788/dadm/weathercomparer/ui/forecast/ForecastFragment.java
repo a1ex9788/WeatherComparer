@@ -28,16 +28,17 @@ public class ForecastFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_forecast, container, false);
 
-        forecastViewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
+        binding = FragmentForecastBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
 
         // Set default data
-        binding = FragmentForecastBinding.inflate(inflater, container, false);
         binding.setWeatherConditionText(WeatherCondition.Clear.getText());
         binding.setWindSpeed("0 km/h");
         binding.setAverageTemperature("0 ºC");
         binding.setRainProbability("0%");
+
+        forecastViewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
 
         new Thread() {
             @Override
