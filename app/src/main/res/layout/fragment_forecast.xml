@@ -18,6 +18,15 @@
         app:lottie_speed="1.1"
         />
 
+    <TextView
+        android:id="@+id/weatherTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sunny"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/animationViewWeather" />
     <ImageView
         android:id="@+id/windIcon"
         android:layout_width="50dp"
@@ -28,7 +37,7 @@
         app:layout_constraintEnd_toStartOf="@+id/textView"
         app:layout_constraintRight_toLeftOf="@id/temperatureIcon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/animationViewWeather" />
+        app:layout_constraintTop_toBottomOf="@id/weatherTextView" />
 
     <ImageView
         android:id="@+id/temperatureIcon"
@@ -36,10 +45,10 @@
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
         android:contentDescription="@string/thermometerPhoto"
-        android:src="@drawable/thermometer"
+        android:src="@drawable/temperature"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/animationViewWeather" />
+        app:layout_constraintTop_toBottomOf="@id/weatherTextView" />
 
     <ImageView
         android:id="@+id/humidityIcon"
@@ -50,7 +59,7 @@
         android:src="@drawable/humidity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@id/animationViewWeather" />
+        app:layout_constraintTop_toBottomOf="@id/weatherTextView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -71,7 +80,7 @@
         android:background="@color/grey"
         app:layout_constraintEnd_toStartOf="@+id/humidityIcon"
         app:layout_constraintStart_toEndOf="@+id/temperatureIcon"
-        app:layout_constraintTop_toBottomOf="@id/animationViewWeather" />
+        app:layout_constraintTop_toBottomOf="@id/weatherTextView" />
 
     <TextView
         android:id="@+id/textView"
@@ -93,7 +102,7 @@
         android:background="@color/grey"
         app:layout_constraintEnd_toStartOf="@+id/temperatureIcon"
         app:layout_constraintStart_toEndOf="@+id/windIcon"
-        app:layout_constraintTop_toBottomOf="@id/animationViewWeather" />
+        app:layout_constraintTop_toBottomOf="@id/weatherTextView" />
 
     <TextView
         android:layout_width="wrap_content"
