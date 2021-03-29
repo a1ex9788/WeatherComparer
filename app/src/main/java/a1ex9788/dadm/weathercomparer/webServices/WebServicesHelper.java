@@ -42,7 +42,7 @@ public class WebServicesHelper {
         connection.setDoInput(true);
 
         if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-            throw new Exception();
+            throw new Exception("An error response code was obtained from the URL: " + url.getPath());
         }
 
         Gson gson = new Gson();

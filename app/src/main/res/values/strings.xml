@@ -4,4 +4,9 @@
     <string name="title_forecast">Forecast</string>
     <string name="title_map">Map</string>
     <string name="title_settings">Settings</string>
+    <string name="title_navigation_drawer">Home</string>
+    <string name="header_image_description">App icon</string>
+    <string name="humidityPhoto">Image of Humidity</string>
+    <string name="thermometerPhoto">"Photo of temperature "</string>
+    <string name="windPhoto">Photo of Wind icon</string>
 </resources>
