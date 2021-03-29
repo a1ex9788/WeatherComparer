@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import java.util.HashMap;
 
 import a1ex9788.dadm.weathercomparer.R;
+import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
 
 public class ForecastFragment extends Fragment {
 
@@ -25,93 +26,85 @@ public class ForecastFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        forecastViewModel =
+                new ViewModelProvider(this).get(ForecastViewModel.class);
+
         new GetDayForecastThread().start();
         new GetHourForecastThread().start();
 
         // Dictionary for catching the value of WeatherCondition
-        HashMap<String, String> dicWeatherCondition = new HashMap<String, String>();
-        dicWeatherCondition.put("ThunderstormWithRain", "https://assets7.lottiefiles.com/temp/lf20_XkF78Y.json");
-        dicWeatherCondition.put("Thunderstorm", "https://assets7.lottiefiles.com/temp/lf20_Kuot2e.json");
-        dicWeatherCondition.put("Fog", "https://assets7.lottiefiles.com/temp/lf20_kOfPKE.json");
-        dicWeatherCondition.put("Rain", "https://assets6.lottiefiles.com/temp/lf20_rpC1Rd.json");
-        dicWeatherCondition.put("HeavyRain", "https://assets4.lottiefiles.com/packages/lf20_bgmkqg6b.json");
-        dicWeatherCondition.put("SnowRain", "https://assets4.lottiefiles.com/packages/lf20_uhdaqfkg.json");
-        dicWeatherCondition.put("LightSnow", "https://assets7.lottiefiles.com/temp/lf20_BSVgyt.json");
-        dicWeatherCondition.put("Snow", "https://assets7.lottiefiles.com/temp/lf20_WtPCZs.json");
-        dicWeatherCondition.put("Flurries", "https://assets9.lottiefiles.com/packages/lf20_J8EPQ1.json");
-        dicWeatherCondition.put("Clouds", "https://assets7.lottiefiles.com/temp/lf20_VAmWRg.json");
-        dicWeatherCondition.put("BrokenClouds", "https://assets5.lottiefiles.com/temp/lf20_dgjK9i.json");
-        dicWeatherCondition.put("UnknownPrecipitation", "https://assets10.lottiefiles.com/temp/lf20_9gY9Yf.json");
-        dicWeatherCondition.put("Sunny", "https://assets7.lottiefiles.com/temp/lf20_Stdaec.json");
+        HashMap<WeatherCondition, String> dicWeatherCondition = new HashMap();
+        dicWeatherCondition.put(WeatherCondition.Clear, "https://assets7.lottiefiles.com/temp/lf20_Stdaec.json");
+        dicWeatherCondition.put(WeatherCondition.Clouds, "https://assets7.lottiefiles.com/temp/lf20_VAmWRg.json");
+        dicWeatherCondition.put(WeatherCondition.BrokenClouds, "https://assets5.lottiefiles.com/temp/lf20_dgjK9i.json");
+        dicWeatherCondition.put(WeatherCondition.Rain, "https://assets6.lottiefiles.com/temp/lf20_rpC1Rd.json");
+        dicWeatherCondition.put(WeatherCondition.Snow, "https://assets7.lottiefiles.com/temp/lf20_WtPCZs.json");
+        dicWeatherCondition.put(WeatherCondition.Fog, "https://assets7.lottiefiles.com/temp/lf20_kOfPKE.json");
+        dicWeatherCondition.put(WeatherCondition.Flurries, "https://assets9.lottiefiles.com/packages/lf20_J8EPQ1.json");
+        dicWeatherCondition.put(WeatherCondition.Thunderstorm, "https://assets7.lottiefiles.com/temp/lf20_Kuot2e.json");
+        dicWeatherCondition.put(WeatherCondition.ThunderstormWithRain, "https://assets7.lottiefiles.com/temp/lf20_XkF78Y.json");
+        dicWeatherCondition.put(WeatherCondition.UnknownPrecipitation, "https://assets10.lottiefiles.com/temp/lf20_9gY9Yf.json");
 
-        forecastViewModel =
-                new ViewModelProvider(this).get(ForecastViewModel.class);
         View root = inflater.inflate(R.layout.fragment_forecast, container, false);
 
-        //All the different cases of WeatherCondition
+        // All the different cases of WeatherCondition
         final LottieAnimationView animationView = root.findViewById(R.id.animationViewWeather);
         final TextView mWeatherTextView = root.findViewById(R.id.weatherTextView);
-        String conditionWeather = "BrokenClouds";
-        switch (conditionWeather) {
-            case "Sunny":
+        WeatherCondition weatherCondition = WeatherCondition.Clear;
+        // TODO: Substitute the strings of the weather conditions for a resource in order to enable the language change.
+        switch (weatherCondition) {
+            case Clear:
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("Sunny"));
                 mWeatherTextView.setText("Sunny");
                 break;
-            case "UnknownPrecipitation":
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("UnknownPrecipitation"));
-                mWeatherTextView.setText("Unknown Precipitation");
-                break;
-            case "Clouds":
+            case Clouds:
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("Clouds"));
                 mWeatherTextView.setText("Cloudy");
                 break;
-            case "BrokenClouds":
+            case BrokenClouds:
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("BrokenClouds"));
                 mWeatherTextView.setText("Broken Clouds");
                 break;
-            case "Flurries":
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("Flurries"));
-                mWeatherTextView.setText("Flurries");
+            case Rain:
+                animationView.setAnimationFromUrl(dicWeatherCondition.get("Rain"));
+                mWeatherTextView.setText("Rainy");
                 break;
-            case "Snow":
+            case Snow:
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("Snow"));
                 animationView.setSpeed((float) 1.8);
                 mWeatherTextView.setText("Snowy");
                 break;
-            case "LightSnow":
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("LightSnow"));
-                mWeatherTextView.setText("Light Snow");
-                break;
-            case "SnowRain":
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("SnowRain"));
-                mWeatherTextView.setText("Snowy and Rainy");
-                break;
-            case "HeavyRain":
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("HeavyRain"));
-                mWeatherTextView.setText("Very Rainy");
-                break;
-            case "Rain":
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("Rain"));
-                mWeatherTextView.setText("Rainy");
-                break;
-            case "Fog":
+            case Fog:
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("Fog"));
                 mWeatherTextView.setText("Foggy");
                 break;
-            case "Thunderstorm":
+            case Flurries:
+                animationView.setAnimationFromUrl(dicWeatherCondition.get("Flurries"));
+                mWeatherTextView.setText("Flurries");
+                break;
+            case Thunderstorm:
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("Thunderstorm"));
                 mWeatherTextView.setText("Stormy");
                 break;
-            case "ThunderstormWithRain":
+            case ThunderstormWithRain:
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("ThunderstormWithRain"));
                 mWeatherTextView.setText("Stormy and Rainy");
+                break;
+            case UnknownPrecipitation:
+                animationView.setAnimationFromUrl(dicWeatherCondition.get("UnknownPrecipitation"));
+                mWeatherTextView.setText("Unknown Precipitation");
+                break;
 
+            default:
+                animationView.setAnimationFromUrl(dicWeatherCondition.get("UnknownPrecipitation"));
+                mWeatherTextView.setText("Unknown");
                 break;
         }
 
         this.clBottomSheet = root.findViewById(R.id.clBottomSheet);
         final BottomSheetBehavior clBottomSheetBehaviour = BottomSheetBehavior.from(this.clBottomSheet);
         clBottomSheetBehaviour.setState(BottomSheetBehavior.STATE_DRAGGING);
+
         return root;
     }
 
