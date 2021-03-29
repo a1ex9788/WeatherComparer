@@ -1,8 +1,5 @@
 package a1ex9788.dadm.weathercomparer.ui.map;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.database.Observable;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.transition.Fade;
@@ -17,7 +14,6 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
-import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -31,10 +27,8 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.Arrays;
 
@@ -43,19 +37,19 @@ import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.databinding.FragmentMapBinding;
 import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 
+public class MapFragment extends Fragment {
 
-public class MapFragment extends Fragment{
     public static String MAP_TAG = "map";
-    private MapViewModel mapViewModel;
-    private GoogleMap map;
     MapPlace place;
     AutocompleteSupportFragment autocompleteFragment;
     FragmentMapBinding binding;
     boolean loading = false;
+    private MapViewModel mapViewModel;
+    private GoogleMap map;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState)  {
-        binding = FragmentMapBinding.inflate(inflater,container,false);
+                             ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentMapBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         mapViewModel =
@@ -72,13 +66,13 @@ public class MapFragment extends Fragment{
             Places.initialize(getContext(), ApiKeys.GOOGLE);
 
             map.setOnCameraMoveStartedListener(latLng -> {
-               resetInfo(container);
+                resetInfo(container);
             });
 
             autocompleteFragment = (AutocompleteSupportFragment)
                     getChildFragmentManager().findFragmentById(R.id.f_autocomplete);
 
-            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG, Place.Field.PHOTO_METADATAS));
+            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.PHOTO_METADATAS));
 
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
@@ -86,11 +80,11 @@ public class MapFragment extends Fragment{
                     loading = true;
                     binding.setLoading(loading);
                     Log.i(MAP_TAG, placeFounded.getName() + placeFounded.getLatLng());
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(placeFounded.getLatLng(),11);
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(placeFounded.getLatLng(), 11);
                     Log.i(MAP_TAG, cameraUpdate.toString());
                     map.animateCamera(cameraUpdate);
                     place = new MapPlace(placeFounded);
-                    Log.d(MAP_TAG,placeFounded.getPhotoMetadatas().get(0).toString());
+                    Log.d(MAP_TAG, placeFounded.getPhotoMetadatas().get(0).toString());
                     Picasso.get().load("https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAiKQz6mYGVdAYfIWDxkTiOIa0x86e2ntA&maxheight=200&photoreference=" + place.getPhotos().get(0)).into((ImageView) container.findViewById(R.id.civ_place), new Callback() {
                         @Override
                         public void onSuccess() {
@@ -103,7 +97,6 @@ public class MapFragment extends Fragment{
 
                         }
                     });
-
 
                     binding.setPlace(place);
                 }
@@ -119,19 +112,18 @@ public class MapFragment extends Fragment{
                 resetInfo(container);
             });
 
-            ImageView ivSearchIcon = (ImageView)autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_button);
+            ImageView ivSearchIcon = (ImageView) autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_button);
 
-            ivSearchIcon.setImageIcon(Icon.createWithResource(getContext(),R.drawable.ic_menu));
+            ivSearchIcon.setImageIcon(Icon.createWithResource(getContext(), R.drawable.ic_menu));
             ivSearchIcon.setOnClickListener(view -> {
-                ((DrawerLayout)getActivity().findViewById(R.id.nd_layout)).openDrawer(GravityCompat.START);
+                ((DrawerLayout) getActivity().findViewById(R.id.nd_layout)).openDrawer(GravityCompat.START);
             });
         });
-
 
         return root;
     }
 
-    void resetInfo(ViewGroup container){
+    void resetInfo(ViewGroup container) {
         Transition transition = new Fade();
         transition.setDuration(600);
         transition.addTarget(R.id.map_fragment_place_card);
@@ -142,4 +134,5 @@ public class MapFragment extends Fragment{
         place = null;
         binding.setPlace(place);
     }
+
 }
