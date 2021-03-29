@@ -32,7 +32,10 @@ public class ForecastFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        //Dictionary for catching the value of WeatherCondition
+        new GetDayForecastThread().start();
+        new GetHourForecastThread().start();
+
+        // Dictionary for catching the value of WeatherCondition
         HashMap<String, String> dicWeatherCondition = new HashMap<String, String>();
         dicWeatherCondition.put("ThunderstormWithRain","https://assets7.lottiefiles.com/temp/lf20_XkF78Y.json");
         dicWeatherCondition.put("Thunderstorm","https://assets7.lottiefiles.com/temp/lf20_Kuot2e.json");
@@ -48,7 +51,6 @@ public class ForecastFragment extends Fragment {
         dicWeatherCondition.put("UnknownPrecipitation","https://assets10.lottiefiles.com/temp/lf20_9gY9Yf.json");
         dicWeatherCondition.put("Sunny","https://assets7.lottiefiles.com/temp/lf20_Stdaec.json");
 
-
         forecastViewModel =
                 new ViewModelProvider(this).get(ForecastViewModel.class);
         View root = inflater.inflate(R.layout.fragment_forecast, container, false);
@@ -60,56 +62,40 @@ public class ForecastFragment extends Fragment {
         switch (conditionWeather) {
             case "Sunny":
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("Sunny"));
-                mWeatherTextView.setText("Sunny");
                 break;
             case "UnknownPrecipitation":
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("UnknownPrecipitation"));
-                mWeatherTextView.setText("Unknown Precipitation");
                 break;
             case "Clouds":
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("Clouds"));
-                mWeatherTextView.setText("Cloudy");
-                break;
-            case "BrokenClouds":
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("BrokenClouds"));
-                mWeatherTextView.setText("Broken Clouds");
                 break;
             case "Flurries":
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("Flurries"));
-                mWeatherTextView.setText("Flurries");
                 break;
             case "Snow":
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("Snow"));
-                animationView.setSpeed((float) 1.8);
-                mWeatherTextView.setText("Snowy");
                 break;
             case "LightSnow":
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("LightSnow"));
-                mWeatherTextView.setText("Light Snow");
                 break;
             case "SnowRain":
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("SnowRain"));
-                mWeatherTextView.setText("Snowy and Rainy");
                 break;
             case "HeavyRain":
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("HeavyRain"));
-                mWeatherTextView.setText("Very Rainy");
                 break;
             case "Rain":
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("Rain"));
-                mWeatherTextView.setText("Rainy");
                 break;
             case "Fog":
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("Fog"));
-                mWeatherTextView.setText("Foggy");
                 break;
             case "Thunderstorm":
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("Thunderstorm"));
-                mWeatherTextView.setText("Stormy");
                 break;
             case "ThunderstormWithRain":
                 animationView.setAnimationFromUrl(dicWeatherCondition.get("ThunderstormWithRain"));
-                mWeatherTextView.setText("Stormy and Rainy");
+
                 break;
         }
 
