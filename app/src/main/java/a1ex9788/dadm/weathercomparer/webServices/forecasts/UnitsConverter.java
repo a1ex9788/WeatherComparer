@@ -12,15 +12,18 @@ public class UnitsConverter {
     }
 
     public static WeatherCondition accuWeatherConditionToStandard(int icon) {
-        return null;
+        // TODO: Implement this.
+        return WeatherCondition.Clear;
     }
 
     public static WeatherCondition openWeatherConditionToStandard(int id) {
-        return null;
+        // TODO: Implement this.
+        return WeatherCondition.Clear;
     }
 
     public static WeatherCondition weatherBitConditionToStandard(int code) {
-        return null;
+        // TODO: Implement this.
+        return WeatherCondition.Clear;
     }
 
     public static double metersPerSecondToKilometersPerHour(double metersPerSecondValue) {

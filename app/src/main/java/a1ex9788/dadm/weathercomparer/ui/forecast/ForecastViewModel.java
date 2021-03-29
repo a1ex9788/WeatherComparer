@@ -17,12 +17,14 @@ public class ForecastViewModel extends ViewModel {
     WeatherForecast openWeatherForecast = new OpenWeatherForecast(39.289, -0.799);
     WeatherForecast weatherBitForecast = new WeatherBitForecast(39.289, -0.799);
 
-    public List<DayForecast> getAverageDailyForecast() {
-        return null;
+    public List<DayForecast> getAverageDailyForecast() throws Exception {
+        // TODO: Implement the average
+        return openWeatherForecast.getDailyForecast();
     }
 
-    public List<HourForecast> getAverageHourlyForecast() {
-        return null;
+    public List<HourForecast> getAverageHourlyForecast() throws Exception {
+        // TODO: Implement the average
+        return openWeatherForecast.getHourlyForecast();
     }
 
     public List<DayForecast> getAccuWeatherDailyForecast() throws Exception {
