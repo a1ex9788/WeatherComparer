@@ -9,4 +9,7 @@
     <string name="humidityPhoto">Image of Humidity</string>
     <string name="thermometerPhoto">"Photo of temperature "</string>
     <string name="windPhoto">Photo of Wind icon</string>
+
+    <!-- Strings bottom sheet-->
+    <string name="tvToday">Today</string>
 </resources>
