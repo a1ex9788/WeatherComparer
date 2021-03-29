@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.HashMap;
 
@@ -54,56 +53,43 @@ public class ForecastFragment extends Fragment {
         // TODO: Substitute the strings of the weather conditions for a resource in order to enable the language change.
         switch (weatherCondition) {
             case Clear:
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("Sunny"));
                 mWeatherTextView.setText("Sunny");
                 break;
             case Clouds:
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("Clouds"));
                 mWeatherTextView.setText("Cloudy");
                 break;
             case BrokenClouds:
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("BrokenClouds"));
                 mWeatherTextView.setText("Broken Clouds");
                 break;
             case Rain:
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("Rain"));
                 mWeatherTextView.setText("Rainy");
                 break;
             case Snow:
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("Snow"));
                 animationView.setSpeed((float) 1.8);
                 mWeatherTextView.setText("Snowy");
                 break;
             case Fog:
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("Fog"));
                 mWeatherTextView.setText("Foggy");
                 break;
             case Flurries:
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("Flurries"));
                 mWeatherTextView.setText("Flurries");
                 break;
             case Thunderstorm:
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("Thunderstorm"));
                 mWeatherTextView.setText("Stormy");
                 break;
             case ThunderstormWithRain:
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("ThunderstormWithRain"));
                 mWeatherTextView.setText("Stormy and Rainy");
                 break;
             case UnknownPrecipitation:
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("UnknownPrecipitation"));
                 mWeatherTextView.setText("Unknown Precipitation");
                 break;
 
             default:
-                animationView.setAnimationFromUrl(dicWeatherCondition.get("UnknownPrecipitation"));
+                weatherCondition = WeatherCondition.UnknownPrecipitation;
                 mWeatherTextView.setText("Unknown");
                 break;
         }
-
-        this.clBottomSheet = root.findViewById(R.id.clBottomSheet);
-        final BottomSheetBehavior clBottomSheetBehaviour = BottomSheetBehavior.from(this.clBottomSheet);
-        clBottomSheetBehaviour.setState(BottomSheetBehavior.STATE_DRAGGING);
+        animationView.setAnimationFromUrl(dicWeatherCondition.get(weatherCondition));
 
         return root;
     }
