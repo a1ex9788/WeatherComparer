@@ -24,6 +24,8 @@ import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
 
 public class ForecastFragment extends Fragment {
 
+    private final String SPEED_UNIT = "km/h", TEMPERATURE_UNIT = "°C", PROBABILITY_SIGN = "%";
+
     private ForecastViewModel forecastViewModel;
     private ImageButton ibNavigationDrawer;
     private FragmentForecastBinding binding;
@@ -32,12 +34,12 @@ public class ForecastFragment extends Fragment {
         binding = FragmentForecastBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Set default data
+        // Set default data. It will be seen before the real one is loaded and in case of error.
         setWeatherConditionAnimation(root, WeatherCondition.UnknownPrecipitation);
         binding.setWeatherConditionText("No data");
-        binding.setWindSpeed("0 km/h");
-        binding.setAverageTemperature("0 ºC");
-        binding.setRainProbability("0 %");
+        binding.setWindSpeed("-");
+        binding.setAverageTemperature("-");
+        binding.setRainProbability("-");
 
         forecastViewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
 
@@ -63,15 +65,15 @@ public class ForecastFragment extends Fragment {
 
     private void setDailyForecastData(View root, DayForecast dayForecast) {
         binding.setWeatherConditionText(dayForecast.getWeatherCondition().getText());
-        binding.setWindSpeed(roundToTwoDecimals(dayForecast.getWindSpeed_kilometersPerHour()) + " km/ h");
-        binding.setAverageTemperature(roundToTwoDecimals(dayForecast.getAvgTemperature_celsius()) + " ºC");
-        binding.setRainProbability(roundToTwoDecimals(dayForecast.getPrecipitationProbability()) + " %");
+        binding.setWindSpeed(roundToOneDecimal(dayForecast.getWindSpeed_kilometersPerHour()) + " " + SPEED_UNIT);
+        binding.setAverageTemperature(roundToOneDecimal(dayForecast.getAvgTemperature_celsius()) + " " + TEMPERATURE_UNIT);
+        binding.setRainProbability(roundToOneDecimal(dayForecast.getPrecipitationProbability()) + " " + PROBABILITY_SIGN);
 
         setWeatherConditionAnimation(root, dayForecast.getWeatherCondition());
     }
 
-    private double roundToTwoDecimals(double d) {
-        return Math.round(d * 100 / 100);
+    private double roundToOneDecimal(double d) {
+        return Math.round(d * 10.0) / 10.0;
     }
 
     private void setWeatherConditionAnimation(View root, WeatherCondition weatherCondition) {
