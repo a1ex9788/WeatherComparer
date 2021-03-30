@@ -71,7 +71,7 @@ public class WeatherBitForecast extends WeatherForecast {
                     weatherBitDayForecast.clouds,
                     weatherBitDayForecast.wind_spd == null ? null : UnitsConverter.metersPerSecondToKilometersPerHour(weatherBitDayForecast.wind_spd),
                     weatherBitDayForecast.pres,
-                    weatherBitDayForecast.uv == null ? null : UnitsConverter.uvIndexValueToUvIndex(weatherBitDayForecast.uv),
+                    weatherBitDayForecast.uv,
                     weatherBitDayForecast.sunrise_ts == null ? null : UnitsConverter.unixUtcToDate(weatherBitDayForecast.sunrise_ts),
                     weatherBitDayForecast.sunset_ts == null ? null : UnitsConverter.unixUtcToDate(weatherBitDayForecast.sunset_ts)
             ));
@@ -95,7 +95,7 @@ public class WeatherBitForecast extends WeatherForecast {
                     weatherBitHourForecast.clouds,
                     weatherBitHourForecast.wind_spd == null ? null : UnitsConverter.metersPerSecondToKilometersPerHour(weatherBitHourForecast.wind_spd),
                     weatherBitHourForecast.pres,
-                    weatherBitHourForecast.uv == null ? null : UnitsConverter.uvIndexValueToUvIndex(weatherBitHourForecast.uv)
+                    weatherBitHourForecast.uv
             ));
         }
 

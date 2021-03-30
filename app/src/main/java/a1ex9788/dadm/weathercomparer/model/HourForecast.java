@@ -14,9 +14,9 @@ public class HourForecast {
     protected Double cloudinessProbability;
     protected Double windSpeed_kilometersPerHour;
     protected Double pressure_millibars;
-    protected UvIndex uvIndex;
+    protected Double uvIndex;
 
-    public HourForecast(Date date, WeatherCondition weatherCondition, Double avgTemperature_celsius, Double realFeel_celsius, Double precipitationProbability, Double humidityProbability, Double cloudinessProbability, Double windSpeed_kilometersPerHour, Double pressure_millibars, UvIndex uvIndex) {
+    public HourForecast(Date date, WeatherCondition weatherCondition, Double avgTemperature_celsius, Double realFeel_celsius, Double precipitationProbability, Double humidityProbability, Double cloudinessProbability, Double windSpeed_kilometersPerHour, Double pressure_millibars, Double uvIndex) {
         this.date = date;
         this.weatherCondition = weatherCondition;
         this.avgTemperature_celsius = avgTemperature_celsius;
@@ -65,7 +65,7 @@ public class HourForecast {
         return pressure_millibars;
     }
 
-    public UvIndex getUvIndex() {
+    public Double getUvIndex() {
         return uvIndex;
     }
 

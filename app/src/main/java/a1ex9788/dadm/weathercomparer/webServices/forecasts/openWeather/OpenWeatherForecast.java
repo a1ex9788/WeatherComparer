@@ -70,7 +70,7 @@ public class OpenWeatherForecast extends WeatherForecast {
                     openWeatherDayForecast.clouds,
                     openWeatherDayForecast.wind_speed == null ? null : UnitsConverter.metersPerSecondToKilometersPerHour(openWeatherDayForecast.wind_speed),
                     openWeatherDayForecast.pressure,
-                    openWeatherDayForecast.uvi == null ? null : UnitsConverter.uvIndexValueToUvIndex(openWeatherDayForecast.uvi),
+                    openWeatherDayForecast.uvi,
                     openWeatherDayForecast.sunrise == null ? null : UnitsConverter.unixUtcToDate(openWeatherDayForecast.sunrise),
                     openWeatherDayForecast.sunset == null ? null : UnitsConverter.unixUtcToDate(openWeatherDayForecast.sunset)
             ));
@@ -94,7 +94,7 @@ public class OpenWeatherForecast extends WeatherForecast {
                     openWeatherHourForecast.clouds,
                     openWeatherHourForecast.wind_speed == null ? null : UnitsConverter.metersPerSecondToKilometersPerHour(openWeatherHourForecast.wind_speed),
                     openWeatherHourForecast.pressure,
-                    openWeatherHourForecast.uvi == null ? null : UnitsConverter.uvIndexValueToUvIndex(openWeatherHourForecast.uvi)
+                    openWeatherHourForecast.uvi
             ));
         }
 

@@ -10,7 +10,7 @@ public class DayForecast extends HourForecast {
     private Date sunrise;
     private Date sunset;
 
-    public DayForecast(Date date, WeatherCondition weatherCondition, Double avgTemperature_celsius, Double minTemperature_celsius, Double maxTemperature_celsius, Double realFeel_celsius, Double precipitationProbability, Double humidityProbability, Double cloudinessProbability, Double windSpeed_metersPerSecond, Double pressure_pascals, UvIndex uvIndex, Date sunrise, Date sunset) {
+    public DayForecast(Date date, WeatherCondition weatherCondition, Double avgTemperature_celsius, Double minTemperature_celsius, Double maxTemperature_celsius, Double realFeel_celsius, Double precipitationProbability, Double humidityProbability, Double cloudinessProbability, Double windSpeed_metersPerSecond, Double pressure_pascals, Double uvIndex, Date sunrise, Date sunset) {
         super(date, weatherCondition, avgTemperature_celsius, realFeel_celsius, precipitationProbability, humidityProbability, cloudinessProbability, windSpeed_metersPerSecond, pressure_pascals, uvIndex);
         this.minTemperature_celsius = minTemperature_celsius;
         this.maxTemperature_celsius = maxTemperature_celsius;

@@ -134,7 +134,7 @@ public class AccuWeatherForecast extends WeatherForecast {
                     accuWeatherHourForecast.CloudCover,
                     accuWeatherHourForecast.Wind == null || accuWeatherHourForecast.Wind.Speed == null ? null : accuWeatherHourForecast.Wind.Speed.Value,
                     null,
-                    accuWeatherHourForecast.UVIndex == null ? null : UnitsConverter.uvIndexValueToUvIndex(accuWeatherHourForecast.UVIndex)
+                    accuWeatherHourForecast.UVIndex
             ));
         }
 
