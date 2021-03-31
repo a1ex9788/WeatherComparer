@@ -10,12 +10,14 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.libraries.places.api.Places;
 import com.google.android.material.navigation.NavigationView;
 
 import a1ex9788.dadm.weathercomparer.ui.forecast.ForecastFragment;
 import a1ex9788.dadm.weathercomparer.ui.map.MapFragment;
 import a1ex9788.dadm.weathercomparer.ui.places.PlacesFragment;
 import a1ex9788.dadm.weathercomparer.ui.settings.SettingsFragment;
+import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.dlNavigationDrawer = findViewById(R.id.nd_layout);
         NavigationView nvNavigationDrawer = findViewById(R.id.nv_navigation_drawer);
         nvNavigationDrawer.setNavigationItemSelectedListener(this);
+
+        Places.initialize(this, ApiKeys.GOOGLE);
     }
 
     @Override
