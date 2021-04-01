@@ -9,28 +9,28 @@
         <variable name="loading" type="Boolean"/>
         <variable name="forecast" type="a1ex9788.dadm.weathercomparer.model.HourForecast"/>
     </data>
-<FrameLayout
-    map:uiZoomControls="true"
-    map:uiZoomGestures="true"
-    map:mapType="normal"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MapsActivity">
+        android:orientation="vertical"
+        map:mapType="normal"
+        map:uiZoomControls="true"
+        map:uiZoomGestures="true"
+        tools:context=".MainActivity">
 
-    </fragment>
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MapsActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        </fragment>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/rlPlace"
@@ -158,9 +158,10 @@
                 android:id="@+id/f_autocomplete"
                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </androidx.cardview.widget.CardView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="wrap_content"></fragment>
 
-</FrameLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
 </layout>

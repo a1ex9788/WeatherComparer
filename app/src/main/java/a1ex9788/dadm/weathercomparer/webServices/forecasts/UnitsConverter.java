@@ -11,16 +11,33 @@ public class UnitsConverter {
         return new Date((long) unixUtcTimestamp * 1000);
     }
 
+    public static long dateToUnixUTC(Date date) {
+        return date.getTime() / 1000;
+    }
+
     public static WeatherCondition accuWeatherConditionToStandard(int icon) {
-        return null;
+        // TODO: Implement this.
+        return WeatherCondition.Clear;
     }
 
     public static WeatherCondition openWeatherConditionToStandard(int id) {
-        return null;
+        // TODO: Implement this.
+        return WeatherCondition.Clear;
     }
 
     public static WeatherCondition weatherBitConditionToStandard(int code) {
-        return null;
+        // TODO: Implement this.
+        return WeatherCondition.Clear;
+    }
+
+    public static WeatherCondition getWeatherConditionFromValue(int value) {
+        for (WeatherCondition weatherCondition : WeatherCondition.values()) {
+            if (weatherCondition.getValue() == value) {
+                return weatherCondition;
+            }
+        }
+
+        return WeatherCondition.Unknown;
     }
 
     public static double metersPerSecondToKilometersPerHour(double metersPerSecondValue) {

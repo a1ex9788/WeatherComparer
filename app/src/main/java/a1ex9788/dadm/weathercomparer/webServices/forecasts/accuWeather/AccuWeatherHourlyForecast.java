@@ -17,7 +17,7 @@ public class AccuWeatherHourlyForecast {
         public Double RelativeHumidity;
         public Double CloudCover;
         public Wind Wind;
-        public Integer UVIndex;
+        public Double UVIndex;
 
         public class Temperature {
 

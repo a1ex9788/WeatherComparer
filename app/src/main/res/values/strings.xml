@@ -6,9 +6,7 @@
     <string name="title_settings">Settings</string>
     <string name="title_navigation_drawer">Home</string>
     <string name="header_image_description">App icon</string>
-    <string name="humidityPhoto">Image of Humidity</string>
-    <string name="thermometerPhoto">"Photo of temperature "</string>
-    <string name="windPhoto">Photo of Wind icon</string>
+    <string name="toast_forecastError">There was a problem and the forecast data could not be obtained.</string>
 
     <!-- Strings bottom sheet-->
     <string name="tvToday">Today</string>

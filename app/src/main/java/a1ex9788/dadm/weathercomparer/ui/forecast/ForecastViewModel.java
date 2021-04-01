@@ -2,10 +2,12 @@ package a1ex9788.dadm.weathercomparer.ui.forecast;
 
 import androidx.lifecycle.ViewModel;
 
+import java.util.Arrays;
 import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.AverageForecastCalculator;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecast;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeatherForecast;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather.OpenWeatherForecast;
@@ -13,16 +15,26 @@ import a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit.WeatherBit
 
 public class ForecastViewModel extends ViewModel {
 
-    WeatherForecast accuWeatherForecast = new AccuWeatherForecast(39.289, -0.799);
-    WeatherForecast openWeatherForecast = new OpenWeatherForecast(39.289, -0.799);
-    WeatherForecast weatherBitForecast = new WeatherBitForecast(39.289, -0.799);
+    private final double LAT = 39.289, LONG = -0.799;
 
-    public List<DayForecast> getAverageDailyForecast() {
-        return null;
+    private WeatherForecast accuWeatherForecast = new AccuWeatherForecast(LAT, LONG);
+    private WeatherForecast openWeatherForecast = new OpenWeatherForecast(LAT, LONG);
+    private WeatherForecast weatherBitForecast = new WeatherBitForecast(LAT, LONG);
+
+    private List<WeatherForecast> weatherForecasts = Arrays.asList(
+            accuWeatherForecast,
+            openWeatherForecast,
+            weatherBitForecast
+    );
+
+    private AverageForecastCalculator averageForecastCalculator = new AverageForecastCalculator(weatherForecasts);
+
+    public List<DayForecast> getAverageDailyForecast() throws Exception {
+        return averageForecastCalculator.getAverageDailyForecast();
     }
 
-    public List<HourForecast> getAverageHourlyForecast() {
-        return null;
+    public List<HourForecast> getAverageHourlyForecast() throws Exception {
+        return averageForecastCalculator.getAverageHourlyForecast();
     }
 
     public List<DayForecast> getAccuWeatherDailyForecast() throws Exception {

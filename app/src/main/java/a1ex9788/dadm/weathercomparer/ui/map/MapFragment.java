@@ -30,7 +30,6 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -42,8 +41,8 @@ import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather.OpenWeatherForecast;
 
+public class MapFragment extends Fragment {
 
-public class MapFragment extends Fragment{
     public static String MAP_TAG = "map";
     private GoogleMap map;
     AutocompleteSupportFragment autocompleteFragment;
@@ -51,8 +50,8 @@ public class MapFragment extends Fragment{
     OpenWeatherForecast forecastService;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState)  {
-        binding = FragmentMapBinding.inflate(inflater,container,false);
+                             ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentMapBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager()
@@ -71,7 +70,7 @@ public class MapFragment extends Fragment{
             map = googleMap;
 
             map.setOnCameraMoveStartedListener(latLng -> {
-               resetInfo(container);
+                resetInfo(container);
             });
 
             setupAutocomplete(container);
@@ -132,7 +131,9 @@ public class MapFragment extends Fragment{
         });
     }
 
-    private void resetInfo(ViewGroup container){
+
+
+    void resetInfo(ViewGroup container) {
         Transition transition = new Fade();
         transition.setDuration(600);
         transition.addTarget(R.id.rlPlace);
@@ -156,4 +157,5 @@ public class MapFragment extends Fragment{
             }
         });
     }
+
 }
