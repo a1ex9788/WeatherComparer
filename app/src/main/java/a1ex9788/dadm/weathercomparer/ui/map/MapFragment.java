@@ -71,7 +71,7 @@ public class MapFragment extends Fragment {
         binding.fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addPlace(view);
+                addPlace();
             }
         });
 
@@ -173,7 +173,7 @@ public class MapFragment extends Fragment {
         });
     }
 
-    public void addPlace(View view){
+    public void addPlace(){
         new Thread(new Runnable() {
             @Override
             public void run() {
