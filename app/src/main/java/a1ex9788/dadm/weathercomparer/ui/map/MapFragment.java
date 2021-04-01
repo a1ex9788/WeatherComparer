@@ -24,10 +24,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +39,8 @@ import java.util.Arrays;
 import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.databinding.FragmentMapBinding;
+import a1ex9788.dadm.weathercomparer.db.Room;
+import a1ex9788.dadm.weathercomparer.db.RoomDao;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather.OpenWeatherForecast;
@@ -48,6 +52,7 @@ public class MapFragment extends Fragment {
     AutocompleteSupportFragment autocompleteFragment;
     FragmentMapBinding binding;
     OpenWeatherForecast forecastService;
+    RoomDao db;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -60,6 +65,15 @@ public class MapFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().hide();
 
         supportMapFragment.getMapAsync(onMapReady(container));
+
+        db = Room.getInstance(getContext()).room();
+
+        binding.fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addPlace(view);
+            }
+        });
 
         return root;
     }
@@ -86,11 +100,12 @@ public class MapFragment extends Fragment {
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place placeFounded) {
+                MapPlace place = new MapPlace(placeFounded);
                 binding.setLoading(true);
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(placeFounded.getLatLng(),11);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(place.getLat(),place.getLng()),11);
                 map.animateCamera(cameraUpdate);
 
-                forecastService = new OpenWeatherForecast(placeFounded.getLatLng().latitude,placeFounded.getLatLng().longitude);
+                forecastService = new OpenWeatherForecast(place.getLat(),place.getLng());
                 new Thread(
                         new Runnable() {
                             @Override
@@ -107,7 +122,7 @@ public class MapFragment extends Fragment {
                 ).start();
 
 
-                binding.setPlace(new MapPlace(placeFounded));
+                binding.setPlace(place);
                 loadPhoto(container);
 
             }
@@ -145,7 +160,7 @@ public class MapFragment extends Fragment {
     }
 
     private void loadPhoto(ViewGroup container) {
-        Picasso.get().load("https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAiKQz6mYGVdAYfIWDxkTiOIa0x86e2ntA&maxheight=200&photoreference=" + binding.getPlace().getPhotos().get(0)).into((ImageView) container.findViewById(R.id.civ_place), new Callback() {
+        Picasso.get().load("https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAiKQz6mYGVdAYfIWDxkTiOIa0x86e2ntA&maxheight=200&photoreference=" + binding.getPlace().getPhoto()).into((ImageView) container.findViewById(R.id.civ_place), new Callback() {
             @Override
             public void onSuccess() {
                 binding.setLoading(false);
@@ -156,6 +171,15 @@ public class MapFragment extends Fragment {
 
             }
         });
+    }
+
+    public void addPlace(View view){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                db.addPlace(binding.getPlace());
+            }
+        }).start();
     }
 
 }

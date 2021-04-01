@@ -32,7 +32,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <androidx.cardview.widget.CardView
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                map:fabCustomSize="100px"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:visibility="@{place != null ? View.VISIBLE : View.INVISIBLE}"
+                map:layout_constraintBottom_toTopOf="@+id/rlPlace"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintStart_toStartOf="parent"
+                map:rippleColor="@color/blueVioletCrayola"
+                android:src="@drawable/ic_baseline_add_24" />
+
+            <androidx.cardview.widget.CardView
             android:id="@+id/rlPlace"
             android:layout_width="match_parent"
             android:layout_height="80dp"
@@ -120,7 +134,7 @@
                     android:format12Hour="k:mm"
                     android:format24Hour="k:mm"
                     android:textAlignment="viewEnd"
-                    android:timeZone="@{ place.getTimeZone().getDisplayName() }"
+                    android:timeZone="@{ place.getTimeZone() }"
                     map:layout_constraintBottom_toBottomOf="parent"
                     map:layout_constraintEnd_toEndOf="parent" />
 
