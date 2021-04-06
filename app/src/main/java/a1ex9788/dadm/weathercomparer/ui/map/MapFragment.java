@@ -125,11 +125,6 @@ public class MapFragment extends Fragment {
             map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {
-                    try {
-                        new PlacesService().searchLocalityByNerby(latLng);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                 }
             });
 
