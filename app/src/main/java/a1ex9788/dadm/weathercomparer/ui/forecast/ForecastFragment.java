@@ -23,6 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
@@ -38,10 +39,6 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentForecastBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        if (root == null) {
-            return root;
-        }
 
         forecastViewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
 
@@ -76,13 +73,13 @@ public class ForecastFragment extends Fragment {
                     DayForecast dayForecast = dailyForecast.get(0);
 
                     binding.setWeatherConditionText(dayForecast.getWeatherCondition().getText());
-                    binding.setWindSpeed(roundToOneDecimal(dayForecast.getWindSpeed_kilometersPerHour()) + " " + R.string.speed_metricUnits);
-                    binding.setAverageTemperature(roundToOneDecimal(dayForecast.getAvgTemperature_celsius()) + " " + R.string.temperature_metricUnits);
-                    binding.setRainProbability(roundToOneDecimal(dayForecast.getPrecipitationProbability()) + " " + R.string.probability_sign);
+                    binding.setWindSpeed(roundToOneDecimal(dayForecast.getWindSpeed_kilometersPerHour()) + " " + getString(R.string.speed_metricUnits));
+                    binding.setAverageTemperature(roundToOneDecimal(dayForecast.getAvgTemperature_celsius()) + " " + getString(R.string.temperature_metricUnits));
+                    binding.setRainProbability(roundToOneDecimal(dayForecast.getPrecipitationProbability()) + " " + getString(R.string.probability_sign));
 
                     setWeatherConditionAnimation(root, dayForecast.getWeatherCondition());
                 } catch (Exception e) {
-                    Toast.makeText(getActivity().getBaseContext(), R.string.toast_forecastError, Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireActivity().getBaseContext(), R.string.toast_forecastError, Toast.LENGTH_LONG).show();
                 }
             }
         }.start();
@@ -90,7 +87,7 @@ public class ForecastFragment extends Fragment {
 
     private void setNavigationDrawerButtonOnClickListener(View root) {
         ImageButton ibNavigationDrawer = root.findViewById(R.id.ibNavigationDrawer);
-        ibNavigationDrawer.setOnClickListener(v -> ((MainActivity) getActivity()).openNavigationDrawer());
+        ibNavigationDrawer.setOnClickListener(v -> ((MainActivity) requireActivity()).openNavigationDrawer());
     }
 
     private void configureBottomSheet(View root) {
