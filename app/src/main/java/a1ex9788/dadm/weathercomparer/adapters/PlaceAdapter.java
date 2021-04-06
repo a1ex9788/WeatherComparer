@@ -6,10 +6,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.Bindable;
+import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.squareup.picasso.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +34,6 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
 
            PlaceViewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.place_view,parent,false);
 
-
         return new ViewHolder(binding);
     }
 
@@ -38,6 +41,20 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull PlaceAdapter.ViewHolder holder, int position) {
         MapPlace place = places.get(position);
         holder.binding.setPlace(place);
+        if(place.getPhoto() != null) {
+            holder.binding.setLoading(true);
+            place.loadPhoto(holder.binding.civPlace, new Callback() {
+                @Override
+                public void onSuccess() {
+                    holder.binding.setLoading(false);
+                }
+
+                @Override
+                public void onError(Exception e) {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -65,18 +82,13 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-
-
     static class ViewHolder extends RecyclerView.ViewHolder {
         private PlaceViewBinding binding;
 
         public ViewHolder(@NonNull PlaceViewBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
         }
-
-
-
     }
-
 }

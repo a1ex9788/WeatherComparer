@@ -48,11 +48,11 @@ public class MapFragment extends Fragment {
 
     public static String MAP_TAG = "map";
     private GoogleMap map;
-    AutocompleteSupportFragment autocompleteFragment;
-    FragmentMapBinding binding;
-    PlaceViewBinding placeBinding;
-    OpenWeatherForecast forecastService;
-    RoomDao db;
+    private AutocompleteSupportFragment autocompleteFragment;
+    private FragmentMapBinding binding;
+    private PlaceViewBinding placeBinding;
+    private OpenWeatherForecast forecastService;
+    private RoomDao db;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -79,7 +79,6 @@ public class MapFragment extends Fragment {
                     addPlace();
                     binding.setAlreadyAdded(true);
                 }
-
             }
         });
         
@@ -134,16 +133,15 @@ public class MapFragment extends Fragment {
                 }
             });
 
-            setupAutocomplete(container);
+            setupAutocomplete();
         };
     }
 
-    private void setupAutocomplete(ViewGroup container) {
+    private void setupAutocomplete() {
         autocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.f_autocomplete);
 
         autocompleteFragment.setTypeFilter(TypeFilter.REGIONS);
-
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG, Place.Field.PHOTO_METADATAS,Place.Field.UTC_OFFSET));
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -182,7 +180,20 @@ public class MapFragment extends Fragment {
 
                 animatePlaceCardIn();
                 placeBinding.setPlace(place);
-                if(place.getPhoto() != null) loadPhoto(container);
+                if(place.getPhoto() != null) {
+                    placeBinding.setLoading(true);
+                    placeBinding.getPlace().loadPhoto(placeBinding.civPlace, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            placeBinding.setLoading(false);
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+
+                        }
+                    });
+                }
 
             }
 
@@ -199,12 +210,22 @@ public class MapFragment extends Fragment {
             resetInfo();
         });
 
-        ImageView ivSearchIcon = (ImageView)autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_button);
+        ImageView ivSearchIcon = autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_button);
 
         ivSearchIcon.setImageIcon(Icon.createWithResource(getContext(),R.drawable.ic_menu));
         ivSearchIcon.setOnClickListener(view -> {
             ((DrawerLayout)getActivity().findViewById(R.id.nd_layout)).openDrawer(GravityCompat.START);
         });
+
+        if(getArguments() != null && getArguments().containsKey("search")) {
+            autocompleteFragment.getView().post(new Runnable() {
+                @Override
+                public void run() {
+                    autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)
+                            .performClick();
+                }
+            });
+        }
     }
 
     void animatePlaceCardIn(){
@@ -228,21 +249,6 @@ public class MapFragment extends Fragment {
         autocompleteFragment.getView().findViewById(R.id.places_autocomplete_clear_button).setVisibility(View.INVISIBLE);
         binding.llTools.setVisibility(View.INVISIBLE);
         placeBinding.setPlace(null);
-    }
-
-    private void loadPhoto(ViewGroup container) {
-        placeBinding.setLoading(true);
-        Picasso.get().load( placeBinding.getPlace().getPhoto()).into((ImageView) container.findViewById(R.id.civ_place), new Callback() {
-            @Override
-            public void onSuccess() {
-                placeBinding.setLoading(false);
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        });
     }
 
     public void addPlace(){
@@ -274,5 +280,4 @@ public class MapFragment extends Fragment {
             }
         }).start();
     }
-
 }

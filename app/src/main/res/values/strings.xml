@@ -11,6 +11,9 @@
     <!-- Strings bottom sheet-->
     <string name="tvToday">Today</string>
 
+    <!-- Places fragment -->
+    <string name="tvEmpty">Empty list</string>
+
     <!-- Map fragment -->
     <string name="tAdd">added</string>
     <string name="tDelete">deleted</string>

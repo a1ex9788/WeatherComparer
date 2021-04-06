@@ -34,7 +34,5 @@ public class PlacesService {
         Log.d("map",placeResponse.toString());
   }
 
-
-
 }
 

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,26 +22,31 @@ import a1ex9788.dadm.weathercomparer.adapters.OnPlaceClickListener;
 import a1ex9788.dadm.weathercomparer.adapters.PlaceAdapter;
 import a1ex9788.dadm.weathercomparer.adapters.SwipeController;
 import a1ex9788.dadm.weathercomparer.adapters.SwipeControllerActions;
+import a1ex9788.dadm.weathercomparer.databinding.FragmentMapBinding;
+import a1ex9788.dadm.weathercomparer.databinding.FragmentPlacesBinding;
 import a1ex9788.dadm.weathercomparer.db.Room;
 
 import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.db.RoomDao;
+import a1ex9788.dadm.weathercomparer.ui.map.MapFragment;
 import a1ex9788.dadm.weathercomparer.ui.map.MapPlace;
 
 public class PlacesFragment extends Fragment {
 
     RoomDao db;
-    List<MapPlace> places;
     public static String PLACES_TAG = "PLACES";
 
     private PlacesViewModel placesViewModel;
     private PlaceAdapter adapter;
+    private FragmentPlacesBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         placesViewModel =
                 new ViewModelProvider(this).get(PlacesViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_places, container, false);
+
+        binding = FragmentPlacesBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
 
         RecyclerView recyclerView = root.findViewById(R.id.rv_places);
 
@@ -52,6 +58,13 @@ public class PlacesFragment extends Fragment {
                     @Override
                     public void run() {
                         db.deletePlace(place);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                binding.tvEmpty.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
+                                Toast.makeText(getContext(),place.getName() + " " + getString(R.string.tDelete),Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }).start();
             }
@@ -77,18 +90,28 @@ public class PlacesFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                places = db.getPlaces();
+                List<MapPlace> places = db.getPlaces();
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        binding.tvEmpty.setVisibility(places.isEmpty() ? View.VISIBLE : View.INVISIBLE);
                         adapter.setPlaces(places);
                     }
                 });
             }
         }).start();
 
+        binding.floatingActionButton.setOnClickListener(view -> {
+            Bundle params = new Bundle();
+            params.putBoolean("search",true);
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.fcv_navigation_drawer, MapFragment.class, params )
+                    .commit();
+        });
+
         return root;
     }
-
 }

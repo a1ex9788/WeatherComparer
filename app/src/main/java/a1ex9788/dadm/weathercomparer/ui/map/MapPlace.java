@@ -1,5 +1,8 @@
 package a1ex9788.dadm.weathercomparer.ui.map;
 
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -9,6 +12,8 @@ import androidx.room.PrimaryKey;
 
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.TimeZone;
+
+import a1ex9788.dadm.weathercomparer.R;
 
 @Entity(tableName = "places")
 public class MapPlace extends BaseObservable {
@@ -112,6 +119,10 @@ public class MapPlace extends BaseObservable {
         timeZoneId += hours;
         if(minutes > 0) timeZoneId += ":" + minutes;
         return TimeZone.getTimeZone(timeZoneId);
+    }
+
+    public void loadPhoto(ImageView image, Callback callback) {
+        Picasso.get().load(photo).into(image, callback);
     }
 
     public class PlaceResponse {
