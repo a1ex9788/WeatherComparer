@@ -10,6 +10,12 @@
 
     <!-- Strings bottom sheet-->
     <string name="tvToday">Today</string>
+    <string name="feels_like">Feels like</string>
+    <string name="visibility">Visibility</string>
+    <string name="pressure">Pressure</string>
+    <string name="probability_of_rain">Probability of rain</string>
+    <string name="sunset">Sunset</string>
+    <string name="sunrise">Sunrise</string>
 
     <!-- Places fragment -->
     <string name="tvEmpty">Empty list</string>

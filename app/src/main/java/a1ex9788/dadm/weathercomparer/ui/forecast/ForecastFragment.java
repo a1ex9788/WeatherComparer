@@ -6,14 +6,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.interfaces.dataprovider.BarDataProvider;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.MainActivity;
@@ -29,6 +40,8 @@ public class ForecastFragment extends Fragment {
     private ForecastViewModel forecastViewModel;
     private ImageButton ibNavigationDrawer;
     private FragmentForecastBinding binding;
+    private ConstraintLayout clBottomSheet;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentForecastBinding.inflate(inflater, container, false);
@@ -59,7 +72,49 @@ public class ForecastFragment extends Fragment {
 
         this.ibNavigationDrawer = root.findViewById(R.id.ibNavigationDrawer);
         this.ibNavigationDrawer.setOnClickListener(v -> ((MainActivity) getActivity()).openNavigationDrawer());
+        this.clBottomSheet = root.findViewById(R.id.clBottomSheet);
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(this.clBottomSheet);
+        TextView tvToday = root.findViewById(R.id.tvToday);
+        ConstraintLayout hourPrediction1 = root.findViewById(R.id.hourPrediction1);
+        ConstraintLayout hourPrediction2 = root.findViewById(R.id.hourPrediction2);
+        ConstraintLayout hourPrediction3 = root.findViewById(R.id.hourPrediction3);
+        ConstraintLayout hourPrediction4 = root.findViewById(R.id.hourPrediction4);
+        BarChart bcBottomSheet = root.findViewById(R.id.bcBottomSheet);
+        ArrayList<BarEntry> lineEntries = new ArrayList<>();
+        for (int i = 0; i<11; i++){
+            float y = (int) (Math.random() * 8) + 1;
+            lineEntries.add(new BarEntry((float) i,(float)y));
+        }
+        BarDataSet barDataSet = new BarDataSet(lineEntries, "Chart");
+        BarData barData = new BarData();
+        barData.addDataSet(barDataSet);
+        bcBottomSheet.setData(barData);
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if(BottomSheetBehavior.STATE_COLLAPSED == newState){
+                    hourPrediction1.setVisibility(View.VISIBLE);
+                    hourPrediction2.setVisibility(View.VISIBLE);
+                    hourPrediction3.setVisibility(View.VISIBLE);
+                    hourPrediction4.setVisibility(View.VISIBLE);
+                    bcBottomSheet.setVisibility(View.INVISIBLE);
+                    tvToday.setVisibility(View.VISIBLE);
+                }
+                else if (BottomSheetBehavior.STATE_EXPANDED == newState){
+                    hourPrediction1.setVisibility(View.INVISIBLE);
+                    hourPrediction2.setVisibility(View.INVISIBLE);
+                    hourPrediction3.setVisibility(View.INVISIBLE);
+                    hourPrediction4.setVisibility(View.INVISIBLE);
+                    bcBottomSheet.setVisibility(View.VISIBLE);
+                    tvToday.setVisibility(View.INVISIBLE);
+                }
+            }
 
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
         return root;
     }
 
