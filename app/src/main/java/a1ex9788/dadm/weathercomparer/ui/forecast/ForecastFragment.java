@@ -32,8 +32,6 @@ import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
 
 public class ForecastFragment extends Fragment {
 
-    private final String SPEED_UNIT = "km/h", TEMPERATURE_UNIT = "°C", PROBABILITY_SIGN = "%";
-
     private ForecastViewModel forecastViewModel;
     private FragmentForecastBinding binding;
 
@@ -78,9 +76,9 @@ public class ForecastFragment extends Fragment {
                     DayForecast dayForecast = dailyForecast.get(0);
 
                     binding.setWeatherConditionText(dayForecast.getWeatherCondition().getText());
-                    binding.setWindSpeed(roundToOneDecimal(dayForecast.getWindSpeed_kilometersPerHour()) + " " + SPEED_UNIT);
-                    binding.setAverageTemperature(roundToOneDecimal(dayForecast.getAvgTemperature_celsius()) + " " + TEMPERATURE_UNIT);
-                    binding.setRainProbability(roundToOneDecimal(dayForecast.getPrecipitationProbability()) + " " + PROBABILITY_SIGN);
+                    binding.setWindSpeed(roundToOneDecimal(dayForecast.getWindSpeed_kilometersPerHour()) + " " + R.string.speed_metricUnits);
+                    binding.setAverageTemperature(roundToOneDecimal(dayForecast.getAvgTemperature_celsius()) + " " + R.string.temperature_metricUnits);
+                    binding.setRainProbability(roundToOneDecimal(dayForecast.getPrecipitationProbability()) + " " + R.string.probability_sign);
 
                     setWeatherConditionAnimation(root, dayForecast.getWeatherCondition());
                 } catch (Exception e) {

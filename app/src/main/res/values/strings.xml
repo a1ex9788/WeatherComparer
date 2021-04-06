@@ -1,14 +1,34 @@
 <resources>
     <string name="app_name">Weather Comparer</string>
-    <string name="title_places">Places</string>
+    <string name="header_image_description">App icon</string>
     <string name="title_forecast">Forecast</string>
+    <string name="title_places">Places</string>
     <string name="title_map">Map</string>
     <string name="title_settings">Settings</string>
-    <string name="title_navigation_drawer">Home</string>
-    <string name="header_image_description">App icon</string>
+
+    <!-- API Keys -->
+    <string name="accuWeather_apiKey">yOLINkCqLbJQEg8YcjA1juHumFGgpIp0</string>
+    <string name="openWeather_apiKey">29351929fe3ab873d5ba07eeab75f5d8</string>
+    <string name="weatherBit_apiKey">65e807b828e44105b3f8a64cb5e82604</string>
+    <string name="google_apiKey">AIzaSyAiKQz6mYGVdAYfIWDxkTiOIa0x86e2ntA</string>
+
+    <!-- Metric units -->
+    <string name="speed_metricUnits">km/h</string>
+    <string name="temperature_metricUnits">°C</string>
+
+    <!-- Imperial units -->
+    <string name="speed_imperialUnits">mile/h</string>
+    <string name="temperature_imperialUnits">°F</string>
+
+    <!-- Scientific units -->
+    <string name="speed_scientificUnits">m/s</string>
+    <string name="temperature_scientificUnits">K</string>
+
+    <!-- Forecast fragment -->
+    <string name="probability_sign">%</string>
     <string name="toast_forecastError">There was a problem and the forecast data could not be obtained.</string>
 
-    <!-- Strings bottom sheet-->
+    <!-- Forecast bottom sheet -->
     <string name="tvToday">Today</string>
     <string name="feels_like">Feels like</string>
     <string name="visibility">Visibility</string>
