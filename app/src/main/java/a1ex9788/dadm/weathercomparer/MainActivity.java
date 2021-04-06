@@ -1,6 +1,7 @@
 package a1ex9788.dadm.weathercomparer;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private Toolbar tbNavigationDrawer;
     private DrawerLayout dlNavigationDrawer;
+    private MenuItem lastItem = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.dlNavigationDrawer = findViewById(R.id.nd_layout);
         NavigationView nvNavigationDrawer = findViewById(R.id.nv_navigation_drawer);
         nvNavigationDrawer.setNavigationItemSelectedListener(this);
+        MenuItem menuItem = nvNavigationDrawer.getMenu().getItem(0);
+        onNavigationItemSelected(menuItem);
 
         Places.initialize(this, ApiKeys.GOOGLE);
     }
@@ -66,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         this.dlNavigationDrawer.closeDrawer(GravityCompat.START);
+        if (this.lastItem != null && this.lastItem != item)
+            this.lastItem.setChecked(false);
         Class<? extends Fragment> fragmentClass = null;
         if (item.getItemId() == R.id.navigation_forecast) {
             fragmentClass = ForecastFragment.class;
@@ -83,8 +89,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportActionBar().setTitle(R.string.title_settings);
         }
 
-        if (fragmentClass != null) {
-
+        if (fragmentClass != null && this.lastItem != item) {
+            this.lastItem = item;
+            this.lastItem.setChecked(true);
             getSupportFragmentManager()
                     .beginTransaction()
                     .setReorderingAllowed(true)
