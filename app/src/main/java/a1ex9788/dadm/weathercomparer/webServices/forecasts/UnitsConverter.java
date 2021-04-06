@@ -35,7 +35,6 @@ public class UnitsConverter {
             case 38:
             case 43:
                 return WeatherCondition.Clouds;
-
             case 11:
                 return WeatherCondition.Fog;
             case 12:
@@ -61,7 +60,6 @@ public class UnitsConverter {
             case 29:
             case 44:
                 return WeatherCondition.Snow;
-
             case 31:
                 return WeatherCondition.UnknownPrecipitation;
             case 41:
@@ -87,7 +85,6 @@ public class UnitsConverter {
             case 314:
             case 321:
                 return WeatherCondition.ThunderstormWithRain;
-
             case 210:
             case 211:
             case 212:
@@ -141,7 +138,6 @@ public class UnitsConverter {
             default:
                 return WeatherCondition.Unknown;
         }
-
     }
 
     public static WeatherCondition weatherBitConditionToStandard(int code) {

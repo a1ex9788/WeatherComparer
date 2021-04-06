@@ -2,7 +2,6 @@ package a1ex9788.dadm.weathercomparer.ui.forecast;
 
 import androidx.lifecycle.ViewModel;
 
-import java.util.Arrays;
 import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
