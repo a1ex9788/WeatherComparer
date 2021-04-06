@@ -67,40 +67,31 @@ public class MapFragment extends Fragment {
 
         db = Room.getInstance(getContext()).room();
 
-        binding.fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(MAP_TAG, String.valueOf(binding.getAlreadyAdded()));
-                if (binding.getAlreadyAdded()) {
-                    deletePlace();
-                    binding.setAlreadyAdded(false);
-                } else {
-                    addPlace();
-                    binding.setAlreadyAdded(true);
-                }
+        binding.fabAdd.setOnClickListener(view -> {
+            Log.d(MAP_TAG, String.valueOf(binding.getAlreadyAdded()));
+            if (binding.getAlreadyAdded()) {
+                deletePlace();
+                binding.setAlreadyAdded(false);
+            } else {
+                addPlace();
+                binding.setAlreadyAdded(true);
             }
         });
 
-        binding.fabForecast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO
-            }
+        binding.fabForecast.setOnClickListener(view -> {
+            //TODO
         });
 
         ConstraintLayout constraintLayout = root.findViewById(R.id.clMapLayout);
         placeBinding = PlaceViewBinding.inflate(inflater, constraintLayout, true);
 
-        placeBinding.cvPlace.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (binding.llTools.getVisibility() == View.VISIBLE) {
-                    animateFabOut();
-                    binding.llTools.setVisibility(View.INVISIBLE);
-                } else {
-                    animateToolsIn();
-                    binding.llTools.setVisibility(View.VISIBLE);
-                }
+        placeBinding.cvPlace.setOnClickListener(view -> {
+            if (binding.llTools.getVisibility() == View.VISIBLE) {
+                animateFabOut();
+                binding.llTools.setVisibility(View.INVISIBLE);
+            } else {
+                animateToolsIn();
+                binding.llTools.setVisibility(View.VISIBLE);
             }
         });
 
@@ -122,23 +113,18 @@ public class MapFragment extends Fragment {
                 }
             });
 
-            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(LatLng latLng) {
-                    new Thread(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        new PlacesService().searchLocalityByNerby(latLng);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
+            map.setOnMapClickListener(latLng -> new Thread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                new PlacesService().searchLocalityByNerby(latLng);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                    ).start();
-                }
-            });
+                        }
+                    }
+            ).start());
 
             setupAutocomplete();
         };
