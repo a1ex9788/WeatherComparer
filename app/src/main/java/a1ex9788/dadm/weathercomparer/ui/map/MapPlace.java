@@ -52,8 +52,8 @@ public class MapPlace extends BaseObservable {
         name = googlePlace.getName();
         Random rand = new Random();
         List<PhotoMetadata> photos = googlePlace.getPhotoMetadatas();
-        if(!photos.isEmpty()) {
-            photo = photos.get(rand.nextInt(photos.size())).zza();
+        if( photos != null && !photos.isEmpty()) {
+            photo = "https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAiKQz6mYGVdAYfIWDxkTiOIa0x86e2ntA&maxheight=200&photoreference="+photos.get(rand.nextInt(photos.size())).zza();
         }
         timeZone = getTimeZone(googlePlace).getDisplayName();
     }
@@ -112,5 +112,9 @@ public class MapPlace extends BaseObservable {
         timeZoneId += hours;
         if(minutes > 0) timeZoneId += ":" + minutes;
         return TimeZone.getTimeZone(timeZoneId);
+    }
+
+    public class PlaceResponse {
+        public List results;
     }
 }

@@ -154,6 +154,8 @@ public class SwipeController extends ItemTouchHelper.Callback {
             View itemView = viewHolder.itemView;
 
             button = VectorDrawableCompat.create(context.getResources(), R.drawable.ic_baseline_delete_24, null);
+
+            button.setTint(ContextCompat.getColor(context, R.color.blueVioletCrayola));
             button.setBounds(40, itemView.getTop() + 40, itemView.getBottom() - itemView.getTop() - 40, itemView.getBottom() - 40);
             button.draw(c);
         }

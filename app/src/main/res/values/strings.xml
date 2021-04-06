@@ -10,4 +10,8 @@
 
     <!-- Strings bottom sheet-->
     <string name="tvToday">Today</string>
+
+    <!-- Map fragment -->
+    <string name="tAdd">added</string>
+    <string name="tDelete">deleted</string>
 </resources>

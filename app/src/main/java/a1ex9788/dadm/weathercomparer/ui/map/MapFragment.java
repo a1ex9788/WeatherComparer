@@ -2,21 +2,20 @@ package a1ex9788.dadm.weathercomparer.ui.map;
 
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
-import android.transition.Fade;
-import android.transition.Transition;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdate;
@@ -25,11 +24,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import org.jetbrains.annotations.NotNull;
@@ -39,10 +37,11 @@ import java.util.Arrays;
 import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.databinding.FragmentMapBinding;
+import a1ex9788.dadm.weathercomparer.databinding.PlaceViewBinding;
 import a1ex9788.dadm.weathercomparer.db.Room;
 import a1ex9788.dadm.weathercomparer.db.RoomDao;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
-import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
+import a1ex9788.dadm.weathercomparer.webServices.PlacesService;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather.OpenWeatherForecast;
 
 public class MapFragment extends Fragment {
@@ -51,6 +50,7 @@ public class MapFragment extends Fragment {
     private GoogleMap map;
     AutocompleteSupportFragment autocompleteFragment;
     FragmentMapBinding binding;
+    PlaceViewBinding placeBinding;
     OpenWeatherForecast forecastService;
     RoomDao db;
 
@@ -71,7 +71,39 @@ public class MapFragment extends Fragment {
         binding.fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addPlace();
+                Log.d(MAP_TAG, String.valueOf(binding.getAlreadyAdded()));
+                if(binding.getAlreadyAdded()) {
+                    deletePlace();
+                    binding.setAlreadyAdded(false);
+                } else {
+                    addPlace();
+                    binding.setAlreadyAdded(true);
+                }
+
+            }
+        });
+        
+        binding.fabForecast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO
+            }
+        });
+
+        ConstraintLayout constraintLayout = root.findViewById(R.id.clMapLayout);
+        placeBinding = PlaceViewBinding.inflate(inflater,constraintLayout,true);
+
+        placeBinding.cvPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(binding.llTools.getVisibility() == View.VISIBLE) {
+                    animateFabOut();
+                    binding.llTools.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    animateToolsIn();
+                    binding.llTools.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -84,7 +116,22 @@ public class MapFragment extends Fragment {
             map = googleMap;
 
             map.setOnCameraMoveStartedListener(latLng -> {
-                resetInfo(container);
+                if(placeBinding.getPlace() != null) {
+                    animatePlaceCardOut();
+                    if(binding.llTools.getVisibility() == View.VISIBLE)animateFabOut();
+                    resetInfo();
+                }
+            });
+
+            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    try {
+                        new PlacesService().searchLocalityByNerby(latLng);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             });
 
             setupAutocomplete(container);
@@ -95,13 +142,14 @@ public class MapFragment extends Fragment {
         autocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.f_autocomplete);
 
+        autocompleteFragment.setTypeFilter(TypeFilter.REGIONS);
+
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG, Place.Field.PHOTO_METADATAS,Place.Field.UTC_OFFSET));
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place placeFounded) {
                 MapPlace place = new MapPlace(placeFounded);
-                binding.setLoading(true);
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(place.getLat(),place.getLng()),11);
                 map.animateCamera(cameraUpdate);
 
@@ -112,7 +160,7 @@ public class MapFragment extends Fragment {
                             public void run() {
                                 try {
                                     HourForecast forecast = forecastService.getHourlyForecast().get(0);
-                                    binding.setForecast(forecast);
+                                    placeBinding.setForecast(forecast);
                                 }
                                 catch (Exception error){
                                     Log.d(MAP_TAG,error.getMessage());
@@ -121,9 +169,20 @@ public class MapFragment extends Fragment {
                         }
                 ).start();
 
+                new Thread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                boolean exists = db.searchPlace(place.getId()) != null;
+                                binding.setAlreadyAdded(exists);
+                                Log.d(MAP_TAG, String.valueOf(exists));
+                            }
+                        }
+                ).start();
 
-                binding.setPlace(place);
-                loadPhoto(container);
+                animatePlaceCardIn();
+                placeBinding.setPlace(place);
+                if(place.getPhoto() != null) loadPhoto(container);
 
             }
 
@@ -135,7 +194,9 @@ public class MapFragment extends Fragment {
         });
 
         autocompleteFragment.getView().findViewById(R.id.places_autocomplete_clear_button).setOnClickListener(view -> {
-            resetInfo(container);
+            animatePlaceCardOut();
+            if(binding.llTools.getVisibility() == View.VISIBLE)animateFabOut();
+            resetInfo();
         });
 
         ImageView ivSearchIcon = (ImageView)autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_button);
@@ -146,24 +207,35 @@ public class MapFragment extends Fragment {
         });
     }
 
+    void animatePlaceCardIn(){
+        placeBinding.cvPlace.startAnimation(AnimationUtils.loadAnimation(getContext(),R.anim.fade_in));
+    }
 
+    void animatePlaceCardOut(){
+        placeBinding.cvPlace.startAnimation(AnimationUtils.loadAnimation(getContext(),R.anim.fade_out));
+    }
 
-    void resetInfo(ViewGroup container) {
-        Transition transition = new Fade();
-        transition.setDuration(600);
-        transition.addTarget(R.id.rlPlace);
+    void animateToolsIn(){
+        binding.llTools.startAnimation(AnimationUtils.loadAnimation(getContext(),R.anim.zoom_in));
+    }
 
-        TransitionManager.beginDelayedTransition(container, transition);
+    void animateFabOut(){
+        binding.llTools.startAnimation(AnimationUtils.loadAnimation(getContext(),R.anim.zoom_out));
+    }
+
+    void resetInfo() {
         ((EditText) autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setText(null);
         autocompleteFragment.getView().findViewById(R.id.places_autocomplete_clear_button).setVisibility(View.INVISIBLE);
-        binding.setPlace(null);
+        binding.llTools.setVisibility(View.INVISIBLE);
+        placeBinding.setPlace(null);
     }
 
     private void loadPhoto(ViewGroup container) {
-        Picasso.get().load("https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAiKQz6mYGVdAYfIWDxkTiOIa0x86e2ntA&maxheight=200&photoreference=" + binding.getPlace().getPhoto()).into((ImageView) container.findViewById(R.id.civ_place), new Callback() {
+        placeBinding.setLoading(true);
+        Picasso.get().load( placeBinding.getPlace().getPhoto()).into((ImageView) container.findViewById(R.id.civ_place), new Callback() {
             @Override
             public void onSuccess() {
-                binding.setLoading(false);
+                placeBinding.setLoading(false);
             }
 
             @Override
@@ -177,7 +249,28 @@ public class MapFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                db.addPlace(binding.getPlace());
+                db.addPlace(placeBinding.getPlace());
+                getActivity().runOnUiThread(new Runnable() {
+                   @Override
+                       public void run() {
+                         Toast.makeText(getContext(), placeBinding.getPlace().getName() + " " + getString(R.string.tAdd), Toast.LENGTH_SHORT).show();
+                       }
+                });
+            }
+        }).start();
+    }
+
+    public void deletePlace(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                db.deletePlace(placeBinding.getPlace());
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(),placeBinding.getPlace().getName() + " " + getString(R.string.tDelete),Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }).start();
     }

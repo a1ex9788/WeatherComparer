@@ -7,17 +7,20 @@
     <data>
         <import type="android.view.View"/>
         <variable name="place" type="a1ex9788.dadm.weathercomparer.ui.map.MapPlace"/>
+        <variable name="forecast" type="a1ex9788.dadm.weathercomparer.model.HourForecast"/>
+        <variable name="onTap" type="java.util.function.Function"/>
         <variable name="loading" type="Boolean"/>
     </data>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/rlPlace"
+        android:id="@+id/cvPlace"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         map:cardBackgroundColor="@color/blueVioletCrayola"
+        android:visibility="@{place == null ? View.INVISIBLE : View.VISIBLE}"
         map:cardCornerRadius="15dp"
         map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintEnd_toEndOf="parent"
