@@ -209,6 +209,22 @@ public class UnitsConverter {
         return (metersPerSecondValue / 1000.0) * 3600.0;
     }
 
+    public static double kilometersPerHourToMilesPerHour(double kilometersPerHourValue) {
+        return kilometersPerHourValue / 1.609344;
+    }
+
+    public static double kilometersPerHourToMetersPerSecond(double kilometersPerHourValue) {
+        return kilometersPerHourValue * 1000.0 / 3600.0;
+    }
+
+    public static double celsiusToFahrenheit(double celsiusValue) {
+        return (celsiusValue * 9.0 / 5.0) + 32;
+    }
+
+    public static double celsiusToKelvin(double celsiusValue) {
+        return celsiusValue + 273.15;
+    }
+
     public static UvIndex uvIndexValueToUvIndex(double uvIndexValue) {
         if (uvIndexValue <= 2) {
             return UvIndex.Low;

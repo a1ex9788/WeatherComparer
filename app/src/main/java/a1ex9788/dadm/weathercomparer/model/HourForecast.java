@@ -2,6 +2,8 @@ package a1ex9788.dadm.weathercomparer.model;
 
 import java.util.Date;
 
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.UnitsConverter;
+
 // 'Double' class is used instead of primitive type 'double' in order to allow null values.
 public class HourForecast {
 
@@ -41,8 +43,24 @@ public class HourForecast {
         return avgTemperature_celsius;
     }
 
+    public Double getAvgTemperature_fahrenheit() {
+        return UnitsConverter.celsiusToFahrenheit(avgTemperature_celsius);
+    }
+
+    public Double getAvgTemperature_kelvin() {
+        return UnitsConverter.celsiusToKelvin(avgTemperature_celsius);
+    }
+
     public Double getRealFeel_celsius() {
         return realFeel_celsius;
+    }
+
+    public Double getRealFee_fahrenheit() {
+        return UnitsConverter.celsiusToFahrenheit(realFeel_celsius);
+    }
+
+    public Double getRealFee_kelvin() {
+        return UnitsConverter.celsiusToKelvin(realFeel_celsius);
     }
 
     public Double getPrecipitationProbability() {
@@ -59,6 +77,14 @@ public class HourForecast {
 
     public Double getWindSpeed_kilometersPerHour() {
         return windSpeed_kilometersPerHour;
+    }
+
+    public Double getWindSpeed_milesPerHour() {
+        return UnitsConverter.kilometersPerHourToMilesPerHour(windSpeed_kilometersPerHour);
+    }
+
+    public Double getWindSpeed_metersPerSecond() {
+        return UnitsConverter.kilometersPerHourToMetersPerSecond(windSpeed_kilometersPerHour);
     }
 
     public Double getPressure_millibars() {
