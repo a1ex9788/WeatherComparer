@@ -21,13 +21,7 @@ public class ForecastViewModel extends ViewModel {
     private WeatherForecast openWeatherForecast = new OpenWeatherForecast(LAT, LONG);
     private WeatherForecast weatherBitForecast = new WeatherBitForecast(LAT, LONG);
 
-    private List<WeatherForecast> weatherForecasts = Arrays.asList(
-            accuWeatherForecast,
-            openWeatherForecast,
-            weatherBitForecast
-    );
-
-    private AverageForecastCalculator averageForecastCalculator = new AverageForecastCalculator(weatherForecasts);
+    private AverageForecastCalculator averageForecastCalculator = new AverageForecastCalculator(LAT, LONG);
 
     public List<DayForecast> getAverageDailyForecast() throws Exception {
         return averageForecastCalculator.getAverageDailyForecast();
