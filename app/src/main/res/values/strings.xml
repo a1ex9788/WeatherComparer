@@ -6,12 +6,6 @@
     <string name="title_map">Map</string>
     <string name="title_settings">Settings</string>
 
-    <!-- API Keys -->
-    <string name="accuWeather_apiKey">yOLINkCqLbJQEg8YcjA1juHumFGgpIp0</string>
-    <string name="openWeather_apiKey">29351929fe3ab873d5ba07eeab75f5d8</string>
-    <string name="weatherBit_apiKey">65e807b828e44105b3f8a64cb5e82604</string>
-    <string name="google_apiKey">AIzaSyAiKQz6mYGVdAYfIWDxkTiOIa0x86e2ntA</string>
-
     <!-- Metric units -->
     <string name="speed_metricUnits">km/h</string>
     <string name="temperature_metricUnits">°C</string>
