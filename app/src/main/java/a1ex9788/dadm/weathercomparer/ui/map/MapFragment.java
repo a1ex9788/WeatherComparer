@@ -41,6 +41,7 @@ import a1ex9788.dadm.weathercomparer.databinding.PlaceViewBinding;
 import a1ex9788.dadm.weathercomparer.db.Room;
 import a1ex9788.dadm.weathercomparer.db.RoomDao;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
+import a1ex9788.dadm.weathercomparer.webServices.PlacesService;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.AverageForecastCalculator;
 
 public class MapFragment extends Fragment {
@@ -124,6 +125,18 @@ public class MapFragment extends Fragment {
             map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {
+                    new Thread(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        new PlacesService().searchLocalityByNerby(latLng);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                    ).start();
                 }
             });
 
