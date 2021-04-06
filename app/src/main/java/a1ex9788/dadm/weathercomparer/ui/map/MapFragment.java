@@ -29,7 +29,7 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -41,8 +41,7 @@ import a1ex9788.dadm.weathercomparer.databinding.PlaceViewBinding;
 import a1ex9788.dadm.weathercomparer.db.Room;
 import a1ex9788.dadm.weathercomparer.db.RoomDao;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
-import a1ex9788.dadm.weathercomparer.webServices.PlacesService;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather.OpenWeatherForecast;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.AverageForecastCalculator;
 
 public class MapFragment extends Fragment {
 
@@ -51,7 +50,6 @@ public class MapFragment extends Fragment {
     private AutocompleteSupportFragment autocompleteFragment;
     private FragmentMapBinding binding;
     private PlaceViewBinding placeBinding;
-    private OpenWeatherForecast forecastService;
     private RoomDao db;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -72,7 +70,7 @@ public class MapFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d(MAP_TAG, String.valueOf(binding.getAlreadyAdded()));
-                if(binding.getAlreadyAdded()) {
+                if (binding.getAlreadyAdded()) {
                     deletePlace();
                     binding.setAlreadyAdded(false);
                 } else {
@@ -81,7 +79,7 @@ public class MapFragment extends Fragment {
                 }
             }
         });
-        
+
         binding.fabForecast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,16 +88,15 @@ public class MapFragment extends Fragment {
         });
 
         ConstraintLayout constraintLayout = root.findViewById(R.id.clMapLayout);
-        placeBinding = PlaceViewBinding.inflate(inflater,constraintLayout,true);
+        placeBinding = PlaceViewBinding.inflate(inflater, constraintLayout, true);
 
         placeBinding.cvPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(binding.llTools.getVisibility() == View.VISIBLE) {
+                if (binding.llTools.getVisibility() == View.VISIBLE) {
                     animateFabOut();
                     binding.llTools.setVisibility(View.INVISIBLE);
-                }
-                else {
+                } else {
                     animateToolsIn();
                     binding.llTools.setVisibility(View.VISIBLE);
                 }
@@ -115,9 +112,11 @@ public class MapFragment extends Fragment {
             map = googleMap;
 
             map.setOnCameraMoveStartedListener(latLng -> {
-                if(placeBinding.getPlace() != null) {
+                if (placeBinding.getPlace() != null) {
                     animatePlaceCardOut();
-                    if(binding.llTools.getVisibility() == View.VISIBLE)animateFabOut();
+                    if (binding.llTools.getVisibility() == View.VISIBLE) {
+                        animateFabOut();
+                    }
                     resetInfo();
                 }
             });
@@ -125,11 +124,6 @@ public class MapFragment extends Fragment {
             map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {
-                    try {
-                        new PlacesService().searchLocalityByNerby(latLng);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                 }
             });
 
@@ -142,26 +136,25 @@ public class MapFragment extends Fragment {
                 getChildFragmentManager().findFragmentById(R.id.f_autocomplete);
 
         autocompleteFragment.setTypeFilter(TypeFilter.REGIONS);
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG, Place.Field.PHOTO_METADATAS,Place.Field.UTC_OFFSET));
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.PHOTO_METADATAS, Place.Field.UTC_OFFSET));
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place placeFounded) {
                 MapPlace place = new MapPlace(placeFounded);
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(place.getLat(),place.getLng()),11);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(place.getLat(), place.getLng()), 11);
                 map.animateCamera(cameraUpdate);
 
-                forecastService = new OpenWeatherForecast(place.getLat(),place.getLng());
+                AverageForecastCalculator averageForecastCalculator = new AverageForecastCalculator(place.getLat(), place.getLng());
                 new Thread(
                         new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                    HourForecast forecast = forecastService.getHourlyForecast().get(0);
+                                    HourForecast forecast = averageForecastCalculator.getAverageHourlyForecast().get(0);
                                     placeBinding.setForecast(forecast);
-                                }
-                                catch (Exception error){
-                                    Log.d(MAP_TAG,error.getMessage());
+                                } catch (Exception error) {
+                                    Log.d(MAP_TAG, error.getMessage());
                                 }
                             }
                         }
@@ -180,7 +173,7 @@ public class MapFragment extends Fragment {
 
                 animatePlaceCardIn();
                 placeBinding.setPlace(place);
-                if(place.getPhoto() != null) {
+                if (place.getPhoto() != null) {
                     placeBinding.setLoading(true);
                     placeBinding.getPlace().loadPhoto(placeBinding.civPlace, new Callback() {
                         @Override
@@ -194,7 +187,6 @@ public class MapFragment extends Fragment {
                         }
                     });
                 }
-
             }
 
             @Override
@@ -206,18 +198,20 @@ public class MapFragment extends Fragment {
 
         autocompleteFragment.getView().findViewById(R.id.places_autocomplete_clear_button).setOnClickListener(view -> {
             animatePlaceCardOut();
-            if(binding.llTools.getVisibility() == View.VISIBLE)animateFabOut();
+            if (binding.llTools.getVisibility() == View.VISIBLE) {
+                animateFabOut();
+            }
             resetInfo();
         });
 
         ImageView ivSearchIcon = autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_button);
 
-        ivSearchIcon.setImageIcon(Icon.createWithResource(getContext(),R.drawable.ic_menu));
+        ivSearchIcon.setImageIcon(Icon.createWithResource(getContext(), R.drawable.ic_menu));
         ivSearchIcon.setOnClickListener(view -> {
-            ((DrawerLayout)getActivity().findViewById(R.id.nd_layout)).openDrawer(GravityCompat.START);
+            ((DrawerLayout) getActivity().findViewById(R.id.nd_layout)).openDrawer(GravityCompat.START);
         });
 
-        if(getArguments() != null && getArguments().containsKey("search")) {
+        if (getArguments() != null && getArguments().containsKey("search")) {
             autocompleteFragment.getView().post(new Runnable() {
                 @Override
                 public void run() {
@@ -228,20 +222,20 @@ public class MapFragment extends Fragment {
         }
     }
 
-    void animatePlaceCardIn(){
-        placeBinding.cvPlace.startAnimation(AnimationUtils.loadAnimation(getContext(),R.anim.fade_in));
+    void animatePlaceCardIn() {
+        placeBinding.cvPlace.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
     }
 
-    void animatePlaceCardOut(){
-        placeBinding.cvPlace.startAnimation(AnimationUtils.loadAnimation(getContext(),R.anim.fade_out));
+    void animatePlaceCardOut() {
+        placeBinding.cvPlace.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_out));
     }
 
-    void animateToolsIn(){
-        binding.llTools.startAnimation(AnimationUtils.loadAnimation(getContext(),R.anim.zoom_in));
+    void animateToolsIn() {
+        binding.llTools.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in));
     }
 
-    void animateFabOut(){
-        binding.llTools.startAnimation(AnimationUtils.loadAnimation(getContext(),R.anim.zoom_out));
+    void animateFabOut() {
+        binding.llTools.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.zoom_out));
     }
 
     void resetInfo() {
@@ -251,22 +245,22 @@ public class MapFragment extends Fragment {
         placeBinding.setPlace(null);
     }
 
-    public void addPlace(){
+    public void addPlace() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 db.addPlace(placeBinding.getPlace());
                 getActivity().runOnUiThread(new Runnable() {
-                   @Override
-                       public void run() {
-                         Toast.makeText(getContext(), placeBinding.getPlace().getName() + " " + getString(R.string.tAdd), Toast.LENGTH_SHORT).show();
-                       }
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), placeBinding.getPlace().getName() + " " + getString(R.string.tAdd), Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
         }).start();
     }
 
-    public void deletePlace(){
+    public void deletePlace() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -274,10 +268,11 @@ public class MapFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getContext(),placeBinding.getPlace().getName() + " " + getString(R.string.tDelete),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), placeBinding.getPlace().getName() + " " + getString(R.string.tDelete), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         }).start();
     }
+
 }

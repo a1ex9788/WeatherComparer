@@ -1,20 +1,41 @@
 package a1ex9788.dadm.weathercomparer.webServices.forecasts;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeatherForecast;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather.OpenWeatherForecast;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit.WeatherBitForecast;
 
 public class AverageForecastCalculator {
 
     private final int DAYS_IN_DAILY_FORECAST = 5;
     private final int HOURS_IN_HOURLY_FORECAST = 12;
 
+    private double lat, lon;
+
+    private WeatherForecast accuWeatherForecast;
+    private WeatherForecast openWeatherForecast;
+    private WeatherForecast weatherBitForecast;
+
     private List<WeatherForecast> weatherForecasts;
 
-    public AverageForecastCalculator(List<WeatherForecast> weatherForecasts) {
-        this.weatherForecasts = weatherForecasts;
+    public AverageForecastCalculator(double lat, double lon) {
+        this.lat = lat;
+        this.lon = lon;
+
+        accuWeatherForecast = new AccuWeatherForecast(lat, lon);
+        openWeatherForecast = new OpenWeatherForecast(lat, lon);
+        weatherBitForecast = new WeatherBitForecast(lat, lon);
+
+        weatherForecasts = Arrays.asList(
+                accuWeatherForecast,
+                openWeatherForecast,
+                weatherBitForecast
+        );
     }
 
     public List<DayForecast> getAverageDailyForecast() throws Exception {
