@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuItem menuItem = nvNavigationDrawer.getMenu().getItem(0);
         onNavigationItemSelected(menuItem);
 
-        Places.initialize(this, ApiKeys.GOOGLE);
+        Places.initialize(this, ApiKeys.getGoogleApiKey());
     }
 
     @Override
