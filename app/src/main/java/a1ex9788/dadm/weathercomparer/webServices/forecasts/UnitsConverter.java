@@ -129,6 +129,7 @@ public class UnitsConverter {
             case 781:
                 return WeatherCondition.Flurries;
             case 800:
+                return WeatherCondition.Clear;
             case 801:
             case 802:
             case 804:
