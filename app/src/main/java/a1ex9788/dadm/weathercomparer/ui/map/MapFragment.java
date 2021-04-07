@@ -16,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdate;
@@ -42,11 +43,11 @@ import a1ex9788.dadm.weathercomparer.db.Room;
 import a1ex9788.dadm.weathercomparer.db.RoomDao;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.webServices.PlacesService;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.AverageForecastCalculator;
 
 public class MapFragment extends Fragment {
 
     public static String MAP_TAG = "map";
+    private MapViewModel mapViewModel;
     private GoogleMap map;
     private AutocompleteSupportFragment autocompleteFragment;
     private FragmentMapBinding binding;
@@ -57,6 +58,8 @@ public class MapFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMapBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
 
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
@@ -144,14 +147,13 @@ public class MapFragment extends Fragment {
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(place.getLat(), place.getLng()), 11);
                 map.animateCamera(cameraUpdate);
 
-                AverageForecastCalculator averageForecastCalculator = new AverageForecastCalculator(place.getLat(), place.getLng());
                 new Thread(
                         new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                    HourForecast forecast = averageForecastCalculator.getAverageHourlyForecast().get(0);
-                                    placeBinding.setForecast(forecast);
+                                    HourForecast currentForecast = mapViewModel.getCurrentForecast(place.getLat(), place.getLng());
+                                    placeBinding.setForecast(currentForecast);
                                 } catch (Exception error) {
                                     Log.d(MAP_TAG, error.getMessage());
                                 }

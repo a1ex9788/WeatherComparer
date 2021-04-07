@@ -6,51 +6,59 @@ import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.AverageForecastCalculator;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecast;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeatherForecast;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.average.AverageWeatherForecast;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather.OpenWeatherForecast;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit.WeatherBitForecast;
 
 public class ForecastViewModel extends ViewModel {
 
-    private final double LAT = 39.289, LONG = -0.799;
+    public List<DayForecast> getAverageDailyForecast(double latitude, double longitude) {
+        AverageWeatherForecast averageWeatherForecast = new AverageWeatherForecast(latitude, longitude);
 
-    private WeatherForecast accuWeatherForecast = new AccuWeatherForecast(LAT, LONG);
-    private WeatherForecast openWeatherForecast = new OpenWeatherForecast(LAT, LONG);
-    private WeatherForecast weatherBitForecast = new WeatherBitForecast(LAT, LONG);
-
-    private AverageForecastCalculator averageForecastCalculator = new AverageForecastCalculator(LAT, LONG);
-
-    public List<DayForecast> getAverageDailyForecast() throws Exception {
-        return averageForecastCalculator.getAverageDailyForecast();
+        return averageWeatherForecast.getDailyForecast();
     }
 
-    public List<HourForecast> getAverageHourlyForecast() throws Exception {
-        return averageForecastCalculator.getAverageHourlyForecast();
+    public List<HourForecast> getAverageHourlyForecast(double latitude, double longitude) {
+        AverageWeatherForecast averageWeatherForecast = new AverageWeatherForecast(latitude, longitude);
+
+        return averageWeatherForecast.getHourlyForecast();
     }
 
-    public List<DayForecast> getAccuWeatherDailyForecast() throws Exception {
+    public List<DayForecast> getAccuWeatherDailyForecast(double latitude, double longitude) throws Exception {
+        WeatherForecast accuWeatherForecast = new AccuWeatherForecast(latitude, longitude);
+
         return accuWeatherForecast.getDailyForecast();
     }
 
-    public List<HourForecast> getAccuWeatherHourlyForecast() throws Exception {
+    public List<HourForecast> getAccuWeatherHourlyForecast(double latitude, double longitude) throws Exception {
+        WeatherForecast accuWeatherForecast = new AccuWeatherForecast(latitude, longitude);
+
         return accuWeatherForecast.getHourlyForecast();
     }
 
-    public List<DayForecast> getOpenWeatherDailyForecast() throws Exception {
+    public List<DayForecast> getOpenWeatherDailyForecast(double latitude, double longitude) throws Exception {
+        WeatherForecast openWeatherForecast = new OpenWeatherForecast(latitude, longitude);
+
         return openWeatherForecast.getDailyForecast();
     }
 
-    public List<HourForecast> getOpenWeatherHourlyForecast() throws Exception {
+    public List<HourForecast> getOpenWeatherHourlyForecast(double latitude, double longitude) throws Exception {
+        WeatherForecast openWeatherForecast = new OpenWeatherForecast(latitude, longitude);
+
         return openWeatherForecast.getHourlyForecast();
     }
 
-    public List<DayForecast> getWeatherBitDailyForecast() throws Exception {
+    public List<DayForecast> getWeatherBitDailyForecast(double latitude, double longitude) throws Exception {
+        WeatherForecast weatherBitForecast = new WeatherBitForecast(latitude, longitude);
+
         return weatherBitForecast.getDailyForecast();
     }
 
-    public List<HourForecast> getWeatherBitHourlyForecast() throws Exception {
+    public List<HourForecast> getWeatherBitHourlyForecast(double latitude, double longitude) throws Exception {
+        WeatherForecast weatherBitForecast = new WeatherBitForecast(latitude, longitude);
+
         return weatherBitForecast.getHourlyForecast();
     }
 

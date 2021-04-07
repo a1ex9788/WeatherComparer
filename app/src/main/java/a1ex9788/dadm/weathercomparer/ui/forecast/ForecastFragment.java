@@ -23,7 +23,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
@@ -69,7 +68,8 @@ public class ForecastFragment extends Fragment {
                 Looper.prepare();
 
                 try {
-                    List<DayForecast> dailyForecast = forecastViewModel.getAverageDailyForecast();
+                    double latitude = 39.289, longitude = -0.799;
+                    List<DayForecast> dailyForecast = forecastViewModel.getAverageDailyForecast(latitude, longitude);
                     DayForecast dayForecast = dailyForecast.get(0);
 
                     binding.setWeatherConditionText(dayForecast.getWeatherCondition().getText());
