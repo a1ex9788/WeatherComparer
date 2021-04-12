@@ -1,5 +1,6 @@
 package a1ex9788.dadm.weathercomparer.ui.map;
 
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -29,7 +31,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -153,6 +155,7 @@ public class MapFragment extends Fragment {
                             public void run() {
                                 try {
                                     HourForecast currentForecast = mapViewModel.getCurrentForecast(place.getLat(), place.getLng());
+                                    Log.d("forecast",currentForecast.toString());
                                     placeBinding.setForecast(currentForecast);
                                 } catch (Exception error) {
                                     Log.d(MAP_TAG, error.getMessage());
@@ -176,17 +179,9 @@ public class MapFragment extends Fragment {
                 placeBinding.setPlace(place);
                 if (place.getPhoto() != null) {
                     placeBinding.setLoading(true);
-                    placeBinding.getPlace().loadPhoto(placeBinding.civPlace, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            placeBinding.setLoading(false);
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-
-                        }
-                    });
+                    /*Picasso.get()
+                            .load(place.getPhoto())
+                            .into(placeBinding.ivPlace);*/
                 }
             }
 

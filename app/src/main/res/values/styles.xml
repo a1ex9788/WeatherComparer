@@ -10,11 +10,16 @@
 
     <style name="WhiteTitle" parent="TextAppearance.AppCompat.Title">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">28dp</item>
     </style>
 
     <style name="WhiteSubtitle" parent="TextAppearance.AppCompat.Title">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+
+    <style name="WhiteIndex" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">8dp</item>
     </style>
 </resources>

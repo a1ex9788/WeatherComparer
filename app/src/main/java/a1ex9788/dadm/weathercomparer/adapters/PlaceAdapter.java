@@ -1,19 +1,12 @@
 package a1ex9788.dadm.weathercomparer.adapters;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.Bindable;
-import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import com.squareup.picasso.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,17 +36,6 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         holder.binding.setPlace(place);
         if(place.getPhoto() != null) {
             holder.binding.setLoading(true);
-            place.loadPhoto(holder.binding.civPlace, new Callback() {
-                @Override
-                public void onSuccess() {
-                    holder.binding.setLoading(false);
-                }
-
-                @Override
-                public void onError(Exception e) {
-
-                }
-            });
         }
     }
 
