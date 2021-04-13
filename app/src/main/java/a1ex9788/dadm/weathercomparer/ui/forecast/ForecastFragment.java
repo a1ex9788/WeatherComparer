@@ -1,10 +1,13 @@
 package a1ex9788.dadm.weathercomparer.ui.forecast;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,10 +20,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.dataprovider.BarDataProvider;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -32,6 +38,16 @@ import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.databinding.FragmentForecastBinding;
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
+import lecho.lib.hellocharts.gesture.ContainerScrollType;
+import lecho.lib.hellocharts.gesture.ZoomType;
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.ValueShape;
+import lecho.lib.hellocharts.model.Viewport;
+import lecho.lib.hellocharts.view.LineChartView;
 
 public class ForecastFragment extends Fragment {
 
@@ -41,6 +57,13 @@ public class ForecastFragment extends Fragment {
     private ImageButton ibNavigationDrawer;
     private FragmentForecastBinding binding;
     private ConstraintLayout clBottomSheet;
+
+    List<PointValue> mPointValues = new ArrayList<PointValue>();
+    List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();
+    String[] date = {"10-22","11-22","12-22","1-22","6-22","5-23","5-22","6-22","5-23","5-22"};//Marking of X-axis
+    int[] score= {50,42,90,33,10,74,22,18,79,20};//Data Points of Charts
+    LineChartView chartView;
+    private boolean chartConfigurated;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,40 +96,46 @@ public class ForecastFragment extends Fragment {
         this.ibNavigationDrawer = root.findViewById(R.id.ibNavigationDrawer);
         this.ibNavigationDrawer.setOnClickListener(v -> ((MainActivity) getActivity()).openNavigationDrawer());
         this.clBottomSheet = root.findViewById(R.id.clBottomSheet);
+
         BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(this.clBottomSheet);
+        DisplayMetrics metrics = new DisplayMetrics();
+        ((MainActivity)getActivity()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int height = metrics.heightPixels;
+        bottomSheetBehavior.setPeekHeight(height / 4);
+        this.clBottomSheet.getLayoutParams().height = (3 * height) / 4;
         TextView tvToday = root.findViewById(R.id.tvToday);
-        ConstraintLayout hourPrediction1 = root.findViewById(R.id.hourPrediction1);
+        /*ConstraintLayout hourPrediction1 = root.findViewById(R.id.hourPrediction1);
         ConstraintLayout hourPrediction2 = root.findViewById(R.id.hourPrediction2);
         ConstraintLayout hourPrediction3 = root.findViewById(R.id.hourPrediction3);
-        ConstraintLayout hourPrediction4 = root.findViewById(R.id.hourPrediction4);
-        BarChart bcBottomSheet = root.findViewById(R.id.bcBottomSheet);
-        ArrayList<BarEntry> lineEntries = new ArrayList<>();
-        for (int i = 0; i<11; i++){
-            float y = (int) (Math.random() * 8) + 1;
-            lineEntries.add(new BarEntry((float) i,(float)y));
-        }
-        BarDataSet barDataSet = new BarDataSet(lineEntries, "Chart");
-        BarData barData = new BarData();
-        barData.addDataSet(barDataSet);
-        bcBottomSheet.setData(barData);
+        ConstraintLayout hourPrediction4 = root.findViewById(R.id.hourPrediction4);*/
+        chartView =  root.findViewById(R.id.chart);
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if(BottomSheetBehavior.STATE_COLLAPSED == newState){
-                    hourPrediction1.setVisibility(View.VISIBLE);
+                    /*hourPrediction1.setVisibility(View.VISIBLE);
                     hourPrediction2.setVisibility(View.VISIBLE);
                     hourPrediction3.setVisibility(View.VISIBLE);
-                    hourPrediction4.setVisibility(View.VISIBLE);
-                    bcBottomSheet.setVisibility(View.INVISIBLE);
-                    tvToday.setVisibility(View.VISIBLE);
+                    hourPrediction4.setVisibility(View.VISIBLE);*/
+                    chartView.setVisibility(View.INVISIBLE);
+                    tvToday.setText(R.string.tvToday);
                 }
                 else if (BottomSheetBehavior.STATE_EXPANDED == newState){
-                    hourPrediction1.setVisibility(View.INVISIBLE);
+                    /*hourPrediction1.setVisibility(View.INVISIBLE);
                     hourPrediction2.setVisibility(View.INVISIBLE);
                     hourPrediction3.setVisibility(View.INVISIBLE);
-                    hourPrediction4.setVisibility(View.INVISIBLE);
-                    bcBottomSheet.setVisibility(View.VISIBLE);
-                    tvToday.setVisibility(View.INVISIBLE);
+                    hourPrediction4.setVisibility(View.INVISIBLE);*/
+
+                    tvToday.setText(R.string.tvToday_daily);
+                }
+                else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
+                    chartView.setVisibility(View.VISIBLE);
+                    if(!chartConfigurated) {
+                        getAxisXLables();
+                        getAxisPoints();
+                        initLineChart();
+                        chartConfigurated = true;
+                    }
                 }
             }
 
@@ -115,6 +144,7 @@ public class ForecastFragment extends Fragment {
 
             }
         });
+
         return root;
     }
 
@@ -134,6 +164,68 @@ public class ForecastFragment extends Fragment {
     private void setWeatherConditionAnimation(View root, WeatherCondition weatherCondition) {
         LottieAnimationView animationView = root.findViewById(R.id.animationViewWeather);
         animationView.setAnimationFromUrl(weatherCondition.getIconAddress());
+    }
+
+    private void getAxisXLables() {
+        for (int i = 0; i < date.length; i++) {
+            mAxisXValues.add(new AxisValue(i).setLabel(date[i]));
+        }
+    }
+
+    private void getAxisPoints() {
+        for (int i = 0; i < score.length; i++) {
+            mPointValues.add(new PointValue(i, score[i]));
+        }
+    }
+
+    private void initLineChart() {
+        Line line = new Line(mPointValues).setColor(Color.parseColor("#FFCD41"));  //The color of the broken line (orange)
+        List<Line> lines = new ArrayList<Line>();
+        line.setShape(ValueShape.CIRCLE);//The shape of each data point on a broken line chart is circular here (there are three kinds: ValueShape. SQUARE ValueShape. CIRCLE ValueShape. DIAMOND)
+        line.setCubic(false);//Whether the curve is smooth, that is, whether it is a curve or a broken line
+        line.setFilled(false);//Whether or not to fill the area of the curve
+        line.setHasLabels(true);//Whether to add notes to the data coordinates of curves
+//      Line. setHasLabels OnlyForSelected (true); // Click on the data coordinates to prompt the data (set this line.setHasLabels(true); invalid)
+        line.setHasLines(true);//Whether to display with line or not. If it is false, there is no curve but point display
+        line.setHasPoints(false);//Whether to display a dot if it is false, there is no origin but only a dot (each data point is a large dot)
+        lines.add(line);
+        LineChartData data = new LineChartData();
+        data.setLines(lines);
+
+        //Axis of coordinates
+        Axis axisX = new Axis(); //X axis
+        axisX.setHasTiltedLabels(true);  //Is the font on the X axis oblique or straight, and true oblique?
+        axisX.setTextColor(Color.GRAY);  //Setting font color
+        //axisX.setName("date"); // table name
+        axisX.setTextSize(10);//Set font size
+        axisX.setMaxLabelChars(8); //Up to a few X-axis coordinates, which means that your scaling allows the number of data on the X-axis to be 7<=x<=mAxisXValues.length.
+        axisX.setValues(mAxisXValues);  //Fill in the coordinate name of the X-axis
+        data.setAxisXBottom(axisX); //The x-axis is at the bottom.
+        //Data. setAxisXTop (axisX); //x axis at top
+        axisX.setHasLines(true); //x-axis dividing line
+
+        // The Y-axis automatically sets the Y-axis limit according to the size of the data (below I will give a solution for fixing the number of Y-axis data)
+        Axis axisY = new Axis();  //Y axis
+        axisY.setName("");//y axis annotation
+        axisY.setTextSize(10);//Set font size
+        data.setAxisYLeft(axisY);  //The Y-axis is set on the left
+        //Data. setAxisYRight (axisY); the // Y axis is set to the right
+
+
+        //Setting behavioral properties to support zooming, sliding, and Translation
+        chartView.setInteractive(true);
+        chartView.setZoomType(ZoomType.HORIZONTAL);
+        chartView.setMaxZoom((float) 2);//Maximum method ratio
+        chartView.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
+        chartView.setLineChartData(data);
+        chartView.setVisibility(View.VISIBLE);
+        /**Note: The following 7, 10 just represent a number to analogize.
+         * At that time, it was to solve the fixed number of X-axis data. See (http://forum.xda-developers.com/tools/programming/library-hellocharts-charting-library-t2904456/page2);
+         */
+        Viewport v = new Viewport(chartView.getMaximumViewport());
+        v.left = 0;
+        v.right = 7;
+        chartView.setCurrentViewport(v);
     }
 
 }

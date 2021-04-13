@@ -8,126 +8,10 @@
     android:background="@drawable/bottom_sheet_shape"
     android:orientation="vertical"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="200dp"
+    app:behavior_peekHeight="170dp"
     app:layout_anchor="@+id/clBottomSheet"
     app:layout_anchorGravity="top|center"
     app:layout_behavior="@string/bottom_sheet_behavior">
-
-    <TextView
-        android:id="@+id/tvSunset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/sunset"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tvProbabilityOfRain"
-        app:layout_constraintTop_toBottomOf="@+id/tvProbabilityOfRainValue" />
-
-    <TextView
-        android:id="@+id/tvSunsetValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="17:58"
-        android:textAlignment="viewEnd"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/tvSunset"
-        app:layout_constraintTop_toBottomOf="@+id/tvSunset" />
-
-    <TextView
-        android:id="@+id/tvProbabilityOfRain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/probability_of_rain"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tvPressure"
-        app:layout_constraintTop_toBottomOf="@+id/tvPressureValue" />
-
-    <TextView
-        android:id="@+id/tvProbabilityOfRainValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="76"
-        android:textAlignment="viewEnd"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/tvProbabilityOfRain"
-        app:layout_constraintTop_toBottomOf="@+id/tvProbabilityOfRain" />
-
-    <TextView
-        android:id="@+id/tvPressure"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/pressure"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/tvFeelsLike"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-    <TextView
-        android:id="@+id/tvPressureValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1024"
-        android:textAlignment="viewEnd"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/tvPressure"
-        app:layout_constraintTop_toBottomOf="@+id/tvPressure" />
-
-    <TextView
-        android:id="@+id/tvSunrise"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/sunrise"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tvVisibility"
-        app:layout_constraintTop_toBottomOf="@+id/tvVisibilityValue" />
-
-    <TextView
-        android:id="@+id/tvSunriseValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="6:38"
-        android:textAlignment="viewEnd"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/tvSunrise"
-        app:layout_constraintTop_toBottomOf="@+id/tvSunrise" />
-
-    <TextView
-        android:id="@+id/tvVisibility"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/visibility"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tvFeelsLike"
-        app:layout_constraintTop_toBottomOf="@+id/tvFeelsLikeValue" />
-
-    <TextView
-        android:id="@+id/tvVisibilityValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="16.1"
-        android:textAlignment="viewEnd"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/tvVisibility"
-        app:layout_constraintTop_toBottomOf="@+id/tvVisibility" />
 
     <View
         android:id="@+id/divider"
@@ -145,8 +29,7 @@
         android:id="@+id/tvToday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
         android:text="@string/tvToday"
         android:textColor="@color/white"
         android:textSize="18sp"
@@ -154,105 +37,268 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
-    <include
-        android:id="@+id/hourPrediction1"
-        layout="@layout/bottom_sheet_today_element"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/hourPrediction2"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvToday" />
-
-    <include
-        android:id="@+id/hourPrediction2"
-        layout="@layout/bottom_sheet_today_element"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/hourPrediction3"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/hourPrediction1"
-        app:layout_constraintTop_toTopOf="@+id/hourPrediction1" />
-
-    <include
-        android:id="@+id/hourPrediction3"
-        layout="@layout/bottom_sheet_today_element"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/hourPrediction4"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/hourPrediction2"
-        app:layout_constraintTop_toTopOf="@+id/hourPrediction2" />
-
-    <include
-        android:id="@+id/hourPrediction4"
-        layout="@layout/bottom_sheet_today_element"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/hourPrediction3"
-        app:layout_constraintTop_toTopOf="@+id/hourPrediction3" />
-
-    <View
-        android:id="@+id/divider2"
+    <HorizontalScrollView
+        android:id="@+id/hsvHourPrediction"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hourPrediction1"
-        app:layout_constraintVertical_bias="0.067"
-        tools:layout_editor_absoluteX="8dp"
-        android:backgroundTint="@color/white"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvToday">
 
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/bcBottomSheet"
-        android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <include
+                    android:id="@+id/hourPrediction1"
+                    layout="@layout/bottom_sheet_today_element"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toStartOf="@+id/hourPrediction2"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <include
+                    android:id="@+id/hourPrediction2"
+                    layout="@layout/bottom_sheet_today_element"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toStartOf="@+id/hourPrediction3"
+                    app:layout_constraintStart_toEndOf="@+id/hourPrediction1"
+                    app:layout_constraintTop_toTopOf="@+id/hourPrediction1" />
+
+                <include
+                    android:id="@+id/hourPrediction3"
+                    layout="@layout/bottom_sheet_today_element"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toStartOf="@+id/hourPrediction4"
+                    app:layout_constraintStart_toEndOf="@+id/hourPrediction2"
+                    app:layout_constraintTop_toTopOf="@+id/hourPrediction2" />
+
+                <include
+                    android:id="@+id/hourPrediction4"
+                    layout="@layout/bottom_sheet_today_element"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="@id/hourPrediction5"
+                    app:layout_constraintStart_toEndOf="@+id/hourPrediction3"
+                    app:layout_constraintTop_toTopOf="@+id/hourPrediction3" />
+
+                <include
+                    android:id="@+id/hourPrediction5"
+                    layout="@layout/bottom_sheet_today_element"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="@id/hourPrediction4"
+                    app:layout_constraintStart_toEndOf="@+id/hourPrediction4"
+                    app:layout_constraintTop_toTopOf="@+id/hourPrediction4" />
+
+                <include
+                    android:id="@+id/hourPrediction6"
+                    layout="@layout/bottom_sheet_today_element"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/hourPrediction5"
+                    app:layout_constraintTop_toTopOf="@+id/hourPrediction5" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/divider2"
-        app:layout_constraintEnd_toEndOf="@+id/hourPrediction4"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/hourPrediction1"
-        app:layout_constraintTop_toBottomOf="@+id/divider"
-        android:background="@drawable/bottom_sheet_today_shapes"
-        android:visibility="invisible"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hsvHourPrediction">
 
-    <TextView
-        android:id="@+id/tvFeelsLike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/feels_like"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/divider2"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvFeelsLikeValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="24"
-        android:textAlignment="viewEnd"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/tvFeelsLike"
-        app:layout_constraintTop_toBottomOf="@+id/tvFeelsLike" />
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_height="150dp"
+                android:visibility="invisible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvFeelsLike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="50dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/feels_like"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvFeelsLikeValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="50dp"
+                        android:text="24"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvVisibility"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="50dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/visibility"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="@+id/tvFeelsLike"
+                        app:layout_constraintTop_toBottomOf="@+id/tvFeelsLikeValue" />
+
+                    <TextView
+                        android:id="@+id/tvVisibilityValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="50dp"
+                        android:text="16.1"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvSunrise"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="50dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/sunrise"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvSunriseValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="50dp"
+                        android:text="6:38"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvPressure"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="100dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/pressure"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/tvFeelsLike"
+                        app:layout_constraintTop_toBottomOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvPressureValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="100dp"
+                        android:text="1024"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvProbabilityOfRain"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="100dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/probability_of_rain"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvProbabilityOfRainValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="100dp"
+                        android:text="76"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvSunset"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="100dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/sunset"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvSunsetValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="100dp"
+                        android:text="17:58"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

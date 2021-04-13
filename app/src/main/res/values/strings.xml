@@ -10,6 +10,7 @@
 
     <!-- Strings bottom sheet-->
     <string name="tvToday">Today</string>
+    <string name="tvToday_daily">Daily</string>
     <string name="feels_like">Feels like</string>
     <string name="visibility">Visibility</string>
     <string name="pressure">Pressure</string>
