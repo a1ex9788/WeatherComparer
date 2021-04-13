@@ -4,9 +4,8 @@ import android.content.Context;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
-import androidx.room.TypeConverters;
 
-import a1ex9788.dadm.weathercomparer.ui.map.MapPlace;
+import a1ex9788.dadm.weathercomparer.model.MapPlace;
 
 @Database(entities = MapPlace.class, version = 1)
 abstract public class Room extends RoomDatabase {

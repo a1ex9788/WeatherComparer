@@ -38,7 +38,7 @@
                 android:id="@+id/ll_tools"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="230px"
+                android:layout_marginBottom="300px"
                 android:orientation="horizontal"
                 android:visibility="invisible"
                 map:layout_constraintBottom_toBottomOf="@+id/cvPlace"

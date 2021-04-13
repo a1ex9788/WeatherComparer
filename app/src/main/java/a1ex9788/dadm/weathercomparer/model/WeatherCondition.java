@@ -3,8 +3,8 @@ package a1ex9788.dadm.weathercomparer.model;
 public enum WeatherCondition {
     // TODO: Substitute the strings of the weather conditions for a resource in order to enable the language change.
     Clear("Clear", "https://assets7.lottiefiles.com/temp/lf20_Stdaec.json", 1),
-    Clouds("Clouds", "https://assets7.lottiefiles.com/temp/lf20_VAmWRg.json", 2),
-    BrokenClouds("Broken clouds", "https://assets5.lottiefiles.com/temp/lf20_dgjK9i.json", 3),
+    BrokenClouds("Broken clouds", "https://assets5.lottiefiles.com/temp/lf20_dgjK9i.json", 2),
+    Clouds("Clouds", "https://assets7.lottiefiles.com/temp/lf20_VAmWRg.json", 3),
     Rain("Rain", "https://assets6.lottiefiles.com/temp/lf20_rpC1Rd.json", 4),
     Snow("Snow", "https://assets7.lottiefiles.com/temp/lf20_WtPCZs.json", 5),
     Fog("Fog", "https://assets7.lottiefiles.com/temp/lf20_kOfPKE.json", 6),

@@ -1,17 +1,12 @@
-package a1ex9788.dadm.weathercomparer.ui.map;
-
-import android.widget.ImageView;
+package a1ex9788.dadm.weathercomparer.model;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.BaseObservable;
-import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
-import com.squareup.picasso.Callback;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +15,7 @@ import java.util.Random;
 import java.util.TimeZone;
 
 @Entity(tableName = "places")
-public class MapPlace extends BaseObservable {
+public class MapPlace  {
 
     @NonNull
     @PrimaryKey
@@ -56,7 +51,6 @@ public class MapPlace extends BaseObservable {
         timeZone = getTimeZone(googlePlace).getDisplayName();
     }
 
-    @Bindable
     public String getId() {
         return this.id;
     }
@@ -65,7 +59,6 @@ public class MapPlace extends BaseObservable {
         this.id = id;
     }
 
-    @Bindable
     public double getLat() {
         return this.lat;
     }
@@ -74,7 +67,6 @@ public class MapPlace extends BaseObservable {
         this.lat = lat;
     }
 
-    @Bindable
     public double getLng() {
         return this.lng;
     }
@@ -83,7 +75,6 @@ public class MapPlace extends BaseObservable {
         this.lng = lng;
     }
 
-    @Bindable
     public String getName() {
         return this.name;
     }
@@ -92,7 +83,6 @@ public class MapPlace extends BaseObservable {
         this.name = name;
     }
 
-    @Bindable
     public String getPhoto() {
         return this.photo;
     }
@@ -100,8 +90,7 @@ public class MapPlace extends BaseObservable {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
-
-    @Bindable
+    
     public String getTimeZone() {
         return this.timeZone;
     }
@@ -124,10 +113,6 @@ public class MapPlace extends BaseObservable {
             timeZoneId += ":" + minutes;
         }
         return TimeZone.getTimeZone(timeZoneId);
-    }
-
-    public void loadPhoto(ImageView image, Callback callback) {
-        //Picasso.get().load(photo).into(image, callback);
     }
 
     public class PlaceResponse {

@@ -1,7 +1,6 @@
 package a1ex9788.dadm.weathercomparer;
 
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuItem menuItem = nvNavigationDrawer.getMenu().getItem(0);
         onNavigationItemSelected(menuItem);
 
-        Places.initialize(this, ApiKeys.GOOGLE);
+        Places.initialize(this, ApiKeys.getGoogleApiKey());
     }
 
     @Override
@@ -70,8 +69,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         this.dlNavigationDrawer.closeDrawer(GravityCompat.START);
-        if (this.lastItem != null && this.lastItem != item)
+        if (this.lastItem != null && this.lastItem != item) {
             this.lastItem.setChecked(false);
+        }
         Class<? extends Fragment> fragmentClass = null;
         if (item.getItemId() == R.id.navigation_forecast) {
             fragmentClass = ForecastFragment.class;
@@ -102,7 +102,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-    public void openNavigationDrawer(){
+    public void openNavigationDrawer() {
         this.dlNavigationDrawer.openDrawer(GravityCompat.START);
     }
+
 }

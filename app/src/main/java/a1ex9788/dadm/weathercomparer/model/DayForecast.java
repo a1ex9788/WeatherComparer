@@ -2,6 +2,8 @@ package a1ex9788.dadm.weathercomparer.model;
 
 import java.util.Date;
 
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.UnitsConverter;
+
 // 'Double' class is used instead of primitive type 'double' in order to allow null values.
 public class DayForecast extends HourForecast {
 
@@ -22,8 +24,24 @@ public class DayForecast extends HourForecast {
         return minTemperature_celsius;
     }
 
+    public Double getMinTemperature_fahrenheit() {
+        return UnitsConverter.celsiusToFahrenheit(minTemperature_celsius);
+    }
+
+    public Double getMinTemperature_kelvin() {
+        return UnitsConverter.celsiusToKelvin(minTemperature_celsius);
+    }
+
     public Double getMaxTemperature_celsius() {
         return maxTemperature_celsius;
+    }
+
+    public Double getMaxTemperature_fahrenheit() {
+        return UnitsConverter.celsiusToFahrenheit(maxTemperature_celsius);
+    }
+
+    public Double getMaxTemperature_kelvin() {
+        return UnitsConverter.celsiusToKelvin(maxTemperature_celsius);
     }
 
     public Date getSunrise() {

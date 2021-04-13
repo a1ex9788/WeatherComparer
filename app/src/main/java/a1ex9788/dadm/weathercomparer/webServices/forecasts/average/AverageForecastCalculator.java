@@ -1,44 +1,27 @@
-package a1ex9788.dadm.weathercomparer.webServices.forecasts;
+package a1ex9788.dadm.weathercomparer.webServices.forecasts.average;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeatherForecast;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather.OpenWeatherForecast;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit.WeatherBitForecast;
+import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.UnitsConverter;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecast;
 
 public class AverageForecastCalculator {
 
-    private final int DAYS_IN_DAILY_FORECAST = 5;
-    private final int HOURS_IN_HOURLY_FORECAST = 12;
-
-    private double lat, lon;
-
-    private WeatherForecast accuWeatherForecast;
-    private WeatherForecast openWeatherForecast;
-    private WeatherForecast weatherBitForecast;
-
     private List<WeatherForecast> weatherForecasts;
+    private int daysInDailyForecast, hoursInHourlyForecast;
 
-    public AverageForecastCalculator(double lat, double lon) {
-        this.lat = lat;
-        this.lon = lon;
-
-        accuWeatherForecast = new AccuWeatherForecast(lat, lon);
-        openWeatherForecast = new OpenWeatherForecast(lat, lon);
-        weatherBitForecast = new WeatherBitForecast(lat, lon);
-
-        weatherForecasts = Arrays.asList(
-                accuWeatherForecast,
-                openWeatherForecast,
-                weatherBitForecast
-        );
+    public AverageForecastCalculator(List<WeatherForecast> weatherForecasts, int daysInDailyForecast, int hoursInHourlyForecast) {
+        this.weatherForecasts = weatherForecasts;
+        this.daysInDailyForecast = daysInDailyForecast;
+        this.hoursInHourlyForecast = hoursInHourlyForecast;
     }
 
-    public List<DayForecast> getAverageDailyForecast() throws Exception {
+    public List<DayForecast> getAverageDailyForecast() {
         List<List<DayForecast>> dailyForecasts = new ArrayList();
         for (WeatherForecast weatherForecast : weatherForecasts) {
             try {
@@ -49,7 +32,7 @@ public class AverageForecastCalculator {
         }
 
         List<DayForecast> averageDailyForecast = new ArrayList<>();
-        for (int i = 0; i < DAYS_IN_DAILY_FORECAST; i++) {
+        for (int i = 0; i < daysInDailyForecast; i++) {
             List<Long> weatherConditions = new ArrayList();
             List<Double> averageTemperatures = new ArrayList();
             List<Double> minTemperatures = new ArrayList();
@@ -84,7 +67,7 @@ public class AverageForecastCalculator {
 
             averageDailyForecast.add(new DayForecast(
                     dailyForecasts.get(0).get(i).getDate(),
-                    UnitsConverter.getWeatherConditionFromValue(calculateLongAverage(weatherConditions).intValue()),
+                    calculateWeatherConditionAverage(weatherConditions),
                     calculateAverageDoubles(averageTemperatures),
                     calculateAverageDoubles(minTemperatures),
                     calculateAverageDoubles(maxTemperatures),
@@ -103,7 +86,7 @@ public class AverageForecastCalculator {
         return averageDailyForecast;
     }
 
-    public List<HourForecast> getAverageHourlyForecast() throws Exception {
+    public List<HourForecast> getAverageHourlyForecast() {
         List<List<HourForecast>> hourlyForecasts = new ArrayList();
         for (WeatherForecast weatherForecast : weatherForecasts) {
             try {
@@ -114,7 +97,7 @@ public class AverageForecastCalculator {
         }
 
         List<HourForecast> averageHourlyForecast = new ArrayList<>();
-        for (int i = 0; i < HOURS_IN_HOURLY_FORECAST; i++) {
+        for (int i = 0; i < hoursInHourlyForecast; i++) {
             List<Long> weatherConditions = new ArrayList();
             List<Double> averageTemperatures = new ArrayList();
             List<Double> realFeelTemperatures = new ArrayList();
@@ -141,7 +124,7 @@ public class AverageForecastCalculator {
 
             averageHourlyForecast.add(new HourForecast(
                     hourlyForecasts.get(0).get(i).getDate(),
-                    UnitsConverter.getWeatherConditionFromValue(calculateLongAverage(weatherConditions).intValue()),
+                    calculateWeatherConditionAverage(weatherConditions),
                     calculateAverageDoubles(averageTemperatures),
                     calculateAverageDoubles(realFeelTemperatures),
                     calculateAverageDoubles(precipitationProbabilities),
@@ -154,6 +137,24 @@ public class AverageForecastCalculator {
         }
 
         return averageHourlyForecast;
+    }
+
+    private WeatherCondition calculateWeatherConditionAverage(List<Long> weatherConditions) {
+        List<Long> notNullLongs = new ArrayList();
+
+        for (Long l : weatherConditions) {
+            if (l != null) {
+                notNullLongs.add(l);
+            }
+        }
+
+        for (Long l : notNullLongs) {
+            if (Collections.frequency(notNullLongs, l) > notNullLongs.size() / 2) {
+                return UnitsConverter.getWeatherConditionFromValue(l.intValue());
+            }
+        }
+
+        return UnitsConverter.getWeatherConditionFromValue(calculateLongAverage(weatherConditions).intValue());
     }
 
     private Double calculateAverageDoubles(List<Double> doubles) {

@@ -6,7 +6,8 @@
 
     <data>
         <import type="android.view.View"/>
-        <variable name="place" type="a1ex9788.dadm.weathercomparer.ui.map.MapPlace"/>
+        <import type="a1ex9788.dadm.weathercomparer.utils.DoubleFormats"/>
+        <variable name="place" type="a1ex9788.dadm.weathercomparer.model.MapPlace"/>
         <variable name="forecast" type="a1ex9788.dadm.weathercomparer.model.HourForecast"/>
         <variable name="onTap" type="java.util.function.Function"/>
         <variable name="loading" type="Boolean"/>
@@ -15,31 +16,31 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cvPlace"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
+        android:visibility="@{place == null || forecast == null ? View.INVISIBLE : View.VISIBLE}"
         map:cardBackgroundColor="@color/blueVioletCrayola"
-        android:visibility="@{place == null ? View.INVISIBLE : View.VISIBLE}"
         map:cardCornerRadius="15dp"
         map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintEnd_toEndOf="parent"
         map:layout_constraintStart_toStartOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="8dp">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="30px"
+            android:paddingRight="30px">
 
             <RelativeLayout
                 android:id="@+id/relativeLayout"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:padding="2dp"
-                android:visibility="@{loading ? View.INVISIBLE : View.VISIBLE}"
-                map:layout_constraintBottom_toBottomOf="parent"
-                map:layout_constraintStart_toStartOf="parent"
-                map:layout_constraintTop_toTopOf="parent">
+                android:visibility="@{loading ? View.INVISIBLE : View.VISIBLE}">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/myCardView"
@@ -48,7 +49,7 @@
                     map:cardCornerRadius="50dp">
 
                     <ImageView
-                        android:id="@+id/civ_place"
+                        android:id="@+id/ivPlace"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:scaleType="centerCrop" />
@@ -56,68 +57,184 @@
 
             </RelativeLayout>
 
-            <ProgressBar
-                android:id="@+id/pb_loading"
-                style="@style/ProgressBar"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:progress="0"
-                android:visibility="@{loading ? View.VISIBLE : View.INVISIBLE}"
-                map:layout_constraintBottom_toBottomOf="parent"
-                map:layout_constraintStart_toStartOf="parent"
-                map:layout_constraintTop_toTopOf="parent" />
-
+            <Space
+                android:layout_width="20px"
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="32dp"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:orientation="vertical"
-                map:layout_constraintEnd_toStartOf="@id/animationViewWeather"
-                map:layout_constraintStart_toEndOf="@id/relativeLayout"
-                map:layout_constraintWidth_percent="0.6"
-                tools:layout_editor_absoluteY="8dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvPlaceName"
                     style="@style/WhiteTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:ellipsize="end"
+                    android:gravity="bottom"
                     android:maxLines="1"
                     android:text="@{ place.getName() }" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvPlaceWind"
+                                style="@style/WhiteSubtitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{ DoubleFormats.TWO_DECIMALS.format(forecast.getWindSpeed_kilometersPerHour())  }"
+                                android:textAlignment="viewEnd" />
+
+                            <TextView
+                                style="@style/WhiteIndex"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/speed_metricUnits"
+                                android:textAlignment="viewEnd" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_baseline_air" />
+
+                    </LinearLayout>
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvPlaceTemperature"
+                                style="@style/WhiteSubtitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{ DoubleFormats.NO_COMMA.format(forecast.getAvgTemperature_celsius()) }"
+                                android:textAlignment="viewEnd" />
+
+                            <TextView
+                                style="@style/WhiteIndex"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/temperature_metricUnits"
+                                android:textAlignment="viewEnd" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_baseline_thermostat" />
+
+                    </LinearLayout>
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvPlaceHumidity"
+                                style="@style/WhiteSubtitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{ DoubleFormats.NO_COMMA.format(forecast.getHumidityProbability())}"
+                                android:textAlignment="viewEnd" />
+
+                            <TextView
+                                style="@style/WhiteIndex"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/probability_sign"
+                                android:textAlignment="viewEnd" />
+                        </LinearLayout>
+
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_baseline_invert_colors" />
+
+                    </LinearLayout>
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
-            <android.widget.TextClock
-                android:id="@+id/tvPlaceTime"
-                style="@style/WhiteSubtitle"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:format12Hour="k:mm"
-                android:format24Hour="k:mm"
-                android:textAlignment="viewEnd"
-                android:timeZone="@{ place.getTimeZone() }"
-                map:layout_constraintBottom_toBottomOf="parent"
-                map:layout_constraintEnd_toEndOf="parent" />
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/animationViewWeather"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_speed="1.1"
-                app:lottie_url="https://assets7.lottiefiles.com/temp/lf20_Stdaec.json"
-                map:layout_constraintBottom_toBottomOf="parent"
-                map:layout_constraintEnd_toEndOf="parent"
-                map:layout_constraintTop_toTopOf="parent" />
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animationViewWeather"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_speed="1.1"
+                    app:lottie_url="https://assets7.lottiefiles.com/temp/lf20_Stdaec.json" />
 
+                <android.widget.TextClock
+                    android:id="@+id/tvPlaceTime"
+                    style="@style/WhiteSubtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:format12Hour="k:mm"
+                    android:format24Hour="k:mm"
+                    android:textAlignment="center"
+                    android:timeZone="@{ place.getTimeZone() }" />
+            </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 </layout>

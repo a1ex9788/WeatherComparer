@@ -7,7 +7,7 @@ import androidx.room.Query;
 
 import java.util.List;
 
-import a1ex9788.dadm.weathercomparer.ui.map.MapPlace;
+import a1ex9788.dadm.weathercomparer.model.MapPlace;
 
 @Dao
 public interface RoomDao {

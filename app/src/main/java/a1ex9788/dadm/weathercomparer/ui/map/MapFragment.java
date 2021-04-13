@@ -16,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdate;
@@ -28,7 +29,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -41,12 +42,13 @@ import a1ex9788.dadm.weathercomparer.databinding.PlaceViewBinding;
 import a1ex9788.dadm.weathercomparer.db.Room;
 import a1ex9788.dadm.weathercomparer.db.RoomDao;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
+import a1ex9788.dadm.weathercomparer.model.MapPlace;
 import a1ex9788.dadm.weathercomparer.webServices.PlacesService;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.AverageForecastCalculator;
 
 public class MapFragment extends Fragment {
 
     public static String MAP_TAG = "map";
+    private MapViewModel mapViewModel;
     private GoogleMap map;
     private AutocompleteSupportFragment autocompleteFragment;
     private FragmentMapBinding binding;
@@ -58,6 +60,8 @@ public class MapFragment extends Fragment {
         binding = FragmentMapBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
+
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
 
@@ -67,40 +71,31 @@ public class MapFragment extends Fragment {
 
         db = Room.getInstance(getContext()).room();
 
-        binding.fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(MAP_TAG, String.valueOf(binding.getAlreadyAdded()));
-                if (binding.getAlreadyAdded()) {
-                    deletePlace();
-                    binding.setAlreadyAdded(false);
-                } else {
-                    addPlace();
-                    binding.setAlreadyAdded(true);
-                }
+        binding.fabAdd.setOnClickListener(view -> {
+            Log.d(MAP_TAG, String.valueOf(binding.getAlreadyAdded()));
+            if (binding.getAlreadyAdded()) {
+                deletePlace();
+                binding.setAlreadyAdded(false);
+            } else {
+                addPlace();
+                binding.setAlreadyAdded(true);
             }
         });
 
-        binding.fabForecast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO
-            }
+        binding.fabForecast.setOnClickListener(view -> {
+            //TODO
         });
 
         ConstraintLayout constraintLayout = root.findViewById(R.id.clMapLayout);
         placeBinding = PlaceViewBinding.inflate(inflater, constraintLayout, true);
 
-        placeBinding.cvPlace.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (binding.llTools.getVisibility() == View.VISIBLE) {
-                    animateFabOut();
-                    binding.llTools.setVisibility(View.INVISIBLE);
-                } else {
-                    animateToolsIn();
-                    binding.llTools.setVisibility(View.VISIBLE);
-                }
+        placeBinding.cvPlace.setOnClickListener(view -> {
+            if (binding.llTools.getVisibility() == View.VISIBLE) {
+                animateFabOut();
+                binding.llTools.setVisibility(View.INVISIBLE);
+            } else {
+                animateToolsIn();
+                binding.llTools.setVisibility(View.VISIBLE);
             }
         });
 
@@ -122,23 +117,18 @@ public class MapFragment extends Fragment {
                 }
             });
 
-            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(LatLng latLng) {
-                    new Thread(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        new PlacesService().searchLocalityByNerby(latLng);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
+            map.setOnMapClickListener(latLng -> new Thread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                new PlacesService().searchLocalityByNerby(latLng);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                    ).start();
-                }
-            });
+                        }
+                    }
+            ).start());
 
             setupAutocomplete();
         };
@@ -158,14 +148,15 @@ public class MapFragment extends Fragment {
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(place.getLat(), place.getLng()), 11);
                 map.animateCamera(cameraUpdate);
 
-                AverageForecastCalculator averageForecastCalculator = new AverageForecastCalculator(place.getLat(), place.getLng());
                 new Thread(
                         new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                    HourForecast forecast = averageForecastCalculator.getAverageHourlyForecast().get(0);
-                                    placeBinding.setForecast(forecast);
+                                    HourForecast currentForecast = mapViewModel.getCurrentForecast(place.getLat(), place.getLng());
+                                    Log.d("forecast",currentForecast.toString());
+                                    placeBinding.setForecast(currentForecast);
+                                    animatePlaceCardIn();
                                 } catch (Exception error) {
                                     Log.d(MAP_TAG, error.getMessage());
                                 }
@@ -184,21 +175,11 @@ public class MapFragment extends Fragment {
                         }
                 ).start();
 
-                animatePlaceCardIn();
                 placeBinding.setPlace(place);
                 if (place.getPhoto() != null) {
-                    placeBinding.setLoading(true);
-                    placeBinding.getPlace().loadPhoto(placeBinding.civPlace, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            placeBinding.setLoading(false);
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-
-                        }
-                    });
+                    Picasso.get()
+                            .load(place.getPhoto())
+                            .into(placeBinding.ivPlace);
                 }
             }
 
