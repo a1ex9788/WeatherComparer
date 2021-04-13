@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/bottom_sheet_today_shapes">
 
-
     <ImageView
         android:id="@+id/ivWeatherIcon"
         android:layout_width="65dp"
