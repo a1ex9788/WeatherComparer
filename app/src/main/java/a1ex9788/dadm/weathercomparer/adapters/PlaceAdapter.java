@@ -1,5 +1,6 @@
 package a1ex9788.dadm.weathercomparer.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -7,14 +8,16 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.databinding.PlaceViewBinding;
+import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.ui.map.MapPlace;
-
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.average.AverageWeatherForecast;
 
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
     private List<MapPlace> places = new ArrayList<>();
@@ -35,8 +38,28 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         MapPlace place = places.get(position);
         holder.binding.setPlace(place);
         if(place.getPhoto() != null) {
-            holder.binding.setLoading(true);
+            Picasso.get()
+                    .load(place.getPhoto())
+                    .into(holder.binding.ivPlace);
         }
+
+        AverageWeatherForecast average = new AverageWeatherForecast(place.getLat(), place.getLng());
+
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            HourForecast currentForecast = average.getHourlyForecast().get(0);
+                            Log.d("forecast",currentForecast.toString());
+                            holder.binding.setForecast(currentForecast);
+                            //animatePlaceCardIn();
+                        } catch (Exception error) {
+
+                        }
+                    }
+                }
+        ).start();
     }
 
     @Override
@@ -70,7 +93,6 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         public ViewHolder(@NonNull PlaceViewBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-
         }
     }
 }

@@ -20,7 +20,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:visibility="@{place == null ? View.INVISIBLE : View.VISIBLE}"
+        android:visibility="@{place == null || forecast == null ? View.INVISIBLE : View.VISIBLE}"
         map:cardBackgroundColor="@color/blueVioletCrayola"
         map:cardCornerRadius="15dp"
         map:layout_constraintBottom_toBottomOf="parent"
@@ -31,7 +31,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="30px"
+            android:paddingRight="30px">
 
             <RelativeLayout
                 android:id="@+id/relativeLayout"
@@ -53,25 +55,17 @@
                         android:scaleType="centerCrop" />
                 </androidx.cardview.widget.CardView>
 
-                <ProgressBar
-                    android:id="@+id/pbLoading"
-                    style="@style/ProgressBar"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:progress="0"
-                    android:visibility="@{loading ? View.VISIBLE : View.INVISIBLE}" />
-
             </RelativeLayout>
 
             <Space
-                android:layout_width="8px"
+                android:layout_width="20px"
                 android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
@@ -93,14 +87,14 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
                             android:orientation="vertical">
 
                             <TextView
@@ -126,15 +120,20 @@
 
                     </LinearLayout>
 
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
                             android:orientation="vertical">
 
                             <TextView
@@ -160,15 +159,20 @@
 
                     </LinearLayout>
 
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
                             android:orientation="vertical">
 
                             <TextView
@@ -181,11 +185,12 @@
 
                             <TextView
                                 style="@style/WhiteIndex"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/probability_sign"
                                 android:textAlignment="viewEnd" />
                         </LinearLayout>
+
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -194,13 +199,14 @@
 
                     </LinearLayout>
 
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
                 </LinearLayout>
 
             </LinearLayout>
-
-            <Space
-                android:layout_width="8px"
-                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

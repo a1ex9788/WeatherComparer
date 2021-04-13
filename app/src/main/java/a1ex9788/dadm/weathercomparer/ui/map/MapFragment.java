@@ -157,6 +157,7 @@ public class MapFragment extends Fragment {
                                     HourForecast currentForecast = mapViewModel.getCurrentForecast(place.getLat(), place.getLng());
                                     Log.d("forecast",currentForecast.toString());
                                     placeBinding.setForecast(currentForecast);
+                                    animatePlaceCardIn();
                                 } catch (Exception error) {
                                     Log.d(MAP_TAG, error.getMessage());
                                 }
@@ -175,13 +176,11 @@ public class MapFragment extends Fragment {
                         }
                 ).start();
 
-                animatePlaceCardIn();
                 placeBinding.setPlace(place);
                 if (place.getPhoto() != null) {
-                    placeBinding.setLoading(true);
-                    /*Picasso.get()
+                    Picasso.get()
                             .load(place.getPhoto())
-                            .into(placeBinding.ivPlace);*/
+                            .into(placeBinding.ivPlace);
                 }
             }
 
