@@ -49,11 +49,18 @@ public class ForecastFragment extends Fragment {
 
         setDefaultForecastData(root);
 
+        recoverMapPlace();
+
         setDailyForecastData(root);
 
         configureBottomSheet(root);
 
         return root;
+    }
+
+    private void setNavigationDrawerButtonOnClickListener(View root) {
+        ImageButton ibNavigationDrawer = root.findViewById(R.id.ibNavigationDrawer);
+        ibNavigationDrawer.setOnClickListener(v -> ((MainActivity) requireActivity()).openNavigationDrawer());
     }
 
     private void setDefaultForecastData(View root) {
@@ -63,6 +70,26 @@ public class ForecastFragment extends Fragment {
         binding.setWindSpeed("-");
         binding.setAverageTemperature("-");
         binding.setRainProbability("-");
+    }
+
+    private void recoverMapPlace() {
+        getParentFragmentManager().setFragmentResultListener(String.valueOf(R.string.listenerRequest_key), this, (key, bundle) -> {
+            String name = bundle.getString(String.valueOf(R.string.nameFragmentParameter_key));
+            String photo = bundle.getString(String.valueOf(R.string.photoFragmentParameter_key));
+            String timeZone = bundle.getString(String.valueOf(R.string.timeZoneFragmentParameter_key));
+
+            if (name == null || photo == null || timeZone == null) {
+                // TODO: Show the current location forecast.
+            } else {
+                // TODO: Show the recovered info.
+            }
+        });
+
+        /* To provide parameters to the ForecastFragment the following code is needed:
+            Bundle result = new Bundle();
+            result.putString(String.valueOf(R.string.nameFragmentParameter_key), "Valencia");
+            getParentFragmentManager().setFragmentResult(String.valueOf(R.string.listenerRequest_key), result);
+         */
     }
 
     private void setDailyForecastData(View root) {
@@ -87,11 +114,6 @@ public class ForecastFragment extends Fragment {
                 }
             }
         }.start();
-    }
-
-    private void setNavigationDrawerButtonOnClickListener(View root) {
-        ImageButton ibNavigationDrawer = root.findViewById(R.id.ibNavigationDrawer);
-        ibNavigationDrawer.setOnClickListener(v -> ((MainActivity) requireActivity()).openNavigationDrawer());
     }
 
     private void configureBottomSheet(View root) {

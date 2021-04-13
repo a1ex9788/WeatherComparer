@@ -6,21 +6,21 @@
     <string name="title_map">Map</string>
     <string name="title_settings">Settings</string>
 
-    <!-- Metric units -->
+    <!-- Units -->
     <string name="speed_metricUnits">km/h</string>
     <string name="temperature_metricUnits">°C</string>
-
-    <!-- Imperial units -->
     <string name="speed_imperialUnits">mile/h</string>
     <string name="temperature_imperialUnits">°F</string>
-
-    <!-- Scientific units -->
     <string name="speed_scientificUnits">m/s</string>
     <string name="temperature_scientificUnits">K</string>
 
     <!-- Forecast fragment -->
     <string name="probability_sign">%</string>
     <string name="toast_forecastError">There was a problem and the forecast data could not be obtained.</string>
+    <string name="listenerRequest_key">listener</string>
+    <string name="nameFragmentParameter_key">name</string>
+    <string name="photoFragmentParameter_key">photo</string>
+    <string name="timeZoneFragmentParameter_key">timeZone</string>
 
     <!-- Forecast bottom sheet -->
     <string name="tvToday">Today</string>
