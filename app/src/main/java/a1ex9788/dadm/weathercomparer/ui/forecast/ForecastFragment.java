@@ -47,11 +47,11 @@ public class ForecastFragment extends Fragment {
 
         setNavigationDrawerButtonOnClickListener(root);
 
-        setDefaultForecastData(root);
+        setDefaultForecastData();
 
         recoverMapPlace();
 
-        setDailyForecastData(root);
+        setDailyForecastData();
 
         configureBottomSheet(root);
 
@@ -63,7 +63,7 @@ public class ForecastFragment extends Fragment {
         ibNavigationDrawer.setOnClickListener(v -> ((MainActivity) requireActivity()).openNavigationDrawer());
     }
 
-    private void setDefaultForecastData(View root) {
+    private void setDefaultForecastData() {
         // Set default data. It will be seen before the real one is loaded and in case of error.
         setWeatherConditionAnimation(WeatherCondition.UnknownPrecipitation);
         binding.setWeatherConditionText("No data");
@@ -92,7 +92,7 @@ public class ForecastFragment extends Fragment {
          */
     }
 
-    private void setDailyForecastData(View root) {
+    private void setDailyForecastData() {
         new Thread() {
             @Override
             public void run() {
