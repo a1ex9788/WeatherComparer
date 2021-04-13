@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -34,12 +35,15 @@ public class ForecastFragment extends Fragment {
 
     private ForecastViewModel forecastViewModel;
     private FragmentForecastBinding binding;
+    private LottieAnimationView animationView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentForecastBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         forecastViewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
+
+        animationView = root.findViewById(R.id.animationViewWeather);
 
         setNavigationDrawerButtonOnClickListener(root);
 
@@ -54,7 +58,7 @@ public class ForecastFragment extends Fragment {
 
     private void setDefaultForecastData(View root) {
         // Set default data. It will be seen before the real one is loaded and in case of error.
-        setWeatherConditionAnimation(root, WeatherCondition.UnknownPrecipitation);
+        setWeatherConditionAnimation(WeatherCondition.UnknownPrecipitation);
         binding.setWeatherConditionText("No data");
         binding.setWindSpeed("-");
         binding.setAverageTemperature("-");
@@ -77,7 +81,7 @@ public class ForecastFragment extends Fragment {
                     binding.setAverageTemperature(roundToOneDecimal(dayForecast.getAvgTemperature_celsius()) + " " + getString(R.string.temperature_metricUnits));
                     binding.setRainProbability(roundToOneDecimal(dayForecast.getPrecipitationProbability()) + " " + getString(R.string.probability_sign));
 
-                    setWeatherConditionAnimation(root, dayForecast.getWeatherCondition());
+                    setWeatherConditionAnimation(dayForecast.getWeatherCondition());
                 } catch (Exception e) {
                     Toast.makeText(requireActivity().getBaseContext(), R.string.toast_forecastError, Toast.LENGTH_LONG).show();
                 }
@@ -142,9 +146,17 @@ public class ForecastFragment extends Fragment {
         return Math.round(d * 10.0) / 10.0;
     }
 
-    private void setWeatherConditionAnimation(View root, WeatherCondition weatherCondition) {
-        LottieAnimationView animationView = root.findViewById(R.id.animationViewWeather);
+    private void setWeatherConditionAnimation(WeatherCondition weatherCondition) {
         animationView.setAnimationFromUrl(weatherCondition.getIconAddress());
+        animationView.playAnimation();
+    }
+
+    @Nullable
+    @Override
+    public Object getExitTransition() {
+        animationView.cancelAnimation();
+
+        return super.getExitTransition();
     }
 
 }
