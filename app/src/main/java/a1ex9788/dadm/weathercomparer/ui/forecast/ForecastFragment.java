@@ -7,7 +7,6 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,15 +14,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
@@ -49,7 +43,6 @@ public class ForecastFragment extends Fragment {
 
     private ForecastViewModel forecastViewModel;
     private FragmentForecastBinding binding;
-    private ConstraintLayout clBottomSheet;
 
     List<PointValue> mPointValues = new ArrayList<PointValue>();
     List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();
@@ -72,7 +65,7 @@ public class ForecastFragment extends Fragment {
 
         setDefaultForecastData();
 
-        //recoverMapPlace();
+        recoverMapPlace();
 
         setDailyForecastData();
 
@@ -95,7 +88,7 @@ public class ForecastFragment extends Fragment {
         binding.setRainProbability("-");
     }
 
-    /*private void recoverMapPlace() {
+    private void recoverMapPlace() {
         getParentFragmentManager().setFragmentResultListener(String.valueOf(R.string.listenerRequest_key), this, (key, bundle) -> {
             String name = bundle.getString(String.valueOf(R.string.nameFragmentParameter_key));
             String photo = bundle.getString(String.valueOf(R.string.photoFragmentParameter_key));
@@ -113,7 +106,7 @@ public class ForecastFragment extends Fragment {
             result.putString(String.valueOf(R.string.nameFragmentParameter_key), "Valencia");
             getParentFragmentManager().setFragmentResult(String.valueOf(R.string.listenerRequest_key), result);
          */
-   // }
+    }
 
     private void setDailyForecastData() {
         new Thread() {
@@ -142,6 +135,11 @@ public class ForecastFragment extends Fragment {
     private void configureBottomSheet(View root) {
         ConstraintLayout clBottomSheet = root.findViewById(R.id.clBottomSheet);
         BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(clBottomSheet);
+        DisplayMetrics metrics = new DisplayMetrics();
+        ((MainActivity)getActivity()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int height = metrics.heightPixels;
+        bottomSheetBehavior.setPeekHeight(height / 4);
+        clBottomSheet.getLayoutParams().height = (3 * height) / 4;
         TextView tvToday = root.findViewById(R.id.tvToday);
         /*ConstraintLayout hourPrediction1 = root.findViewById(R.id.hourPrediction1);
         ConstraintLayout hourPrediction2 = root.findViewById(R.id.hourPrediction2);
