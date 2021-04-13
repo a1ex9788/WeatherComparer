@@ -21,14 +21,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.dataprovider.BarDataProvider;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
@@ -39,6 +34,16 @@ import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.databinding.FragmentForecastBinding;
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
+import lecho.lib.hellocharts.gesture.ContainerScrollType;
+import lecho.lib.hellocharts.gesture.ZoomType;
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.ValueShape;
+import lecho.lib.hellocharts.model.Viewport;
+import lecho.lib.hellocharts.view.LineChartView;
 
 public class ForecastFragment extends Fragment {
 
@@ -67,7 +72,7 @@ public class ForecastFragment extends Fragment {
 
         setDefaultForecastData();
 
-        recoverMapPlace();
+        //recoverMapPlace();
 
         setDailyForecastData();
 
@@ -90,7 +95,7 @@ public class ForecastFragment extends Fragment {
         binding.setRainProbability("-");
     }
 
-    private void recoverMapPlace() {
+    /*private void recoverMapPlace() {
         getParentFragmentManager().setFragmentResultListener(String.valueOf(R.string.listenerRequest_key), this, (key, bundle) -> {
             String name = bundle.getString(String.valueOf(R.string.nameFragmentParameter_key));
             String photo = bundle.getString(String.valueOf(R.string.photoFragmentParameter_key));
@@ -108,7 +113,7 @@ public class ForecastFragment extends Fragment {
             result.putString(String.valueOf(R.string.nameFragmentParameter_key), "Valencia");
             getParentFragmentManager().setFragmentResult(String.valueOf(R.string.listenerRequest_key), result);
          */
-    }
+   // }
 
     private void setDailyForecastData() {
         new Thread() {
@@ -138,41 +143,27 @@ public class ForecastFragment extends Fragment {
         ConstraintLayout clBottomSheet = root.findViewById(R.id.clBottomSheet);
         BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(clBottomSheet);
         TextView tvToday = root.findViewById(R.id.tvToday);
-        ConstraintLayout hourPrediction1 = root.findViewById(R.id.hourPrediction1);
+        /*ConstraintLayout hourPrediction1 = root.findViewById(R.id.hourPrediction1);
         ConstraintLayout hourPrediction2 = root.findViewById(R.id.hourPrediction2);
         ConstraintLayout hourPrediction3 = root.findViewById(R.id.hourPrediction3);
-        ConstraintLayout hourPrediction4 = root.findViewById(R.id.hourPrediction4);
-        BarChart bcBottomSheet = root.findViewById(R.id.bcBottomSheet);
-
-        ArrayList<BarEntry> lineEntries = new ArrayList<>();
-        for (int i = 0; i < 11; i++) {
-            float y = (int) (Math.random() * 8) + 1;
-            lineEntries.add(new BarEntry((float) i, (float) y));
-        }
-
-        BarDataSet barDataSet = new BarDataSet(lineEntries, "Chart");
-        BarData barData = new BarData();
-        barData.addDataSet(barDataSet);
-        bcBottomSheet.setData(barData);
-
         ConstraintLayout hourPrediction4 = root.findViewById(R.id.hourPrediction4);*/
+
         chartView =  root.findViewById(R.id.chart);
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
-                    hourPrediction1.setVisibility(View.VISIBLE);
+                    /*hourPrediction1.setVisibility(View.VISIBLE);
                     hourPrediction2.setVisibility(View.VISIBLE);
                     hourPrediction3.setVisibility(View.VISIBLE);
-                    hourPrediction4.setVisibility(View.VISIBLE);
-                    bcBottomSheet.setVisibility(View.INVISIBLE);
+                    hourPrediction4.setVisibility(View.VISIBLE);*/
+                    chartView.setVisibility(View.INVISIBLE);
                     tvToday.setVisibility(View.VISIBLE);
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
-                    hourPrediction1.setVisibility(View.INVISIBLE);
+                    /*hourPrediction1.setVisibility(View.INVISIBLE);
                     hourPrediction2.setVisibility(View.INVISIBLE);
                     hourPrediction3.setVisibility(View.INVISIBLE);
                     hourPrediction4.setVisibility(View.INVISIBLE);*/
-
                     tvToday.setText(R.string.tvToday_daily);
                 }
                 else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
