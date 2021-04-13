@@ -16,7 +16,7 @@ import java.util.List;
 import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.databinding.PlaceViewBinding;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
-import a1ex9788.dadm.weathercomparer.ui.map.MapPlace;
+import a1ex9788.dadm.weathercomparer.model.MapPlace;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.average.AverageWeatherForecast;
 
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {

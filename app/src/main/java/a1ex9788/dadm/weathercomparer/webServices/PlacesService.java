@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import a1ex9788.dadm.weathercomparer.ui.map.MapPlace;
+import a1ex9788.dadm.weathercomparer.model.MapPlace;
 
 public class PlacesService {
 

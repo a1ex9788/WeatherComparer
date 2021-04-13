@@ -1,4 +1,4 @@
-package a1ex9788.dadm.weathercomparer.ui.map;
+package a1ex9788.dadm.weathercomparer.utils;
 
 import java.text.DecimalFormat;
 

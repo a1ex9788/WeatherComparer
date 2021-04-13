@@ -24,7 +24,7 @@ import a1ex9788.dadm.weathercomparer.databinding.FragmentPlacesBinding;
 import a1ex9788.dadm.weathercomparer.db.Room;
 import a1ex9788.dadm.weathercomparer.db.RoomDao;
 import a1ex9788.dadm.weathercomparer.ui.map.MapFragment;
-import a1ex9788.dadm.weathercomparer.ui.map.MapPlace;
+import a1ex9788.dadm.weathercomparer.model.MapPlace;
 
 public class PlacesFragment extends Fragment {
 

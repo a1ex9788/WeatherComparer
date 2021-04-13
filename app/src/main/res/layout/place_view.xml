@@ -6,8 +6,8 @@
 
     <data>
         <import type="android.view.View"/>
-        <import type="a1ex9788.dadm.weathercomparer.ui.map.DoubleFormats"/>
-        <variable name="place" type="a1ex9788.dadm.weathercomparer.ui.map.MapPlace"/>
+        <import type="a1ex9788.dadm.weathercomparer.utils.DoubleFormats"/>
+        <variable name="place" type="a1ex9788.dadm.weathercomparer.model.MapPlace"/>
         <variable name="forecast" type="a1ex9788.dadm.weathercomparer.model.HourForecast"/>
         <variable name="onTap" type="java.util.function.Function"/>
         <variable name="loading" type="Boolean"/>
