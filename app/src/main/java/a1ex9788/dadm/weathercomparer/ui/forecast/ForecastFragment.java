@@ -26,8 +26,10 @@ import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
+import a1ex9788.dadm.weathercomparer.bindings.CurrentWeather;
 import a1ex9788.dadm.weathercomparer.databinding.FragmentForecastBinding;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
+import a1ex9788.dadm.weathercomparer.model.MapPlace;
 import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
@@ -82,12 +84,11 @@ public class ForecastFragment extends Fragment {
     }
 
     private void setNavigationDrawerCheckedItem() {
-        for(int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             MenuItem item = ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
-            if(i == 0){
+            if (i == 0) {
                 item.setChecked(true);
-            }
-            else {
+            } else {
                 item.setChecked(false);
             }
         }
@@ -96,10 +97,21 @@ public class ForecastFragment extends Fragment {
     private void setDefaultForecastData() {
         // Set default data. It will be seen before the real one is loaded and in case of error.
         setWeatherConditionAnimation(WeatherCondition.UnknownPrecipitation);
-        binding.setWeatherConditionText("No data");
-        binding.setWindSpeed("-");
-        binding.setAverageTemperature("-");
-        binding.setRainProbability("-");
+
+        MapPlace mapPlace = new MapPlace();
+        mapPlace.setName("Valencia");
+        mapPlace.setTimeZone("16:14 Mar 16");
+        binding.setPlace(mapPlace);
+
+        CurrentWeather currentWeather = new CurrentWeather(
+                "No data",
+                "-",
+                getString(R.string.speed_metricUnits),
+                "-",
+                getString(R.string.temperature_metricUnits),
+                "-",
+                "%");
+        binding.setCurrentWeather(currentWeather);
     }
 
     private void recoverMapPlace() {
@@ -132,10 +144,20 @@ public class ForecastFragment extends Fragment {
                     double latitude = 39.289, longitude = -0.799;
                     HourForecast hourForecast = forecastViewModel.getCurrentWeather(latitude, longitude);
 
-                    binding.setWeatherConditionText(hourForecast.getWeatherCondition().getText());
-                    binding.setWindSpeed(roundToOneDecimal(hourForecast.getWindSpeed_kilometersPerHour()) + " " + getString(R.string.speed_metricUnits));
-                    binding.setAverageTemperature(roundToOneDecimal(hourForecast.getAvgTemperature_celsius()) + " " + getString(R.string.temperature_metricUnits));
-                    binding.setRainProbability(roundToOneDecimal(hourForecast.getPrecipitationProbability()) + " " + getString(R.string.probability_sign));
+                    MapPlace mapPlace = new MapPlace();
+                    mapPlace.setName("Valencia");
+                    mapPlace.setTimeZone("16:14 Mar 16");
+                    binding.setPlace(mapPlace);
+
+                    CurrentWeather currentWeather = new CurrentWeather(
+                            hourForecast.getWeatherCondition().getText(),
+                            roundToOneDecimal(hourForecast.getWindSpeed_kilometersPerHour()) + "",
+                            getString(R.string.speed_metricUnits),
+                            roundToOneDecimal(hourForecast.getAvgTemperature_celsius()) + "",
+                            getString(R.string.temperature_metricUnits),
+                            roundToOneDecimal(hourForecast.getPrecipitationProbability()) + "",
+                            "%");
+                    binding.setCurrentWeather(currentWeather);
 
                     setWeatherConditionAnimation(hourForecast.getWeatherCondition());
                 } catch (Exception e) {
@@ -180,7 +202,7 @@ public class ForecastFragment extends Fragment {
                     tvToday.setText(R.string.tvToday_daily);
                 } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
                     chartView.setVisibility(View.VISIBLE);
-                    if(!chartConfigured) {
+                    if (!chartConfigured) {
                         getAxisXLables();
                         getAxisPoints();
                         initLineChart();

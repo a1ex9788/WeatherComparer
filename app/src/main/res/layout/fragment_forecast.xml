@@ -8,20 +8,12 @@
         <import type="android.view.View" />
 
         <variable
-            name="weatherConditionText"
-            type="String" />
+            name="place"
+            type="a1ex9788.dadm.weathercomparer.model.MapPlace" />
 
         <variable
-            name="windSpeed"
-            type="String" />
-
-        <variable
-            name="averageTemperature"
-            type="String" />
-
-        <variable
-            name="rainProbability"
-            type="String" />
+            name="currentWeather"
+            type="a1ex9788.dadm.weathercomparer.bindings.CurrentWeather" />
 
     </data>
 
@@ -52,7 +44,7 @@
                 android:id="@+id/dateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:text="@{place.getTimeZone()}"
                 map:layout_constraintBottom_toTopOf="@+id/placeTextView"
                 map:layout_constraintEnd_toEndOf="@+id/placeTextView"
                 map:layout_constraintTop_toTopOf="@+id/imageView2" />
@@ -62,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="TextView"
+                android:text="@{place.getName()}"
                 android:textSize="20dp"
                 map:layout_constraintBottom_toBottomOf="@+id/imageView2"
                 map:layout_constraintEnd_toStartOf="@+id/imageView2"
@@ -82,7 +74,7 @@
 
                 android:id="@+id/animationViewWeather"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="180dp"
                 map:layout_constraintEnd_toEndOf="parent"
                 map:layout_constraintHorizontal_bias="0.5"
                 map:layout_constraintStart_toStartOf="parent"
@@ -95,7 +87,7 @@
                 android:id="@+id/weatherTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{weatherConditionText}"
+                android:text="@{currentWeather.getWeatherConditionText()}"
                 android:textSize="30sp"
                 map:layout_constraintEnd_toEndOf="parent"
                 map:layout_constraintStart_toStartOf="parent"
@@ -115,11 +107,11 @@
                 android:id="@+id/temperatureIcon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginTop="24dp"
                 android:src="@drawable/temperature"
-                map:layout_constraintBottom_toBottomOf="@+id/secondVerticalLine"
                 map:layout_constraintEnd_toEndOf="parent"
                 map:layout_constraintStart_toStartOf="parent"
-                map:layout_constraintTop_toTopOf="@+id/secondVerticalLine" />
+                map:layout_constraintTop_toBottomOf="@+id/weatherTextView" />
 
             <ImageView
                 android:id="@+id/rainIcon"
@@ -135,36 +127,55 @@
                 android:id="@+id/windTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{windSpeed}"
-                android:textSize="20sp"
+                android:text="@{currentWeather.getWindSpeed()}"
+                android:textSize="25sp"
                 map:layout_constraintEnd_toEndOf="@+id/windIcon"
                 map:layout_constraintStart_toStartOf="@+id/windIcon"
                 map:layout_constraintTop_toBottomOf="@+id/windIcon" />
 
+            <TextView
+                android:id="@+id/windUnitsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{currentWeather.getWindSpeedUnits()}"
+                android:textColor="#BCBCBC"
+                map:layout_constraintBottom_toBottomOf="@+id/temperatureUnitsTextView"
+                map:layout_constraintEnd_toEndOf="@+id/windTextView"
+                map:layout_constraintTop_toBottomOf="@+id/windTextView" />
+
             <View
                 android:id="@+id/firstVerticalLine"
-                android:layout_width="3dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="24dp"
+                android:layout_width="1dp"
+                android:layout_height="60dp"
                 android:background="@color/grey"
+                map:layout_constraintBottom_toBottomOf="@+id/temperatureUnitsTextView"
                 map:layout_constraintEnd_toStartOf="@+id/temperatureIcon"
                 map:layout_constraintStart_toEndOf="@+id/windIcon"
-                map:layout_constraintTop_toBottomOf="@+id/weatherTextView" />
+                map:layout_constraintTop_toTopOf="@+id/temperatureIcon" />
 
             <TextView
                 android:id="@+id/temperatureTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{averageTemperature}"
-                android:textSize="20sp"
+                android:text="@{currentWeather.getAverageTemperature()}"
+                android:textSize="25sp"
                 map:layout_constraintEnd_toEndOf="@+id/temperatureIcon"
                 map:layout_constraintStart_toStartOf="@+id/temperatureIcon"
                 map:layout_constraintTop_toBottomOf="@+id/temperatureIcon" />
 
+            <TextView
+                android:id="@+id/temperatureUnitsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{currentWeather.getAverageTemperatureUnits()}"
+                android:textColor="#BCBCBC"
+                map:layout_constraintEnd_toEndOf="@+id/temperatureTextView"
+                map:layout_constraintTop_toBottomOf="@+id/temperatureTextView" />
+
             <View
                 android:id="@+id/secondVerticalLine"
-                android:layout_width="3dp"
-                android:layout_height="100dp"
+                android:layout_width="1dp"
+                android:layout_height="60dp"
                 android:background="@color/grey"
                 map:layout_constraintBottom_toBottomOf="@+id/firstVerticalLine"
                 map:layout_constraintEnd_toStartOf="@+id/rainIcon"
@@ -175,11 +186,21 @@
                 android:id="@+id/rainTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{rainProbability}"
-                android:textSize="20sp"
+                android:text="@{currentWeather.getRainProbability()}"
+                android:textSize="25sp"
                 map:layout_constraintEnd_toEndOf="@+id/rainIcon"
                 map:layout_constraintStart_toStartOf="@+id/rainIcon"
                 map:layout_constraintTop_toBottomOf="@+id/rainIcon" />
+
+            <TextView
+                android:id="@+id/rainUnitsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{currentWeather.getRainProbabilityUnits()}"
+                android:textColor="#BCBCBC"
+                map:layout_constraintBottom_toBottomOf="@+id/temperatureUnitsTextView"
+                map:layout_constraintEnd_toEndOf="@+id/rainTextView"
+                map:layout_constraintTop_toBottomOf="@+id/rainTextView" />
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/coordinatorLayout"
@@ -190,7 +211,9 @@
                 map:layout_constraintEnd_toEndOf="parent"
                 map:layout_constraintStart_toStartOf="parent">
 
-                <include layout="@layout/bottom_sheet_layout" />
+                <include
+                    layout="@layout/bottom_sheet_layout"
+                    tools:visibility="gone" />
 
 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
