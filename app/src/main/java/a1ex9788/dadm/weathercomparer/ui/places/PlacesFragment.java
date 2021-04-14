@@ -3,6 +3,7 @@ package a1ex9788.dadm.weathercomparer.ui.places;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.adapters.PlaceAdapter;
 import a1ex9788.dadm.weathercomparer.adapters.SwipeController;
@@ -41,6 +43,8 @@ public class PlacesFragment extends Fragment {
 
         binding = FragmentPlacesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        setNavigationDrawerCheckedItem();
 
         RecyclerView recyclerView = root.findViewById(R.id.rv_places);
 
@@ -98,6 +102,18 @@ public class PlacesFragment extends Fragment {
         });
 
         return root;
+    }
+
+    private void setNavigationDrawerCheckedItem() {
+        for(int i = 0; i < 4; i++){
+            MenuItem item = ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
+            if(i == 1){
+                item.setChecked(true);
+            }
+            else {
+                item.setChecked(false);
+            }
+        }
     }
 
 }

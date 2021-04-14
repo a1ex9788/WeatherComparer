@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -48,7 +49,7 @@ public class ForecastFragment extends Fragment {
     LineChartView chartView;
     private ForecastViewModel forecastViewModel;
     private FragmentForecastBinding binding;
-    private boolean chartConfigurated;
+    private boolean chartConfigured;
 
     private LottieAnimationView animationView;
 
@@ -61,6 +62,8 @@ public class ForecastFragment extends Fragment {
         animationView = root.findViewById(R.id.animationViewWeather);
 
         setNavigationDrawerButtonOnClickListener(root);
+
+        setNavigationDrawerCheckedItem();
 
         setDefaultForecastData();
 
@@ -76,6 +79,18 @@ public class ForecastFragment extends Fragment {
     private void setNavigationDrawerButtonOnClickListener(View root) {
         ImageButton ibNavigationDrawer = root.findViewById(R.id.ibNavigationDrawer);
         ibNavigationDrawer.setOnClickListener(v -> ((MainActivity) requireActivity()).openNavigationDrawer());
+    }
+
+    private void setNavigationDrawerCheckedItem() {
+        for(int i = 0; i < 4; i++){
+            MenuItem item = ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
+            if(i == 0){
+                item.setChecked(true);
+            }
+            else {
+                item.setChecked(false);
+            }
+        }
     }
 
     private void setDefaultForecastData() {
@@ -139,10 +154,12 @@ public class ForecastFragment extends Fragment {
         bottomSheetBehavior.setPeekHeight(height / 4);
         clBottomSheet.getLayoutParams().height = (3 * height) / 4;
         TextView tvToday = root.findViewById(R.id.tvToday);
-        /*ConstraintLayout hourPrediction1 = root.findViewById(R.id.hourPrediction1);
+        ConstraintLayout hourPrediction1 = root.findViewById(R.id.hourPrediction1);
         ConstraintLayout hourPrediction2 = root.findViewById(R.id.hourPrediction2);
         ConstraintLayout hourPrediction3 = root.findViewById(R.id.hourPrediction3);
-        ConstraintLayout hourPrediction4 = root.findViewById(R.id.hourPrediction4);*/
+        ConstraintLayout hourPrediction4 = root.findViewById(R.id.hourPrediction4);
+        ConstraintLayout hourPrediction5 = root.findViewById(R.id.hourPrediction3);
+        ConstraintLayout hourPrediction6 = root.findViewById(R.id.hourPrediction4);
 
         chartView = root.findViewById(R.id.chart);
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -154,7 +171,7 @@ public class ForecastFragment extends Fragment {
                     hourPrediction3.setVisibility(View.VISIBLE);
                     hourPrediction4.setVisibility(View.VISIBLE);*/
                     chartView.setVisibility(View.INVISIBLE);
-                    tvToday.setVisibility(View.VISIBLE);
+                    tvToday.setText(R.string.tvToday);
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                     /*hourPrediction1.setVisibility(View.INVISIBLE);
                     hourPrediction2.setVisibility(View.INVISIBLE);
@@ -163,11 +180,11 @@ public class ForecastFragment extends Fragment {
                     tvToday.setText(R.string.tvToday_daily);
                 } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
                     chartView.setVisibility(View.VISIBLE);
-                    if (!chartConfigurated) {
+                    if(!chartConfigured) {
                         getAxisXLables();
                         getAxisPoints();
                         initLineChart();
-                        chartConfigurated = true;
+                        chartConfigured = true;
                     }
                 }
             }

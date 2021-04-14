@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar tbNavigationDrawer;
     private DrawerLayout dlNavigationDrawer;
     private MenuItem lastItem = null;
+    private NavigationView nvNavigationDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +41,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
         getSupportActionBar().hide();
         this.dlNavigationDrawer = findViewById(R.id.nd_layout);
-        NavigationView nvNavigationDrawer = findViewById(R.id.nv_navigation_drawer);
-        nvNavigationDrawer.setNavigationItemSelectedListener(this);
-        MenuItem menuItem = nvNavigationDrawer.getMenu().getItem(0);
-        onNavigationItemSelected(menuItem);
+        this.nvNavigationDrawer = findViewById(R.id.nv_navigation_drawer);
+        this.nvNavigationDrawer.setNavigationItemSelectedListener(this);
 
         Places.initialize(this, ApiKeys.getGoogleApiKey());
     }
@@ -69,9 +68,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         this.dlNavigationDrawer.closeDrawer(GravityCompat.START);
-        if (this.lastItem != null && this.lastItem != item) {
-            this.lastItem.setChecked(false);
-        }
         Class<? extends Fragment> fragmentClass = null;
         if (item.getItemId() == R.id.navigation_forecast) {
             fragmentClass = ForecastFragment.class;
@@ -89,9 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportActionBar().setTitle(R.string.title_settings);
         }
 
-        if (fragmentClass != null && this.lastItem != item) {
-            this.lastItem = item;
-            this.lastItem.setChecked(true);
+        if (fragmentClass != null && !item.isChecked()) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .setReorderingAllowed(true)
@@ -105,5 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void openNavigationDrawer() {
         this.dlNavigationDrawer.openDrawer(GravityCompat.START);
     }
+
+    public NavigationView getNavigationDrawer() { return this.nvNavigationDrawer; }
 
 }
