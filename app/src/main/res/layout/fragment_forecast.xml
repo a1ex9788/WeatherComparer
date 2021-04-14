@@ -34,9 +34,7 @@
         map:uiZoomGestures="true"
         tools:context=".MainActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/fcvForecast"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -46,122 +44,151 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="@color/clear"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_menu" />
+                map:layout_constraintStart_toStartOf="parent"
+                map:layout_constraintTop_toTopOf="parent"
+                map:srcCompat="@drawable/ic_menu" />
+
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                map:layout_constraintBottom_toTopOf="@+id/placeTextView"
+                map:layout_constraintEnd_toEndOf="@+id/placeTextView"
+                map:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+            <TextView
+                android:id="@+id/placeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="TextView"
+                android:textSize="20dp"
+                map:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                map:layout_constraintEnd_toStartOf="@+id/imageView2"
+                map:layout_constraintTop_toBottomOf="@+id/dateTextView" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="60dp"
+                android:layout_height="67dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintTop_toTopOf="parent"
+                map:srcCompat="@drawable/ic_launcher_background" />
 
             <com.airbnb.lottie.LottieAnimationView
 
                 android:id="@+id/animationViewWeather"
                 android:layout_width="match_parent"
-                android:layout_height="256dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_speed="1.1"
-                tools:layout_editor_absoluteX="0dp" />
+                android:layout_height="200dp"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintHorizontal_bias="0.5"
+                map:layout_constraintStart_toStartOf="parent"
+                map:layout_constraintTop_toBottomOf="@+id/imageView2"
+                map:lottie_autoPlay="true"
+                map:lottie_loop="true"
+                map:lottie_speed="1.1" />
 
             <TextView
                 android:id="@+id/weatherTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{weatherConditionText}"
-                android:textSize="25sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/animationViewWeather" />
+                android:textSize="30sp"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintStart_toStartOf="parent"
+                map:layout_constraintTop_toBottomOf="@+id/animationViewWeather" />
 
             <ImageView
                 android:id="@+id/windIcon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="30dp"
                 android:src="@drawable/wind"
-                app:layout_constraintEnd_toStartOf="@+id/textView"
-                app:layout_constraintRight_toLeftOf="@id/temperatureIcon"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/weatherTextView" />
+                map:layout_constraintBottom_toBottomOf="@+id/temperatureIcon"
+                map:layout_constraintEnd_toStartOf="@+id/temperatureIcon"
+                map:layout_constraintStart_toStartOf="parent"
+                map:layout_constraintTop_toTopOf="@+id/temperatureIcon" />
 
             <ImageView
                 android:id="@+id/temperatureIcon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="30dp"
                 android:src="@drawable/temperature"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/weatherTextView" />
+                map:layout_constraintBottom_toBottomOf="@+id/secondVerticalLine"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintStart_toStartOf="parent"
+                map:layout_constraintTop_toTopOf="@+id/secondVerticalLine" />
 
             <ImageView
                 android:id="@+id/rainIcon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="30dp"
                 android:src="@drawable/rain"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView"
-                app:layout_constraintTop_toBottomOf="@id/weatherTextView" />
+                map:layout_constraintBottom_toBottomOf="@+id/temperatureIcon"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintStart_toEndOf="@+id/temperatureIcon"
+                map:layout_constraintTop_toTopOf="@+id/temperatureIcon" />
 
             <TextView
+                android:id="@+id/windTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="130dp"
                 android:text="@{windSpeed}"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/windIcon"
-                app:layout_constraintEnd_toStartOf="@+id/textView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/windIcon" />
+                map:layout_constraintEnd_toEndOf="@+id/windIcon"
+                map:layout_constraintStart_toStartOf="@+id/windIcon"
+                map:layout_constraintTop_toBottomOf="@+id/windIcon" />
 
             <View
                 android:id="@+id/firstVerticalLine"
                 android:layout_width="3dp"
                 android:layout_height="100dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="24dp"
                 android:background="@color/grey"
-                app:layout_constraintEnd_toStartOf="@+id/rainIcon"
-                app:layout_constraintStart_toEndOf="@+id/temperatureIcon"
-                app:layout_constraintTop_toBottomOf="@id/weatherTextView" />
+                map:layout_constraintEnd_toStartOf="@+id/temperatureIcon"
+                map:layout_constraintStart_toEndOf="@+id/windIcon"
+                map:layout_constraintTop_toBottomOf="@+id/weatherTextView" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/temperatureTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="130dp"
                 android:text="@{averageTemperature}"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/temperatureIcon"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/temperatureIcon" />
+                map:layout_constraintEnd_toEndOf="@+id/temperatureIcon"
+                map:layout_constraintStart_toStartOf="@+id/temperatureIcon"
+                map:layout_constraintTop_toBottomOf="@+id/temperatureIcon" />
 
             <View
                 android:id="@+id/secondVerticalLine"
                 android:layout_width="3dp"
                 android:layout_height="100dp"
-                android:layout_marginTop="30dp"
                 android:background="@color/grey"
-                app:layout_constraintEnd_toStartOf="@+id/temperatureIcon"
-                app:layout_constraintStart_toEndOf="@+id/windIcon"
-                app:layout_constraintTop_toBottomOf="@id/weatherTextView" />
+                map:layout_constraintBottom_toBottomOf="@+id/firstVerticalLine"
+                map:layout_constraintEnd_toStartOf="@+id/rainIcon"
+                map:layout_constraintStart_toEndOf="@+id/temperatureIcon"
+                map:layout_constraintTop_toTopOf="@+id/firstVerticalLine" />
 
             <TextView
+                android:id="@+id/rainTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="130dp"
                 android:text="@{rainProbability}"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/rainIcon"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView"
-                app:layout_constraintTop_toTopOf="@+id/rainIcon" />
+                map:layout_constraintEnd_toEndOf="@+id/rainIcon"
+                map:layout_constraintStart_toStartOf="@+id/rainIcon"
+                map:layout_constraintTop_toBottomOf="@+id/rainIcon" />
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/coordinatorLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                android:visibility="visible"
+                map:layout_constraintBottom_toBottomOf="parent"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintStart_toStartOf="parent">
 
                 <include layout="@layout/bottom_sheet_layout" />
 
