@@ -4,6 +4,7 @@ import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -60,6 +61,8 @@ public class MapFragment extends Fragment {
         binding = FragmentMapBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        setNavigationDrawerCheckedItem();
+
         mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
 
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager()
@@ -100,6 +103,18 @@ public class MapFragment extends Fragment {
         });
 
         return root;
+    }
+
+    private void setNavigationDrawerCheckedItem() {
+        for(int i = 0; i < 4; i++){
+            MenuItem item = ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
+            if(i == 2){
+                item.setChecked(true);
+            }
+            else {
+                item.setChecked(false);
+            }
+        }
     }
 
     @NotNull

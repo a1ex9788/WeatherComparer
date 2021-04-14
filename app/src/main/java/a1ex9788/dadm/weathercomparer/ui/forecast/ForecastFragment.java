@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -49,7 +50,7 @@ public class ForecastFragment extends Fragment {
     String[] date = {"10-22","11-22","12-22","1-22","6-22","5-23","5-22","6-22","5-23","5-22"};//Marking of X-axis
     int[] score= {50,42,90,33,10,74,22,18,79,20};//Data Points of Charts
     LineChartView chartView;
-    private boolean chartConfigurated;
+    private boolean chartConfigured;
 
     private LottieAnimationView animationView;
 
@@ -62,6 +63,8 @@ public class ForecastFragment extends Fragment {
         animationView = root.findViewById(R.id.animationViewWeather);
 
         setNavigationDrawerButtonOnClickListener(root);
+
+        setNavigationDrawerCheckedItem();
 
         setDefaultForecastData();
 
@@ -77,6 +80,18 @@ public class ForecastFragment extends Fragment {
     private void setNavigationDrawerButtonOnClickListener(View root) {
         ImageButton ibNavigationDrawer = root.findViewById(R.id.ibNavigationDrawer);
         ibNavigationDrawer.setOnClickListener(v -> ((MainActivity) requireActivity()).openNavigationDrawer());
+    }
+
+    private void setNavigationDrawerCheckedItem() {
+        for(int i = 0; i < 4; i++){
+            MenuItem item = ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
+            if(i == 0){
+                item.setChecked(true);
+            }
+            else {
+                item.setChecked(false);
+            }
+        }
     }
 
     private void setDefaultForecastData() {
@@ -166,11 +181,11 @@ public class ForecastFragment extends Fragment {
                 }
                 else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
                     chartView.setVisibility(View.VISIBLE);
-                    if(!chartConfigurated) {
+                    if(!chartConfigured) {
                         getAxisXLables();
                         getAxisPoints();
                         initLineChart();
-                        chartConfigurated = true;
+                        chartConfigured = true;
                     }
                 }
             }
