@@ -156,10 +156,12 @@ public class ForecastFragment extends Fragment {
         bottomSheetBehavior.setPeekHeight(height / 4);
         clBottomSheet.getLayoutParams().height = (3 * height) / 4;
         TextView tvToday = root.findViewById(R.id.tvToday);
-        /*ConstraintLayout hourPrediction1 = root.findViewById(R.id.hourPrediction1);
+        ConstraintLayout hourPrediction1 = root.findViewById(R.id.hourPrediction1);
         ConstraintLayout hourPrediction2 = root.findViewById(R.id.hourPrediction2);
         ConstraintLayout hourPrediction3 = root.findViewById(R.id.hourPrediction3);
-        ConstraintLayout hourPrediction4 = root.findViewById(R.id.hourPrediction4);*/
+        ConstraintLayout hourPrediction4 = root.findViewById(R.id.hourPrediction4);
+        ConstraintLayout hourPrediction5 = root.findViewById(R.id.hourPrediction3);
+        ConstraintLayout hourPrediction6 = root.findViewById(R.id.hourPrediction4);
 
         chartView =  root.findViewById(R.id.chart);
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -171,7 +173,7 @@ public class ForecastFragment extends Fragment {
                     hourPrediction3.setVisibility(View.VISIBLE);
                     hourPrediction4.setVisibility(View.VISIBLE);*/
                     chartView.setVisibility(View.INVISIBLE);
-                    tvToday.setVisibility(View.VISIBLE);
+                    tvToday.setText(R.string.tvToday);
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                     /*hourPrediction1.setVisibility(View.INVISIBLE);
                     hourPrediction2.setVisibility(View.INVISIBLE);
