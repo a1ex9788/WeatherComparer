@@ -14,6 +14,10 @@ import a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit.WeatherBit
 
 public class ForecastViewModel extends ViewModel {
 
+    public HourForecast getCurrentWeather(double latitude, double longitude) {
+        return getAverageHourlyForecast(latitude, longitude).get(0);
+    }
+
     public List<DayForecast> getAverageDailyForecast(double latitude, double longitude) {
         AverageWeatherForecast averageWeatherForecast = new AverageWeatherForecast(latitude, longitude);
 

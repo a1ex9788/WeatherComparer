@@ -26,7 +26,7 @@ import java.util.List;
 import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.databinding.FragmentForecastBinding;
-import a1ex9788.dadm.weathercomparer.model.DayForecast;
+import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
@@ -41,14 +41,13 @@ import lecho.lib.hellocharts.view.LineChartView;
 
 public class ForecastFragment extends Fragment {
 
-    private ForecastViewModel forecastViewModel;
-    private FragmentForecastBinding binding;
-
     List<PointValue> mPointValues = new ArrayList<PointValue>();
     List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();
-    String[] date = {"10-22","11-22","12-22","1-22","6-22","5-23","5-22","6-22","5-23","5-22"};//Marking of X-axis
-    int[] score= {50,42,90,33,10,74,22,18,79,20};//Data Points of Charts
+    String[] date = {"10-22", "11-22", "12-22", "1-22", "6-22", "5-23", "5-22", "6-22", "5-23", "5-22"};//Marking of X-axis
+    int[] score = {50, 42, 90, 33, 10, 74, 22, 18, 79, 20};//Data Points of Charts
     LineChartView chartView;
+    private ForecastViewModel forecastViewModel;
+    private FragmentForecastBinding binding;
     private boolean chartConfigurated;
 
     private LottieAnimationView animationView;
@@ -67,7 +66,7 @@ public class ForecastFragment extends Fragment {
 
         recoverMapPlace();
 
-        setDailyForecastData();
+        setCurrentForecastData();
 
         configureBottomSheet(root);
 
@@ -108,7 +107,7 @@ public class ForecastFragment extends Fragment {
          */
     }
 
-    private void setDailyForecastData() {
+    private void setCurrentForecastData() {
         new Thread() {
             @Override
             public void run() {
@@ -116,15 +115,14 @@ public class ForecastFragment extends Fragment {
 
                 try {
                     double latitude = 39.289, longitude = -0.799;
-                    List<DayForecast> dailyForecast = forecastViewModel.getAverageDailyForecast(latitude, longitude);
-                    DayForecast dayForecast = dailyForecast.get(0);
+                    HourForecast hourForecast = forecastViewModel.getCurrentWeather(latitude, longitude);
 
-                    binding.setWeatherConditionText(dayForecast.getWeatherCondition().getText());
-                    binding.setWindSpeed(roundToOneDecimal(dayForecast.getWindSpeed_kilometersPerHour()) + " " + getString(R.string.speed_metricUnits));
-                    binding.setAverageTemperature(roundToOneDecimal(dayForecast.getAvgTemperature_celsius()) + " " + getString(R.string.temperature_metricUnits));
-                    binding.setRainProbability(roundToOneDecimal(dayForecast.getPrecipitationProbability()) + " " + getString(R.string.probability_sign));
+                    binding.setWeatherConditionText(hourForecast.getWeatherCondition().getText());
+                    binding.setWindSpeed(roundToOneDecimal(hourForecast.getWindSpeed_kilometersPerHour()) + " " + getString(R.string.speed_metricUnits));
+                    binding.setAverageTemperature(roundToOneDecimal(hourForecast.getAvgTemperature_celsius()) + " " + getString(R.string.temperature_metricUnits));
+                    binding.setRainProbability(roundToOneDecimal(hourForecast.getPrecipitationProbability()) + " " + getString(R.string.probability_sign));
 
-                    setWeatherConditionAnimation(dayForecast.getWeatherCondition());
+                    setWeatherConditionAnimation(hourForecast.getWeatherCondition());
                 } catch (Exception e) {
                     Toast.makeText(requireActivity().getBaseContext(), R.string.toast_forecastError, Toast.LENGTH_LONG).show();
                 }
@@ -136,7 +134,7 @@ public class ForecastFragment extends Fragment {
         ConstraintLayout clBottomSheet = root.findViewById(R.id.clBottomSheet);
         BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(clBottomSheet);
         DisplayMetrics metrics = new DisplayMetrics();
-        ((MainActivity)getActivity()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        ((MainActivity) getActivity()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int height = metrics.heightPixels;
         bottomSheetBehavior.setPeekHeight(height / 4);
         clBottomSheet.getLayoutParams().height = (3 * height) / 4;
@@ -146,7 +144,7 @@ public class ForecastFragment extends Fragment {
         ConstraintLayout hourPrediction3 = root.findViewById(R.id.hourPrediction3);
         ConstraintLayout hourPrediction4 = root.findViewById(R.id.hourPrediction4);*/
 
-        chartView =  root.findViewById(R.id.chart);
+        chartView = root.findViewById(R.id.chart);
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -163,10 +161,9 @@ public class ForecastFragment extends Fragment {
                     hourPrediction3.setVisibility(View.INVISIBLE);
                     hourPrediction4.setVisibility(View.INVISIBLE);*/
                     tvToday.setText(R.string.tvToday_daily);
-                }
-                else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
+                } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
                     chartView.setVisibility(View.VISIBLE);
-                    if(!chartConfigurated) {
+                    if (!chartConfigurated) {
                         getAxisXLables();
                         getAxisPoints();
                         initLineChart();
@@ -218,7 +215,7 @@ public class ForecastFragment extends Fragment {
         line.setCubic(false);//Whether the curve is smooth, that is, whether it is a curve or a broken line
         line.setFilled(false);//Whether or not to fill the area of the curve
         line.setHasLabels(true);//Whether to add notes to the data coordinates of curves
-//      Line. setHasLabels OnlyForSelected (true); // Click on the data coordinates to prompt the data (set this line.setHasLabels(true); invalid)
+        //      Line. setHasLabels OnlyForSelected (true); // Click on the data coordinates to prompt the data (set this line.setHasLabels(true); invalid)
         line.setHasLines(true);//Whether to display with line or not. If it is false, there is no curve but point display
         line.setHasPoints(false);//Whether to display a dot if it is false, there is no origin but only a dot (each data point is a large dot)
         lines.add(line);
@@ -243,7 +240,6 @@ public class ForecastFragment extends Fragment {
         axisY.setTextSize(10);//Set font size
         data.setAxisYLeft(axisY);  //The Y-axis is set on the left
         //Data. setAxisYRight (axisY); the // Y axis is set to the right
-
 
         //Setting behavioral properties to support zooming, sliding, and Translation
         chartView.setInteractive(true);
