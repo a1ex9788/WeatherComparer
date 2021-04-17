@@ -25,7 +25,7 @@ public class UnitsConverter {
             case 30:
             case 33:
             case 34:
-                return WeatherCondition.Clear;
+                return WeatherCondition.Sunny;
             case 6:
             case 7:
             case 8:
@@ -34,9 +34,9 @@ public class UnitsConverter {
             case 37:
             case 38:
             case 43:
-                return WeatherCondition.Clouds;
+                return WeatherCondition.Overcast;
             case 11:
-                return WeatherCondition.Fog;
+                return WeatherCondition.Foggy;
             case 12:
             case 13:
             case 14:
@@ -46,7 +46,7 @@ public class UnitsConverter {
             case 18:
             case 39:
             case 40:
-                return WeatherCondition.Rain;
+                return WeatherCondition.Rainy;
             case 19:
             case 20:
             case 21:
@@ -103,7 +103,7 @@ public class UnitsConverter {
             case 521:
             case 522:
             case 531:
-                return WeatherCondition.Rain;
+                return WeatherCondition.Rainy;
             case 600:
             case 601:
             case 602:
@@ -124,18 +124,18 @@ public class UnitsConverter {
             case 751:
             case 761:
             case 762:
-                return WeatherCondition.Fog;
+                return WeatherCondition.Foggy;
             case 771:
             case 781:
                 return WeatherCondition.Flurries;
             case 800:
-                return WeatherCondition.Clear;
+                return WeatherCondition.Sunny;
             case 801:
             case 802:
             case 804:
-                return WeatherCondition.Clouds;
+                return WeatherCondition.Overcast;
             case 803:
-                return WeatherCondition.BrokenClouds;
+                return WeatherCondition.Cloudy;
             default:
                 return WeatherCondition.Unknown;
         }
@@ -162,7 +162,7 @@ public class UnitsConverter {
             case 520:
             case 521:
             case 522:
-                return WeatherCondition.Rain;
+                return WeatherCondition.Rainy;
             case 600:
             case 601:
             case 602:
@@ -180,15 +180,15 @@ public class UnitsConverter {
             case 731:
             case 741:
             case 751:
-                return WeatherCondition.Fog;
+                return WeatherCondition.Foggy;
             case 800:
-                return WeatherCondition.Clear;
+                return WeatherCondition.Sunny;
             case 801:
             case 802:
             case 804:
-                return WeatherCondition.Clouds;
+                return WeatherCondition.Overcast;
             case 803:
-                return WeatherCondition.BrokenClouds;
+                return WeatherCondition.Cloudy;
             case 900:
                 return WeatherCondition.UnknownPrecipitation;
             default:
