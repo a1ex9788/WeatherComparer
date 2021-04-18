@@ -20,15 +20,17 @@ import a1ex9788.dadm.weathercomparer.model.MapPlace;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.average.AverageWeatherForecast;
 
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
+
     private List<MapPlace> places = new ArrayList<>();
 
-    public PlaceAdapter(){ }
+    public PlaceAdapter() {
+    }
 
     @NonNull
     @Override
     public PlaceAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-           PlaceViewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.place_view,parent,false);
+        PlaceViewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.place_view, parent, false);
 
         return new ViewHolder(binding);
     }
@@ -37,7 +39,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull PlaceAdapter.ViewHolder holder, int position) {
         MapPlace place = places.get(position);
         holder.binding.setPlace(place);
-        if(place.getPhoto() != null) {
+        if (place.getPhoto() != null) {
             Picasso.get()
                     .load(place.getPhoto())
                     .into(holder.binding.ivPlace);
@@ -46,17 +48,14 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         AverageWeatherForecast average = new AverageWeatherForecast(place.getLat(), place.getLng());
 
         new Thread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            HourForecast currentForecast = average.getHourlyForecast().get(0);
-                            Log.d("forecast",currentForecast.toString());
-                            holder.binding.setForecast(currentForecast);
-                            //animatePlaceCardIn();
-                        } catch (Exception error) {
+                () -> {
+                    try {
+                        HourForecast currentForecast = average.getHourlyForecast().get(0);
+                        Log.d("forecast", currentForecast.toString());
+                        holder.binding.setForecast(currentForecast);
+                        //animatePlaceCardIn();
+                    } catch (Exception error) {
 
-                        }
                     }
                 }
         ).start();
@@ -67,32 +66,35 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         return places.size();
     }
 
-    public MapPlace getPlaceAt(int position){
+    public MapPlace getPlaceAt(int position) {
         return places.get(position);
     }
 
-    public MapPlace removePlaceAt(int position){
+    public MapPlace removePlaceAt(int position) {
         MapPlace place = places.remove(position);
         notifyItemRemoved(position);
         return place;
     }
 
-    public void clearAll(){
+    public void clearAll() {
         places.clear();
         notifyDataSetChanged();
     }
 
-    public void setPlaces(List<MapPlace> places){
+    public void setPlaces(List<MapPlace> places) {
         this.places = places;
         notifyDataSetChanged();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+
         private PlaceViewBinding binding;
 
         public ViewHolder(@NonNull PlaceViewBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
+
     }
+
 }

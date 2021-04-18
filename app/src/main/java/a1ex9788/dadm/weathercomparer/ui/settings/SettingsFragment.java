@@ -8,19 +8,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
 
 public class SettingsFragment extends Fragment {
 
-    private SettingsViewModel settingsViewModel;
-
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        settingsViewModel =
-                new ViewModelProvider(this).get(SettingsViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
         setNavigationDrawerCheckedItem();
@@ -29,14 +23,14 @@ public class SettingsFragment extends Fragment {
     }
 
     private void setNavigationDrawerCheckedItem() {
-        for(int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             MenuItem item = ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
-            if(i == 3){
+            if (i == 3) {
                 item.setChecked(true);
-            }
-            else {
+            } else {
                 item.setChecked(false);
             }
         }
     }
+
 }

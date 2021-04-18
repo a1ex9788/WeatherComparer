@@ -40,11 +40,8 @@ import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.databinding.FragmentMapBinding;
 import a1ex9788.dadm.weathercomparer.databinding.PlaceViewBinding;
-import a1ex9788.dadm.weathercomparer.db.Room;
-import a1ex9788.dadm.weathercomparer.db.RoomDao;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.model.MapPlace;
-import a1ex9788.dadm.weathercomparer.webServices.PlacesService;
 
 public class MapFragment extends Fragment {
 
@@ -54,7 +51,6 @@ public class MapFragment extends Fragment {
     private AutocompleteSupportFragment autocompleteFragment;
     private FragmentMapBinding binding;
     private PlaceViewBinding placeBinding;
-    private RoomDao db;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -71,8 +67,6 @@ public class MapFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().hide();
 
         supportMapFragment.getMapAsync(onMapReady(container));
-
-        db = Room.getInstance(getContext()).room();
 
         binding.fabAdd.setOnClickListener(view -> {
             Log.d(MAP_TAG, String.valueOf(binding.getAlreadyAdded()));
@@ -106,12 +100,11 @@ public class MapFragment extends Fragment {
     }
 
     private void setNavigationDrawerCheckedItem() {
-        for(int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             MenuItem item = ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
-            if(i == 2){
+            if (i == 2) {
                 item.setChecked(true);
-            }
-            else {
+            } else {
                 item.setChecked(false);
             }
         }
@@ -133,14 +126,11 @@ public class MapFragment extends Fragment {
             });
 
             map.setOnMapClickListener(latLng -> new Thread(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                new PlacesService().searchLocalityByNerby(latLng);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                    () -> {
+                        try {
+                            MapPlace mapPlace = mapViewModel.getPlace(latLng.latitude, latLng.longitude);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
             ).start());
@@ -164,29 +154,23 @@ public class MapFragment extends Fragment {
                 map.animateCamera(cameraUpdate);
 
                 new Thread(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    HourForecast currentForecast = mapViewModel.getCurrentForecast(place.getLat(), place.getLng());
-                                    Log.d("forecast",currentForecast.toString());
-                                    placeBinding.setForecast(currentForecast);
-                                    animatePlaceCardIn();
-                                } catch (Exception error) {
-                                    Log.d(MAP_TAG, error.getMessage());
-                                }
+                        () -> {
+                            try {
+                                HourForecast currentForecast = mapViewModel.getCurrentForecast(place.getLat(), place.getLng());
+                                Log.d("forecast", currentForecast.toString());
+                                placeBinding.setForecast(currentForecast);
+                                animatePlaceCardIn();
+                            } catch (Exception error) {
+                                Log.d(MAP_TAG, error.getMessage());
                             }
                         }
                 ).start();
 
                 new Thread(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                boolean exists = db.searchPlace(place.getId()) != null;
-                                binding.setAlreadyAdded(exists);
-                                Log.d(MAP_TAG, String.valueOf(exists));
-                            }
+                        () -> {
+                            boolean exists = mapViewModel.existsPlace(getContext(), place.getId());
+                            binding.setAlreadyAdded(exists);
+                            Log.d(MAP_TAG, String.valueOf(exists));
                         }
                 ).start();
 
@@ -221,13 +205,8 @@ public class MapFragment extends Fragment {
         });
 
         if (getArguments() != null && getArguments().containsKey("search")) {
-            autocompleteFragment.getView().post(new Runnable() {
-                @Override
-                public void run() {
-                    autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)
-                            .performClick();
-                }
-            });
+            autocompleteFragment.getView().post(() -> autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)
+                    .performClick());
         }
     }
 
@@ -255,32 +234,18 @@ public class MapFragment extends Fragment {
     }
 
     public void addPlace() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                db.addPlace(placeBinding.getPlace());
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getContext(), placeBinding.getPlace().getName() + " " + getString(R.string.tAdd), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+        new Thread(() -> {
+            mapViewModel.savePlace(getContext(), placeBinding.getPlace());
+
+            getActivity().runOnUiThread(() -> Toast.makeText(getContext(), placeBinding.getPlace().getName() + " " + getString(R.string.tAdd), Toast.LENGTH_SHORT).show());
         }).start();
     }
 
     public void deletePlace() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                db.deletePlace(placeBinding.getPlace());
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getContext(), placeBinding.getPlace().getName() + " " + getString(R.string.tDelete), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+        new Thread(() -> {
+            mapViewModel.deletePlace(getContext(), placeBinding.getPlace());
+
+            getActivity().runOnUiThread(() -> Toast.makeText(getContext(), placeBinding.getPlace().getName() + " " + getString(R.string.tDelete), Toast.LENGTH_SHORT).show());
         }).start();
     }
 

@@ -23,15 +23,11 @@ import a1ex9788.dadm.weathercomparer.adapters.PlaceAdapter;
 import a1ex9788.dadm.weathercomparer.adapters.SwipeController;
 import a1ex9788.dadm.weathercomparer.adapters.SwipeControllerActions;
 import a1ex9788.dadm.weathercomparer.databinding.FragmentPlacesBinding;
-import a1ex9788.dadm.weathercomparer.db.Room;
-import a1ex9788.dadm.weathercomparer.db.RoomDao;
-import a1ex9788.dadm.weathercomparer.ui.map.MapFragment;
 import a1ex9788.dadm.weathercomparer.model.MapPlace;
+import a1ex9788.dadm.weathercomparer.ui.map.MapFragment;
 
 public class PlacesFragment extends Fragment {
 
-    public static String PLACES_TAG = "PLACES";
-    RoomDao db;
     private PlacesViewModel placesViewModel;
     private PlaceAdapter adapter;
     private FragmentPlacesBinding binding;
@@ -53,7 +49,7 @@ public class PlacesFragment extends Fragment {
             public void onLeftClicked(int position) {
                 MapPlace place = adapter.removePlaceAt(position);
                 new Thread(() -> {
-                    db.deletePlace(place);
+                    placesViewModel.deletePlace(getContext(), place);
                     getActivity().runOnUiThread(() -> {
                         binding.tvEmpty.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
                         Toast.makeText(getContext(), place.getName() + " " + getString(R.string.tDelete), Toast.LENGTH_SHORT).show();
@@ -77,17 +73,12 @@ public class PlacesFragment extends Fragment {
         adapter = new PlaceAdapter();
         recyclerView.setAdapter(adapter);
 
-        db = Room.getInstance(getContext()).room();
-
         new Thread(() -> {
-            List<MapPlace> places = db.getPlaces();
+            List<MapPlace> places = placesViewModel.getPlaces(getContext());
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    binding.tvEmpty.setVisibility(places.isEmpty() ? View.VISIBLE : View.INVISIBLE);
-                    adapter.setPlaces(places);
-                }
+            getActivity().runOnUiThread(() -> {
+                binding.tvEmpty.setVisibility(places.isEmpty() ? View.VISIBLE : View.INVISIBLE);
+                adapter.setPlaces(places);
             });
         }).start();
 
@@ -105,12 +96,11 @@ public class PlacesFragment extends Fragment {
     }
 
     private void setNavigationDrawerCheckedItem() {
-        for(int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             MenuItem item = ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
-            if(i == 1){
+            if (i == 1) {
                 item.setChecked(true);
-            }
-            else {
+            } else {
                 item.setChecked(false);
             }
         }
