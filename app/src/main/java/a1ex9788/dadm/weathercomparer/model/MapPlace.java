@@ -14,8 +14,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.TimeZone;
 
+import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
+
 @Entity(tableName = "places")
-public class MapPlace  {
+public class MapPlace {
+
+    private static final String googlePhotosPrefix = "https://maps.googleapis.com/maps/api/place/photo?key=" + ApiKeys.getGoogleApiKey() + "&maxheight=200&photoreference=";
 
     @NonNull
     @PrimaryKey
@@ -49,6 +53,16 @@ public class MapPlace  {
             photo = "https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAiKQz6mYGVdAYfIWDxkTiOIa0x86e2ntA&maxheight=200&photoreference=" + photos.get(rand.nextInt(photos.size())).zza();
         }
         timeZone = getTimeZone(googlePlace).getDisplayName();
+    }
+
+    public MapPlace(String identifier, String name, double latitude, double longitude, String photo) {
+        id = identifier;
+        name = name;
+        lat = latitude;
+        lng = longitude;
+        photo = photo.startsWith(googlePhotosPrefix) ? photo : googlePhotosPrefix + photo;
+        // TODO: Obtain real time zone.
+        timeZone = "";
     }
 
     public String getId() {
@@ -90,7 +104,7 @@ public class MapPlace  {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
-    
+
     public String getTimeZone() {
         return this.timeZone;
     }
