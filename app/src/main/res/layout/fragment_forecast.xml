@@ -6,6 +6,7 @@
     <data>
 
         <import type="android.view.View" />
+        <import type="a1ex9788.dadm.weathercomparer.utils.DoubleFormats"/>
 
         <variable
             name="place"
@@ -134,7 +135,7 @@
                 android:id="@+id/windTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{currentWeather.getWindSpeed()}"
+                android:text="@{ currentWeather.getWindSpeed()}"
                 style="@style/SemiBlackTitle"
                 map:layout_constraintEnd_toEndOf="@+id/windIcon"
                 map:layout_constraintStart_toStartOf="@+id/windIcon"
