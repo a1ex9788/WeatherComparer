@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentClass = SettingsFragment.class;
             getSupportActionBar().show();
             getSupportActionBar().setTitle(R.string.title_settings);
+
         }
 
         if (fragmentClass != null && !item.isChecked()) {

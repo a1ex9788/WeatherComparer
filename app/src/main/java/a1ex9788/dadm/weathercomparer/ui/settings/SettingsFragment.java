@@ -7,19 +7,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceFragmentCompat;
 
 import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends PreferenceFragmentCompat {
 
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_settings, container, false);
-
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        // Creates the View to be shown from a Preference resource
+        setPreferencesFromResource(R.xml.preferences, rootKey);
         setNavigationDrawerCheckedItem();
-
-        return root;
     }
 
     private void setNavigationDrawerCheckedItem() {
