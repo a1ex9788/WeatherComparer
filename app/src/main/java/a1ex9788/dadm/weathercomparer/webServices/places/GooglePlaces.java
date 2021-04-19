@@ -1,14 +1,30 @@
 package a1ex9788.dadm.weathercomparer.webServices.places;
 
+import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
+
+import java.util.Arrays;
+import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.model.MapPlace;
 import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 import a1ex9788.dadm.weathercomparer.webServices.WebServicesHelper;
 
 public class GooglePlaces {
+    PlacesClient placesClient;
 
-    public MapPlace searchLocalityByNearby(double latitude, double longitude) throws Exception {
+    public GooglePlaces(Context context) {
+        this.placesClient = Places.createClient(context);
+    }
+
+    public String searchLocalityByNearby(double latitude, double longitude) throws Exception {
         Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme("https");
         uriBuilder.authority("maps.googleapis.com");
@@ -24,10 +40,6 @@ public class GooglePlaces {
 
         GooglePlace googlePlace = WebServicesHelper.getWebServiceAnswer(uriBuilder, GooglePlace.class);
 
-        return convertToPlaceStandard(googlePlace, latitude, longitude);
-    }
-
-    private MapPlace convertToPlaceStandard(GooglePlace googlePlace, double latitude, double longitude) {
         if (googlePlace == null || googlePlace.results == null || googlePlace.results.get(0) == null) {
             return null;
         }
@@ -38,14 +50,14 @@ public class GooglePlaces {
             return null;
         }
 
-        return new MapPlace(
-                googlePlaceResult.place_id,
-                googlePlaceResult.name,
-                latitude,
-                longitude,
-                googlePlaceResult.photos == null || googlePlaceResult.photos.get(0) == null
-                        ? null : googlePlaceResult.photos.get(0).photo_reference);
+        return googlePlaceResult.place_id;
     }
 
+    public void getDetails(String id, OnSuccessListener onFounded) {
+        final List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.LAT_LNG, Place.Field.UTC_OFFSET);
+        final FetchPlaceRequest request = FetchPlaceRequest.newInstance(id, placeFields);
+
+        placesClient.fetchPlace(request).addOnSuccessListener(onFounded);
+    }
 }
 

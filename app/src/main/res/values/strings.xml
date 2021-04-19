@@ -34,6 +34,7 @@
 
     <!-- Places fragment -->
     <string name="tvEmpty">Empty list</string>
+    <string name="tUnknownLocation">Sorry, unknown location</string>
 
     <!-- Map fragment -->
     <string name="tAdd">added</string>
