@@ -260,39 +260,39 @@ public class ForecastFragment extends Fragment {
                     ((MainActivity) getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            tvHour1.setText(hourForecastsList.get(3).getDate().toString().substring(11, 16));
-                            tvTemp1.setText(hourForecastsList.get(3).getAvgTemperature_celsius().toString().
+                            tvHour1.setText(hourForecastsList.get(2).getDate().toString().substring(11, 16));
+                            tvTemp1.setText(hourForecastsList.get(2).getAvgTemperature_celsius().toString().
                                     substring(0, 4) + getString(R.string.temperature_metricUnits));
-                            lavWeatherIcon1.setAnimationFromUrl(hourForecastsList.get(3).getWeatherCondition().getIconAddress());
-                            tvHour2.setText(hourForecastsList.get(4).getDate().toString().substring(11, 16));
-                            tvTemp2.setText(hourForecastsList.get(4).getAvgTemperature_celsius().toString().
+                            lavWeatherIcon1.setAnimationFromUrl(hourForecastsList.get(2).getWeatherCondition().getIconAddress());
+                            tvHour2.setText(hourForecastsList.get(3).getDate().toString().substring(11, 16));
+                            tvTemp2.setText(hourForecastsList.get(3).getAvgTemperature_celsius().toString().
                                     substring(0, 4) + getString(R.string.temperature_metricUnits));
-                            lavWeatherIcon2.setAnimationFromUrl(hourForecastsList.get(4).getWeatherCondition().getIconAddress());
-                            tvHour3.setText(hourForecastsList.get(5).getDate().toString().substring(11, 16));
-                            tvTemp3.setText(hourForecastsList.get(5).getAvgTemperature_celsius().toString().
+                            lavWeatherIcon2.setAnimationFromUrl(hourForecastsList.get(3).getWeatherCondition().getIconAddress());
+                            tvHour3.setText(hourForecastsList.get(4).getDate().toString().substring(11, 16));
+                            tvTemp3.setText(hourForecastsList.get(4).getAvgTemperature_celsius().toString().
                                     substring(0, 4) + getString(R.string.temperature_metricUnits));
-                            lavWeatherIcon3.setAnimationFromUrl(hourForecastsList.get(5).getWeatherCondition().getIconAddress());
-                            tvHour4.setText(hourForecastsList.get(6).getDate().toString().substring(11, 16));
-                            tvTemp4.setText(hourForecastsList.get(6).getAvgTemperature_celsius().toString().
+                            lavWeatherIcon3.setAnimationFromUrl(hourForecastsList.get(4).getWeatherCondition().getIconAddress());
+                            tvHour4.setText(hourForecastsList.get(5).getDate().toString().substring(11, 16));
+                            tvTemp4.setText(hourForecastsList.get(5).getAvgTemperature_celsius().toString().
                                     substring(0, 4) + getString(R.string.temperature_metricUnits));
-                            lavWeatherIcon4.setAnimationFromUrl(hourForecastsList.get(6).getWeatherCondition().getIconAddress());
-                            tvHour5.setText(hourForecastsList.get(7).getDate().toString().substring(11, 16));
-                            tvTemp5.setText(hourForecastsList.get(7).getAvgTemperature_celsius().toString().
+                            lavWeatherIcon4.setAnimationFromUrl(hourForecastsList.get(5).getWeatherCondition().getIconAddress());
+                            tvHour5.setText(hourForecastsList.get(6).getDate().toString().substring(11, 16));
+                            tvTemp5.setText(hourForecastsList.get(6).getAvgTemperature_celsius().toString().
                                     substring(0, 4) + getString(R.string.temperature_metricUnits));
-                            lavWeatherIcon5.setAnimationFromUrl(hourForecastsList.get(7).getWeatherCondition().getIconAddress());
-                            tvHour6.setText(hourForecastsList.get(8).getDate().toString().substring(11, 16));
-                            tvTemp6.setText(hourForecastsList.get(8).getAvgTemperature_celsius().toString().
+                            lavWeatherIcon5.setAnimationFromUrl(hourForecastsList.get(6).getWeatherCondition().getIconAddress());
+                            tvHour6.setText(hourForecastsList.get(7).getDate().toString().substring(11, 16));
+                            tvTemp6.setText(hourForecastsList.get(7).getAvgTemperature_celsius().toString().
                                     substring(0, 4) + getString(R.string.temperature_metricUnits));
                             lavWeatherIcon6.setAnimationFromUrl(hourForecastsList.get(8).getWeatherCondition().getIconAddress());
-                            tvFeelsLike.setText(dayForecastsList.get(0).getRealFeel_celsius().toString().
+                            tvFeelsLike.setText(dayForecastsList.get(1).getRealFeel_celsius().toString().
                                     substring(0, 4) + getString(R.string.temperature_metricUnits));
-                            tvPressure.setText(dayForecastsList.get(0).getPressure_millibars().toString() +
+                            tvPressure.setText(dayForecastsList.get(1).getPressure_millibars().toString() +
                                     getString(R.string.milibar_pressureUnit));
-                            tvUVIndex.setText(dayForecastsList.get(0).getUvIndex().toString().substring(0, 1));
-                            tvProbabilityOfRain.setText(dayForecastsList.get(0).getPrecipitationProbability().
+                            tvUVIndex.setText(dayForecastsList.get(1).getUvIndex().toString().substring(0, 1));
+                            tvProbabilityOfRain.setText(dayForecastsList.get(1).getPrecipitationProbability().
                                     toString().substring(0, 5) + getString(R.string.probability_sign));
-                            tvSunrise.setText(dayForecastsList.get(0).getSunrise().toString().substring(11, 16));
-                            tvSunset.setText(dayForecastsList.get(0).getSunset().toString().substring(11, 16));
+                            tvSunrise.setText(dayForecastsList.get(1).getSunrise().toString().substring(11, 16));
+                            tvSunset.setText(dayForecastsList.get(1).getSunset().toString().substring(11, 16));
                         }
                     });
 
@@ -303,28 +303,28 @@ public class ForecastFragment extends Fragment {
                             if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
                                 chartView.setVisibility(View.INVISIBLE);
                                 tvToday.setText(R.string.tvToday);
-                                tvHour1.setText(hourForecastsList.get(3).getDate().toString().substring(11, 16));
-                                tvTemp1.setText(hourForecastsList.get(3).getAvgTemperature_celsius().toString().
+                                tvHour1.setText(hourForecastsList.get(2).getDate().toString().substring(11, 16));
+                                tvTemp1.setText(hourForecastsList.get(2).getAvgTemperature_celsius().toString().
                                         substring(0, 4) + getString(R.string.temperature_metricUnits));
-                                lavWeatherIcon1.setAnimationFromUrl(hourForecastsList.get(3).getWeatherCondition().getIconAddress());
-                                tvHour2.setText(hourForecastsList.get(4).getDate().toString().substring(11, 16));
-                                tvTemp2.setText(hourForecastsList.get(4).getAvgTemperature_celsius().toString().
+                                lavWeatherIcon1.setAnimationFromUrl(hourForecastsList.get(2).getWeatherCondition().getIconAddress());
+                                tvHour2.setText(hourForecastsList.get(3).getDate().toString().substring(11, 16));
+                                tvTemp2.setText(hourForecastsList.get(3).getAvgTemperature_celsius().toString().
                                         substring(0, 4) + getString(R.string.temperature_metricUnits));
-                                lavWeatherIcon2.setAnimationFromUrl(hourForecastsList.get(4).getWeatherCondition().getIconAddress());
-                                tvHour3.setText(hourForecastsList.get(5).getDate().toString().substring(11, 16));
-                                tvTemp3.setText(hourForecastsList.get(5).getAvgTemperature_celsius().toString().
+                                lavWeatherIcon2.setAnimationFromUrl(hourForecastsList.get(3).getWeatherCondition().getIconAddress());
+                                tvHour3.setText(hourForecastsList.get(4).getDate().toString().substring(11, 16));
+                                tvTemp3.setText(hourForecastsList.get(4).getAvgTemperature_celsius().toString().
                                         substring(0, 4) + getString(R.string.temperature_metricUnits));
-                                lavWeatherIcon3.setAnimationFromUrl(hourForecastsList.get(5).getWeatherCondition().getIconAddress());
-                                tvHour4.setText(hourForecastsList.get(6).getDate().toString().substring(11, 16));
-                                tvTemp4.setText(hourForecastsList.get(6).getAvgTemperature_celsius().toString().
+                                lavWeatherIcon3.setAnimationFromUrl(hourForecastsList.get(4).getWeatherCondition().getIconAddress());
+                                tvHour4.setText(hourForecastsList.get(5).getDate().toString().substring(11, 16));
+                                tvTemp4.setText(hourForecastsList.get(5).getAvgTemperature_celsius().toString().
                                         substring(0, 4) + getString(R.string.temperature_metricUnits));
-                                lavWeatherIcon4.setAnimationFromUrl(hourForecastsList.get(6).getWeatherCondition().getIconAddress());
-                                tvHour5.setText(hourForecastsList.get(7).getDate().toString().substring(11, 16));
-                                tvTemp5.setText(hourForecastsList.get(7).getAvgTemperature_celsius().toString().
+                                lavWeatherIcon4.setAnimationFromUrl(hourForecastsList.get(5).getWeatherCondition().getIconAddress());
+                                tvHour5.setText(hourForecastsList.get(6).getDate().toString().substring(11, 16));
+                                tvTemp5.setText(hourForecastsList.get(6).getAvgTemperature_celsius().toString().
                                         substring(0, 4) + getString(R.string.temperature_metricUnits));
-                                lavWeatherIcon5.setAnimationFromUrl(hourForecastsList.get(7).getWeatherCondition().getIconAddress());
-                                tvHour6.setText(hourForecastsList.get(8).getDate().toString().substring(11, 16));
-                                tvTemp6.setText(hourForecastsList.get(8).getAvgTemperature_celsius().toString().
+                                lavWeatherIcon5.setAnimationFromUrl(hourForecastsList.get(6).getWeatherCondition().getIconAddress());
+                                tvHour6.setText(hourForecastsList.get(7).getDate().toString().substring(11, 16));
+                                tvTemp6.setText(hourForecastsList.get(7).getAvgTemperature_celsius().toString().
                                         substring(0, 4) + getString(R.string.temperature_metricUnits));
                                 lavWeatherIcon6.setAnimationFromUrl(hourForecastsList.get(8).getWeatherCondition().getIconAddress());
                                 hourPrediction6.setVisibility(View.VISIBLE);
