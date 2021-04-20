@@ -42,7 +42,7 @@
         android:id="@+id/hsvHourPrediction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvToday">
@@ -130,7 +130,9 @@
         android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="2dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -157,16 +159,23 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.15"
+                    android:orientation="vertical"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tvFeelsLike"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
                         android:layout_marginTop="16dp"
                         android:text="@string/feels_like"
+                        android:textAlignment="inherit"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -175,7 +184,6 @@
                         android:id="@+id/tvFeelsLikeValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
                         android:text="24"
                         android:textAlignment="viewEnd"
                         android:textColor="@color/white"
@@ -183,9 +191,8 @@
 
                     <TextView
                         android:id="@+id/tvUVIndex"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
                         android:layout_marginTop="16dp"
                         android:text="@string/UVIndex"
                         android:textColor="@color/white"
@@ -198,7 +205,6 @@
                         android:id="@+id/tvUVIndexValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
                         android:text="16.1"
                         android:textAlignment="viewEnd"
                         android:textColor="@color/white"
@@ -206,9 +212,8 @@
 
                     <TextView
                         android:id="@+id/tvSunrise"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
                         android:layout_marginTop="16dp"
                         android:text="@string/sunrise"
                         android:textColor="@color/white"
@@ -219,7 +224,6 @@
                         android:id="@+id/tvSunriseValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
                         android:text="6:38"
                         android:textAlignment="viewEnd"
                         android:textColor="@color/white"
@@ -229,17 +233,18 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tvPressure"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="100dp"
                         android:layout_marginTop="16dp"
                         android:text="@string/pressure"
+                        android:textAlignment="inherit"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -250,7 +255,6 @@
                         android:id="@+id/tvPressureValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="100dp"
                         android:text="1024"
                         android:textAlignment="viewEnd"
                         android:textColor="@color/white"
@@ -258,11 +262,11 @@
 
                     <TextView
                         android:id="@+id/tvProbabilityOfRain"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="100dp"
                         android:layout_marginTop="16dp"
                         android:text="@string/probability_of_rain"
+                        android:textAlignment="textStart"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -271,7 +275,6 @@
                         android:id="@+id/tvProbabilityOfRainValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="100dp"
                         android:text="76"
                         android:textAlignment="viewEnd"
                         android:textColor="@color/white"
@@ -279,9 +282,8 @@
 
                     <TextView
                         android:id="@+id/tvSunset"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="100dp"
                         android:layout_marginTop="16dp"
                         android:text="@string/sunset"
                         android:textColor="@color/white"
@@ -292,12 +294,17 @@
                         android:id="@+id/tvSunsetValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="100dp"
                         android:text="17:58"
                         android:textAlignment="viewEnd"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:orientation="vertical"></LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

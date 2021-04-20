@@ -2,6 +2,7 @@ package a1ex9788.dadm.weathercomparer.ui.forecast;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -52,9 +53,9 @@ import lecho.lib.hellocharts.view.LineChartView;
 public class ForecastFragment extends Fragment {
 
     List<PointValue> mPointValues = new ArrayList<PointValue>();
-    List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();
-    String[] date = {"10-22", "11-22", "12-22", "1-22", "6-22", "5-23", "5-22", "6-22", "5-23", "5-22"};//Marking of X-axis
-    int[] score = {50, 42, 90, 33, 10, 74, 22, 18, 79, 20};//Data Points of Charts
+    //List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();
+    //String[] date = {"10-22", "11-22", "12-22", "1-22", "6-22", "5-23", "5-22", "6-22", "5-23", "5-22"};//Marking of X-axis
+    //int[] score = {50, 42, 90, 33, 10, 74, 22, 18, 79, 20};//Data Points of Charts
     LineChartView chartView;
     private ForecastViewModel forecastViewModel;
     private FragmentForecastBinding binding;
@@ -256,6 +257,9 @@ public class ForecastFragment extends Fragment {
 
                     List<HourForecast> hourForecastsList = forecastViewModel.getAverageHourlyForecast(latitude, longitude);
                     List<DayForecast> dayForecastsList = forecastViewModel.getAverageDailyForecast(latitude, longitude);
+                    //List<HourForecast> hourForecastsAccuWeather = forecastViewModel.getAccuWeatherHourlyForecast(latitude, longitude);
+                    List<HourForecast> hourForecastsOpenWeather = forecastViewModel.getOpenWeatherHourlyForecast(latitude, longitude);
+                    List<HourForecast> hourForecastsWeatherBit = forecastViewModel.getWeatherBitHourlyForecast(latitude, longitude);
 
                     ((MainActivity) getActivity()).runOnUiThread(new Runnable() {
                         @Override
@@ -349,9 +353,11 @@ public class ForecastFragment extends Fragment {
                             } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
                                 chartView.setVisibility(View.VISIBLE);
                                 if (!chartConfigured) {
-                                    getAxisXLables();
-                                    getAxisPoints();
-                                    initLineChart();
+                                    List<AxisValue> axisXValues = getAxisXLables(hourForecastsList);
+                                    List<PointValue> pointValuesAverage = getAxisPoints(hourForecastsList);
+                                    List<PointValue> pointValuesOpenWeather = getAxisPoints(hourForecastsOpenWeather);
+                                    List<PointValue> pointValuesWeatherBit = getAxisPoints(hourForecastsWeatherBit);
+                                    initLineChart(axisXValues, pointValuesAverage, pointValuesOpenWeather, pointValuesWeatherBit);
                                     chartConfigured = true;
                                 }
                             }
@@ -386,29 +392,57 @@ public class ForecastFragment extends Fragment {
         return super.getExitTransition();
     }
 
-    private void getAxisXLables() {
-        for (int i = 0; i < date.length; i++) {
-            mAxisXValues.add(new AxisValue(i).setLabel(date[i]));
+    private List<AxisValue> getAxisXLables(List<HourForecast> hourForecastList) {
+        List<AxisValue> axisXValues =  new ArrayList<AxisValue>();
+        for(int i = 0; i < hourForecastList.size(); i++){
+            axisXValues.add(new AxisValue(i).setLabel(hourForecastList.get(i).getDate().
+                    toString().substring(11, 16)));
         }
+        return axisXValues;
     }
 
-    private void getAxisPoints() {
-        for (int i = 0; i < score.length; i++) {
+    private List<PointValue> getAxisPoints(List<HourForecast> hourForecastList) {
+        /*for (int i = 0; i < score.length; i++) {
             mPointValues.add(new PointValue(i, score[i]));
+        }*/
+        List<PointValue> pointValues = new ArrayList<PointValue>();
+        for(int i = 0; i < 12; i++){
+            double temp = hourForecastList.get(i).getAvgTemperature_celsius();
+            pointValues.add(new PointValue(i, (float) temp));
         }
+        return pointValues;
     }
 
-    private void initLineChart() {
-        Line line = new Line(mPointValues).setColor(Color.parseColor("#FFCD41"));  //The color of the broken line (orange)
+    private void initLineChart(List<AxisValue> axisXValues, List<PointValue> pointValuesAverage,
+                               List<PointValue> pointValuesOpenWeather, List<PointValue> pointValuesWeatherBit) {
+        Line lineAverage = new Line(pointValuesAverage).setColor(Color.parseColor("#1B1B1B"));  //The color of the broken line (orange)
+        Line lineOpenWeather = new Line(pointValuesOpenWeather).setColor(Color.parseColor("#DAEFFF"));  //The color of the broken line (orange)
+        Line lineWeatherBit = new Line(pointValuesWeatherBit).setColor(Color.parseColor("#FFCD41"));  //The color of the broken line (orange)
         List<Line> lines = new ArrayList<Line>();
-        line.setShape(ValueShape.CIRCLE);//The shape of each data point on a broken line chart is circular here (there are three kinds: ValueShape. SQUARE ValueShape. CIRCLE ValueShape. DIAMOND)
-        line.setCubic(false);//Whether the curve is smooth, that is, whether it is a curve or a broken line
-        line.setFilled(false);//Whether or not to fill the area of the curve
-        line.setHasLabels(true);//Whether to add notes to the data coordinates of curves
+        lineAverage.setShape(ValueShape.CIRCLE);//The shape of each data point on a broken line chart is circular here (there are three kinds: ValueShape. SQUARE ValueShape. CIRCLE ValueShape. DIAMOND)
+        lineAverage.setCubic(false);//Whether the curve is smooth, that is, whether it is a curve or a broken line
+        lineAverage.setFilled(false);//Whether or not to fill the area of the curve
+        lineAverage.setHasLabels(true);//Whether to add notes to the data coordinates of curves
         //      Line. setHasLabels OnlyForSelected (true); // Click on the data coordinates to prompt the data (set this line.setHasLabels(true); invalid)
-        line.setHasLines(true);//Whether to display with line or not. If it is false, there is no curve but point display
-        line.setHasPoints(false);//Whether to display a dot if it is false, there is no origin but only a dot (each data point is a large dot)
-        lines.add(line);
+        lineAverage.setHasLines(true);//Whether to display with line or not. If it is false, there is no curve but point display
+        lineAverage.setHasPoints(false);//Whether to display a dot if it is false, there is no origin but only a dot (each data point is a large dot)
+        lineOpenWeather.setShape(ValueShape.CIRCLE);//The shape of each data point on a broken line chart is circular here (there are three kinds: ValueShape. SQUARE ValueShape. CIRCLE ValueShape. DIAMOND)
+        lineOpenWeather.setCubic(false);//Whether the curve is smooth, that is, whether it is a curve or a broken line
+        lineOpenWeather.setFilled(false);//Whether or not to fill the area of the curve
+        lineOpenWeather.setHasLabels(true);//Whether to add notes to the data coordinates of curves
+        //      Line. setHasLabels OnlyForSelected (true); // Click on the data coordinates to prompt the data (set this line.setHasLabels(true); invalid)
+        lineOpenWeather.setHasLines(true);//Whether to display with line or not. If it is false, there is no curve but point display
+        lineOpenWeather.setHasPoints(false);//Whether to display a dot if it is false, there is no origin but only a dot (each data point is a large dot)
+        lineWeatherBit.setShape(ValueShape.CIRCLE);//The shape of each data point on a broken line chart is circular here (there are three kinds: ValueShape. SQUARE ValueShape. CIRCLE ValueShape. DIAMOND)
+        lineWeatherBit.setCubic(false);//Whether the curve is smooth, that is, whether it is a curve or a broken line
+        lineWeatherBit.setFilled(false);//Whether or not to fill the area of the curve
+        lineWeatherBit.setHasLabels(true);//Whether to add notes to the data coordinates of curves
+        //      Line. setHasLabels OnlyForSelected (true); // Click on the data coordinates to prompt the data (set this line.setHasLabels(true); invalid)
+        lineWeatherBit.setHasLines(true);//Whether to display with line or not. If it is false, there is no curve but point display
+        lineWeatherBit.setHasPoints(false);//Whether to display a dot if it is false, there is no origin but only a dot (each data point is a large dot)
+        lines.add(lineAverage);
+        lines.add(lineOpenWeather);
+        lines.add(lineWeatherBit);
         LineChartData data = new LineChartData();
         data.setLines(lines);
 
@@ -419,7 +453,7 @@ public class ForecastFragment extends Fragment {
         //axisX.setName("date"); // table name
         axisX.setTextSize(10);//Set font size
         axisX.setMaxLabelChars(8); //Up to a few X-axis coordinates, which means that your scaling allows the number of data on the X-axis to be 7<=x<=mAxisXValues.length.
-        axisX.setValues(mAxisXValues);  //Fill in the coordinate name of the X-axis
+        axisX.setValues(axisXValues);  //Fill in the coordinate name of the X-axis
         data.setAxisXBottom(axisX); //The x-axis is at the bottom.
         //Data. setAxisXTop (axisX); //x axis at top
         axisX.setHasLines(true); //x-axis dividing line
@@ -427,7 +461,7 @@ public class ForecastFragment extends Fragment {
         // The Y-axis automatically sets the Y-axis limit according to the size of the data (below I will give a solution for fixing the number of Y-axis data)
         Axis axisY = new Axis();  //Y axis
         axisY.setName("");//y axis annotation
-        axisY.setTextSize(10);//Set font size
+        axisY.setTextSize(9);//Set font size
         data.setAxisYLeft(axisY);  //The Y-axis is set on the left
         //Data. setAxisYRight (axisY); the // Y axis is set to the right
 
@@ -437,6 +471,7 @@ public class ForecastFragment extends Fragment {
         chartView.setMaxZoom((float) 2);//Maximum method ratio
         chartView.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
         chartView.setLineChartData(data);
+
         chartView.setVisibility(View.VISIBLE);
         /**Note: The following 7, 10 just represent a number to analogize.
          * At that time, it was to solve the fixed number of X-axis data. See (http://forum.xda-developers.com/tools/programming/library-hellocharts-charting-library-t2904456/page2);

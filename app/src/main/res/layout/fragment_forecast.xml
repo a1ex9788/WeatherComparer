@@ -221,8 +221,7 @@
                 map:layout_constraintStart_toStartOf="parent">
 
                 <include
-                    layout="@layout/bottom_sheet_layout"
-                    tools:visibility="gone" />
+                    layout="@layout/bottom_sheet_layout" />
 
 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
