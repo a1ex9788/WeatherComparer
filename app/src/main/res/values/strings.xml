@@ -35,9 +35,30 @@
 
     <!-- Places fragment -->
     <string name="tvEmpty">Empty list</string>
+    <string name="tUnknownLocation">Sorry, unknown location</string>
 
     <!-- Map fragment -->
     <string name="tAdd">added</string>
     <string name="tDelete">deleted</string>
 
+
+    <!-- Strings related to Settings -->
+    <!-- Language Settings -->
+    <string name="language_category">Language Configuration</string>
+    <string name="language_content">Choose your language</string>
+    <string name="englishString">English</string>
+    <string name="spanishString">Spanish</string>
+    <string name="frenchString">French</string>
+    <string name="valueLanguage0">0</string>
+    <string name="valueLanguage1">1</string>
+    <string name="valueLanguage2">2</string>
+    <!-- Units Settings -->
+    <string name="units_category">Units Configuration</string>
+    <string name="units_content">Select your unit</string>
+    <string name="metricUnitsString">Metric (km/h - °C)</string>
+    <string name="imperialUnitsString">Imperial (mile/h - °F)</string>
+    <string name="scientificUnitsString">Scientific (m/s - K)</string>
+    <string name="valueUnits0">0</string>
+    <string name="valueUnits1">1</string>
+    <string name="valueUnits2">2</string>
 </resources>

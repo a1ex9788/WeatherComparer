@@ -39,6 +39,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull PlaceAdapter.ViewHolder holder, int position) {
         MapPlace place = places.get(position);
         holder.binding.setPlace(place);
+
         if (place.getPhoto() != null) {
             Picasso.get()
                     .load(place.getPhoto())
@@ -51,9 +52,11 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
                 () -> {
                     try {
                         HourForecast currentForecast = average.getHourlyForecast().get(0);
-                        Log.d("forecast", currentForecast.toString());
+
                         holder.binding.setForecast(currentForecast);
-                        //animatePlaceCardIn();
+
+                        holder.binding.animationViewWeather.setAnimationFromUrl(currentForecast.getWeatherCondition().getIconAddress());
+                        holder.binding.animationViewWeather.playAnimation();
                     } catch (Exception error) {
 
                     }

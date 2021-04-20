@@ -26,8 +26,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.squareup.picasso.Picasso;
@@ -42,6 +44,8 @@ import a1ex9788.dadm.weathercomparer.databinding.FragmentMapBinding;
 import a1ex9788.dadm.weathercomparer.databinding.PlaceViewBinding;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.model.MapPlace;
+import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
+import a1ex9788.dadm.weathercomparer.webServices.places.GooglePlaces;
 
 public class MapFragment extends Fragment {
 
@@ -91,8 +95,7 @@ public class MapFragment extends Fragment {
                 animateFabOut();
                 binding.llTools.setVisibility(View.INVISIBLE);
             } else {
-                animateToolsIn();
-                binding.llTools.setVisibility(View.VISIBLE);
+                showTools();
             }
         });
 
@@ -125,15 +128,27 @@ public class MapFragment extends Fragment {
                 }
             });
 
-            map.setOnMapClickListener(latLng -> new Thread(
-                    () -> {
-                        try {
-                            MapPlace mapPlace = mapViewModel.getPlace(latLng.latitude, latLng.longitude);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-            ).start());
+            map.setOnMapClickListener(latLng -> {
+                if(placeBinding.getPlace() != null) {
+                    placeBinding.setPlace(null);
+                } else if(map.getCameraPosition().zoom > 5) {
+                    new Thread(
+                            () -> {
+                                try {
+                                    mapViewModel.getPlace(getContext(),latLng.latitude, latLng.longitude, (response) -> {
+                                        Place place = ((FetchPlaceResponse) response).getPlace();
+                                        onPlaceFounded(place);
+                                    });
+                                } catch (Exception e) {
+                                    getActivity().runOnUiThread(() -> {
+                                        Toast.makeText(getContext(), getString(R.string.tUnknownLocation), Toast.LENGTH_SHORT).show();
+                                    });
+                                }
+                            }
+                    ).start();
+                }
+                });
+
 
             setupAutocomplete();
         };
@@ -149,37 +164,7 @@ public class MapFragment extends Fragment {
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place placeFounded) {
-                MapPlace place = new MapPlace(placeFounded);
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(place.getLat(), place.getLng()), 11);
-                map.animateCamera(cameraUpdate);
-
-                new Thread(
-                        () -> {
-                            try {
-                                HourForecast currentForecast = mapViewModel.getCurrentForecast(place.getLat(), place.getLng());
-                                Log.d("forecast", currentForecast.toString());
-                                placeBinding.setForecast(currentForecast);
-                                animatePlaceCardIn();
-                            } catch (Exception error) {
-                                Log.d(MAP_TAG, error.getMessage());
-                            }
-                        }
-                ).start();
-
-                new Thread(
-                        () -> {
-                            boolean exists = mapViewModel.existsPlace(getContext(), place.getId());
-                            binding.setAlreadyAdded(exists);
-                            Log.d(MAP_TAG, String.valueOf(exists));
-                        }
-                ).start();
-
-                placeBinding.setPlace(place);
-                if (place.getPhoto() != null) {
-                    Picasso.get()
-                            .load(place.getPhoto())
-                            .into(placeBinding.ivPlace);
-                }
+                onPlaceFounded(placeFounded);
             }
 
             @Override
@@ -210,30 +195,75 @@ public class MapFragment extends Fragment {
         }
     }
 
-    void animatePlaceCardIn() {
+    void onPlaceFounded(Place placeFounded) {
+        MapPlace place = new MapPlace(placeFounded);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(place.getLat(), place.getLng()), 11);
+        map.animateCamera(cameraUpdate);
+
+        new Thread(
+                () -> {
+                    try {
+                        HourForecast currentForecast = mapViewModel.getCurrentForecast(place.getLat(), place.getLng());
+                        placeBinding.setForecast(currentForecast);
+                        setWeatherConditionAnimation();
+                        animatePlaceCardIn();
+
+                    } catch (Exception error) {
+                        Log.d(MAP_TAG, error.getMessage());
+                    }
+                }
+        ).start();
+
+        new Thread(
+                () -> {
+                    boolean exists = mapViewModel.existsPlace(getContext(), place.getId());
+                    binding.setAlreadyAdded(exists);
+
+                }
+        ).start();
+
+        placeBinding.setPlace(place);
+        if (place.getPhoto() != null) {
+            Picasso.get()
+                    .load(place.getPhoto())
+                    .into(placeBinding.ivPlace);
+        }
+    }
+
+    private void setWeatherConditionAnimation() {
+        placeBinding.animationViewWeather.setAnimationFromUrl(placeBinding.getForecast().getWeatherCondition().getIconAddress());
+        placeBinding.animationViewWeather.playAnimation();
+    }
+
+    private void showTools() {
+        animateToolsIn();
+        binding.llTools.setVisibility(View.VISIBLE);
+    }
+
+    private void animatePlaceCardIn() {
         placeBinding.cvPlace.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
     }
 
-    void animatePlaceCardOut() {
+    private void animatePlaceCardOut() {
         placeBinding.cvPlace.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_out));
     }
 
-    void animateToolsIn() {
+    private void animateToolsIn() {
         binding.llTools.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in));
     }
 
-    void animateFabOut() {
+    private void animateFabOut() {
         binding.llTools.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.zoom_out));
     }
 
-    void resetInfo() {
+    private void resetInfo() {
         ((EditText) autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setText(null);
         autocompleteFragment.getView().findViewById(R.id.places_autocomplete_clear_button).setVisibility(View.INVISIBLE);
         binding.llTools.setVisibility(View.INVISIBLE);
         placeBinding.setPlace(null);
     }
 
-    public void addPlace() {
+    private void addPlace() {
         new Thread(() -> {
             mapViewModel.savePlace(getContext(), placeBinding.getPlace());
 
@@ -241,7 +271,7 @@ public class MapFragment extends Fragment {
         }).start();
     }
 
-    public void deletePlace() {
+    private void deletePlace() {
         new Thread(() -> {
             mapViewModel.deletePlace(getContext(), placeBinding.getPlace());
 

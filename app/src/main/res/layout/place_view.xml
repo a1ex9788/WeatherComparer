@@ -7,9 +7,10 @@
     <data>
         <import type="android.view.View"/>
         <import type="a1ex9788.dadm.weathercomparer.utils.DoubleFormats"/>
+
         <variable name="place" type="a1ex9788.dadm.weathercomparer.model.MapPlace"/>
         <variable name="forecast" type="a1ex9788.dadm.weathercomparer.model.HourForecast"/>
-        <variable name="onTap" type="java.util.function.Function"/>
+        <variable name="url" type="String"/>
         <variable name="loading" type="Boolean"/>
     </data>
 
@@ -102,7 +103,7 @@
                                 style="@style/WhiteSubtitle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@{ DoubleFormats.TWO_DECIMALS.format(forecast.getWindSpeed_kilometersPerHour())  }"
+                                android:text="@{ DoubleFormats.TWO.format(forecast.getWindSpeed_kilometersPerHour())  }"
                                 android:textAlignment="viewEnd" />
 
                             <TextView
@@ -141,7 +142,7 @@
                                 style="@style/WhiteSubtitle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@{ DoubleFormats.NO_COMMA.format(forecast.getAvgTemperature_celsius()) }"
+                                android:text="@{ DoubleFormats.ZERO.format(forecast.getAvgTemperature_celsius()) }"
                                 android:textAlignment="viewEnd" />
 
                             <TextView
@@ -180,7 +181,7 @@
                                 style="@style/WhiteSubtitle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{ DoubleFormats.NO_COMMA.format(forecast.getHumidityProbability())}"
+                                android:text="@{ DoubleFormats.ZERO.format(forecast.getHumidityProbability())}"
                                 android:textAlignment="viewEnd" />
 
                             <TextView
@@ -220,8 +221,7 @@
                     android:layout_height="60dp"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
-                    app:lottie_speed="1.1"
-                    app:lottie_url="https://assets7.lottiefiles.com/temp/lf20_Stdaec.json" />
+                    app:lottie_speed="1.1" />
 
                 <android.widget.TextClock
                     android:id="@+id/tvPlaceTime"

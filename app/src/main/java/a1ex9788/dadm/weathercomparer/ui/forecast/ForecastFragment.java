@@ -1,8 +1,10 @@
 package a1ex9788.dadm.weathercomparer.ui.forecast;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -57,13 +59,14 @@ public class ForecastFragment extends Fragment {
     private ForecastViewModel forecastViewModel;
     private FragmentForecastBinding binding;
     private boolean chartConfigured;
+    private SharedPreferences prefs ;
 
     private LottieAnimationView animationView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentForecastBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         forecastViewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
 
         animationView = root.findViewById(R.id.animationViewWeather);
@@ -98,7 +101,36 @@ public class ForecastFragment extends Fragment {
             }
         }
     }
-
+    private String getSpeedUnits() {
+        final String metric =  prefs.getString("units",getString(R.string.valueUnits0));
+        if (metric.equals(getString(R.string.valueUnits0))) {
+            return getString(R.string.speed_metricUnits);
+        }
+        else if (metric.equals(getString(R.string.valueUnits1))) {
+            return getString(R.string.speed_imperialUnits);
+        }
+        else if (metric.equals(getString(R.string.valueUnits2))) {
+            return getString(R.string.speed_scientificUnits);
+        }
+        else {
+            return getString(R.string.speed_metricUnits);
+        }
+    }
+    private String getTemperatureUnits() {
+        final String metric =  prefs.getString("units",getString(R.string.valueUnits0));
+        if (metric.equals(getString(R.string.valueUnits0))) {
+            return getString(R.string.temperature_metricUnits);
+        }
+        else if (metric.equals(getString(R.string.valueUnits1))) {
+            return getString(R.string.temperature_imperialUnits);
+        }
+        else if (metric.equals(getString(R.string.valueUnits2))) {
+            return getString(R.string.temperature_scientificUnits);
+        }
+        else {
+            return getString(R.string.temperature_metricUnits);
+        }
+    }
     private void setDefaultForecastData() {
         // Set default data. It will be seen before the real one is loaded and in case of error.
         setWeatherConditionAnimation(WeatherCondition.UnknownPrecipitation);
@@ -111,9 +143,9 @@ public class ForecastFragment extends Fragment {
         CurrentWeather currentWeather = new CurrentWeather(
                 "No data",
                 "-",
-                getString(R.string.speed_metricUnits),
+                getSpeedUnits(),
                 "-",
-                getString(R.string.temperature_metricUnits),
+                getTemperatureUnits(),
                 "-",
                 "%");
         binding.setCurrentWeather(currentWeather);
@@ -157,9 +189,9 @@ public class ForecastFragment extends Fragment {
                     CurrentWeather currentWeather = new CurrentWeather(
                             hourForecast.getWeatherCondition().getText(),
                             roundToOneDecimal(hourForecast.getWindSpeed_kilometersPerHour()) + "",
-                            getString(R.string.speed_metricUnits),
+                            getSpeedUnits(),
                             roundToOneDecimal(hourForecast.getAvgTemperature_celsius()) + "",
-                            getString(R.string.temperature_metricUnits),
+                            getTemperatureUnits(),
                             roundToOneDecimal(hourForecast.getPrecipitationProbability()) + "",
                             "%");
                     binding.setCurrentWeather(currentWeather);
