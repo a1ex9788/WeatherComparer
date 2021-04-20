@@ -227,15 +227,23 @@ public class UnitsConverter {
     }
 
     public static UvIndex uvIndexValueToUvIndex(double uvIndexValue) {
-        if (uvIndexValue <= 2) {
+        if (uvIndexValue < 3) {
             return UvIndex.Low;
-        } else if (uvIndexValue <= 5) {
+        } else if (uvIndexValue < 6) {
             return UvIndex.Moderate;
-        } else if (uvIndexValue <= 7) {
+        } else if (uvIndexValue < 8) {
             return UvIndex.High;
         } else {
             return UvIndex.VeryHigh;
         }
+    }
+
+    public static double roundToOneDecimal(double d) {
+        return Math.round(d * 10.0) / 10.0;
+    }
+
+    public static double roundToTwoDecimals(double d) {
+        return Math.round(d * 100.0) / 100.0;
     }
 
 }
