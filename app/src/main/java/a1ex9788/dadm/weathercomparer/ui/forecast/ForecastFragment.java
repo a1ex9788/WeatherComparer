@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +31,11 @@ import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.bindings.CurrentWeather;
 import a1ex9788.dadm.weathercomparer.databinding.FragmentForecastBinding;
+import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.model.MapPlace;
 import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeatherDailyForecast;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Axis;
@@ -168,54 +173,146 @@ public class ForecastFragment extends Fragment {
     }
 
     private void configureBottomSheet(View root) {
-        ConstraintLayout clBottomSheet = root.findViewById(R.id.clBottomSheet);
-        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(clBottomSheet);
-        DisplayMetrics metrics = new DisplayMetrics();
-        ((MainActivity) getActivity()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int height = metrics.heightPixels;
-        bottomSheetBehavior.setPeekHeight(height / 4);
-        clBottomSheet.getLayoutParams().height = (3 * height) / 4;
-        TextView tvToday = root.findViewById(R.id.tvToday);
-        ConstraintLayout hourPrediction1 = root.findViewById(R.id.hourPrediction1);
-        ConstraintLayout hourPrediction2 = root.findViewById(R.id.hourPrediction2);
-        ConstraintLayout hourPrediction3 = root.findViewById(R.id.hourPrediction3);
-        ConstraintLayout hourPrediction4 = root.findViewById(R.id.hourPrediction4);
-        ConstraintLayout hourPrediction5 = root.findViewById(R.id.hourPrediction3);
-        ConstraintLayout hourPrediction6 = root.findViewById(R.id.hourPrediction4);
-
-        chartView = root.findViewById(R.id.chart);
-        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        new Thread() {
             @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
-                    /*hourPrediction1.setVisibility(View.VISIBLE);
-                    hourPrediction2.setVisibility(View.VISIBLE);
-                    hourPrediction3.setVisibility(View.VISIBLE);
-                    hourPrediction4.setVisibility(View.VISIBLE);*/
-                    chartView.setVisibility(View.INVISIBLE);
-                    tvToday.setText(R.string.tvToday);
-                } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
-                    /*hourPrediction1.setVisibility(View.INVISIBLE);
-                    hourPrediction2.setVisibility(View.INVISIBLE);
-                    hourPrediction3.setVisibility(View.INVISIBLE);
-                    hourPrediction4.setVisibility(View.INVISIBLE);*/
-                    tvToday.setText(R.string.tvToday_daily);
-                } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
-                    chartView.setVisibility(View.VISIBLE);
-                    if (!chartConfigured) {
-                        getAxisXLables();
-                        getAxisPoints();
-                        initLineChart();
-                        chartConfigured = true;
-                    }
+            public void run() {
+                Looper.prepare();
+                try {
+                    ConstraintLayout clBottomSheet = root.findViewById(R.id.clBottomSheet);
+                    BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(clBottomSheet);
+                    DisplayMetrics metrics = new DisplayMetrics();
+
+                    ((MainActivity) getActivity()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                    int height = metrics.heightPixels;
+                    int width = metrics.heightPixels;
+                    bottomSheetBehavior.setPeekHeight(height / 4);
+                    clBottomSheet.getLayoutParams().height = (3 * height) / 4;
+                    TextView tvToday = root.findViewById(R.id.tvToday);
+                    TextView tvFeelsLike = clBottomSheet.findViewById(R.id.tvFeelsLikeValue);
+                    TextView tvPressure = clBottomSheet.findViewById(R.id.tvPressureValue);
+                    TextView tvUVIndex = clBottomSheet.findViewById(R.id.tvUVIndexValue);
+                    TextView tvProbabilityOfRain = clBottomSheet.findViewById(R.id.tvProbabilityOfRainValue);
+                    TextView tvSunrise = clBottomSheet.findViewById(R.id.tvSunriseValue);
+                    TextView tvSunset = clBottomSheet.findViewById(R.id.tvSunsetValue);
+
+                    ConstraintLayout hourPrediction1 = root.findViewById(R.id.hourPrediction1);
+                    TextView tvHour1 = hourPrediction1.findViewById(R.id.tvHour);
+                    TextView tvTemp1 = hourPrediction1.findViewById(R.id.tvTemp);
+                    ConstraintLayout hourPrediction2 = root.findViewById(R.id.hourPrediction2);
+                    TextView tvHour2 = hourPrediction2.findViewById(R.id.tvHour);
+                    TextView tvTemp2 = hourPrediction2.findViewById(R.id.tvTemp);
+                    ConstraintLayout hourPrediction3 = root.findViewById(R.id.hourPrediction3);
+                    TextView tvHour3 = hourPrediction3.findViewById(R.id.tvHour);
+                    TextView tvTemp3 = hourPrediction3.findViewById(R.id.tvTemp);
+                    ConstraintLayout hourPrediction4 = root.findViewById(R.id.hourPrediction4);
+                    TextView tvHour4 = hourPrediction4.findViewById(R.id.tvHour);
+                    TextView tvTemp4 = hourPrediction4.findViewById(R.id.tvTemp);
+                    ConstraintLayout hourPrediction5 = root.findViewById(R.id.hourPrediction5);
+                    TextView tvHour5 = hourPrediction5.findViewById(R.id.tvHour);
+                    TextView tvTemp5 = hourPrediction5.findViewById(R.id.tvTemp);
+                    ConstraintLayout hourPrediction6 = root.findViewById(R.id.hourPrediction6);
+                    TextView tvHour6 = hourPrediction6.findViewById(R.id.tvHour);
+                    TextView tvTemp6 = hourPrediction6.findViewById(R.id.tvTemp);
+                    double latitude = 39.289, longitude = -0.799;
+
+
+                    List<HourForecast> hourForecastsList = forecastViewModel.getAverageHourlyForecast(latitude, longitude);
+                    List<DayForecast> dayForecastsList = forecastViewModel.getAverageDailyForecast(latitude, longitude);
+
+                    ((MainActivity) getActivity()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tvHour1.setText(hourForecastsList.get(3).getDate().toString().substring(11, 16));
+                            tvTemp1.setText(hourForecastsList.get(3).getAvgTemperature_celsius().toString().
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits));
+                            tvHour2.setText(hourForecastsList.get(4).getDate().toString().substring(11, 16));
+                            tvTemp2.setText(hourForecastsList.get(4).getAvgTemperature_celsius().toString().
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits));
+                            tvHour3.setText(hourForecastsList.get(5).getDate().toString().substring(11, 16));
+                            tvTemp3.setText(hourForecastsList.get(5).getAvgTemperature_celsius().toString().
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits));
+                            tvHour4.setText(hourForecastsList.get(6).getDate().toString().substring(11, 16));
+                            tvTemp4.setText(hourForecastsList.get(6).getAvgTemperature_celsius().toString().
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits));
+                            tvHour5.setText(hourForecastsList.get(7).getDate().toString().substring(11, 16));
+                            tvTemp5.setText(hourForecastsList.get(7).getAvgTemperature_celsius().toString().
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits));
+                            tvHour6.setText(hourForecastsList.get(8).getDate().toString().substring(11, 16));
+                            tvTemp6.setText(hourForecastsList.get(8).getAvgTemperature_celsius().toString().
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits));
+                            tvFeelsLike.setText(dayForecastsList.get(0).getRealFeel_celsius().toString().
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits));
+                            tvPressure.setText(dayForecastsList.get(0).getPressure_millibars().toString() +
+                                    getString(R.string.milibar_pressureUnit));
+                            tvUVIndex.setText(dayForecastsList.get(0).getUvIndex().toString().substring(0, 1));
+                            tvProbabilityOfRain.setText(dayForecastsList.get(0).getPrecipitationProbability().
+                                    toString() + getString(R.string.probability_sign));
+                            tvSunrise.setText(dayForecastsList.get(0).getSunrise().toString().substring(11, 16));
+                            tvSunset.setText(dayForecastsList.get(0).getSunset().toString().substring(11, 16));
+                        }
+                    });
+
+                    chartView = root.findViewById(R.id.chart);
+                    bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+                        @Override
+                        public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                            if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
+                                chartView.setVisibility(View.INVISIBLE);
+                                tvToday.setText(R.string.tvToday);
+                                tvHour1.setText(hourForecastsList.get(3).getDate().toString().substring(11, 16));
+                                tvTemp1.setText(hourForecastsList.get(3).getAvgTemperature_celsius().toString().
+                                        substring(0, 4) + getString(R.string.temperature_metricUnits));
+                                tvHour2.setText(hourForecastsList.get(4).getDate().toString().substring(11, 16));
+                                tvTemp2.setText(hourForecastsList.get(4).getAvgTemperature_celsius().toString().
+                                        substring(0, 4) + getString(R.string.temperature_metricUnits));
+                                tvHour3.setText(hourForecastsList.get(5).getDate().toString().substring(11, 16));
+                                tvTemp3.setText(hourForecastsList.get(5).getAvgTemperature_celsius().toString().
+                                        substring(0, 4) + getString(R.string.temperature_metricUnits));
+                                tvHour4.setText(hourForecastsList.get(6).getDate().toString().substring(11, 16));
+                                tvTemp4.setText(hourForecastsList.get(6).getAvgTemperature_celsius().toString().
+                                        substring(0, 4) + getString(R.string.temperature_metricUnits));
+                                tvHour5.setText(hourForecastsList.get(7).getDate().toString().substring(11, 16));
+                                tvTemp5.setText(hourForecastsList.get(7).getAvgTemperature_celsius().toString().
+                                        substring(0, 4) + getString(R.string.temperature_metricUnits));
+                                tvHour6.setText(hourForecastsList.get(8).getDate().toString().substring(11, 16));
+                                tvTemp6.setText(hourForecastsList.get(8).getAvgTemperature_celsius().toString().
+                                        substring(0, 4) + getString(R.string.temperature_metricUnits));
+
+                            } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
+                                tvToday.setText(R.string.tvToday_daily);
+                                tvHour1.setText(dayForecastsList.get(0).getDate().toString().substring(0, 4));
+                                tvTemp1.setText("");
+                                tvHour2.setText(dayForecastsList.get(1).getDate().toString().substring(0, 4));
+                                tvTemp2.setText("");
+                                tvHour3.setText(dayForecastsList.get(2).getDate().toString().substring(0, 4));
+                                tvTemp3.setText("");
+                                tvHour4.setText(dayForecastsList.get(3).getDate().toString().substring(0, 4));
+                                tvTemp4.setText("");
+                                tvHour5.setText(dayForecastsList.get(4).getDate().toString().substring(0, 4));
+                                tvTemp5.setText("");
+                                /*tvHour6.setText(dayForecastsList.get(6).getDate().toString().substring(0, 4));
+                                tvTemp6.setText("");*/
+                            } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
+                                chartView.setVisibility(View.VISIBLE);
+                                if (!chartConfigured) {
+                                    getAxisXLables();
+                                    getAxisPoints();
+                                    initLineChart();
+                                    chartConfigured = true;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+                        }
+                    });
+                }catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
-            }
-        });
+        }.start();
     }
 
     private double roundToOneDecimal(double d) {

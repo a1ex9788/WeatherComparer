@@ -30,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/tvToday"
         android:textColor="@color/white"
         android:textSize="18sp"
@@ -41,7 +42,7 @@
         android:id="@+id/hsvHourPrediction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvToday">
@@ -181,12 +182,12 @@
                         android:textSize="18sp" />
 
                     <TextView
-                        android:id="@+id/tvVisibility"
+                        android:id="@+id/tvUVIndex"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="50dp"
                         android:layout_marginTop="16dp"
-                        android:text="@string/visibility"
+                        android:text="@string/UVIndex"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -194,7 +195,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/tvFeelsLikeValue" />
 
                     <TextView
-                        android:id="@+id/tvVisibilityValue"
+                        android:id="@+id/tvUVIndexValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="50dp"

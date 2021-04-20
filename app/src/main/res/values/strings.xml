@@ -13,6 +13,7 @@
     <string name="temperature_imperialUnits">°F</string>
     <string name="speed_scientificUnits">m/s</string>
     <string name="temperature_scientificUnits">K</string>
+    <string name="milibar_pressureUnit">mb</string>
 
     <!-- Forecast fragment -->
     <string name="probability_sign">%</string>
@@ -26,7 +27,7 @@
     <string name="tvToday">Today</string>
     <string name="tvToday_daily">Daily</string>
     <string name="feels_like">Feels like</string>
-    <string name="visibility">Visibility</string>
+    <string name="UVIndex">UV Index</string>
     <string name="pressure">Pressure</string>
     <string name="probability_of_rain">Probability of rain</string>
     <string name="sunset">Sunset</string>
@@ -38,4 +39,5 @@
     <!-- Map fragment -->
     <string name="tAdd">added</string>
     <string name="tDelete">deleted</string>
+
 </resources>
