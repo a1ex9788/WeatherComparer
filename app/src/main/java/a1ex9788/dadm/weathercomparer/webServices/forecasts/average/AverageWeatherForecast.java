@@ -12,7 +12,7 @@ import a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit.WeatherBit
 
 public class AverageWeatherForecast extends WeatherForecast {
 
-    private final int DAYS_IN_DAILY_FORECAST = 5;
+    private final int DAYS_IN_DAILY_FORECAST = 4;
     private final int HOURS_IN_HOURLY_FORECAST = 12;
 
     List<WeatherForecast> weatherForecasts = Arrays.asList(
