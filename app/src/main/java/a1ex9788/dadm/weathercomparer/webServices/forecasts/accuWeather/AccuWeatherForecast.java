@@ -82,7 +82,8 @@ public class AccuWeatherForecast extends WeatherForecast {
     private List<DayForecast> convertToStandard(AccuWeatherDailyForecast accuWeatherDailyForecast) {
         List<DayForecast> dailyForecast = new ArrayList();
 
-        for (AccuWeatherDailyForecast.AccuWeatherDayForecast accuWeatherDayForecast : accuWeatherDailyForecast.DailyForecasts) {
+        // The first element is today's forecast so it has to be skipped.
+        for (AccuWeatherDailyForecast.AccuWeatherDayForecast accuWeatherDayForecast : accuWeatherDailyForecast.DailyForecasts.subList(1, accuWeatherDailyForecast.DailyForecasts.size())) {
             dailyForecast.add(new DayForecast(
                     accuWeatherDayForecast.Date,
                     accuWeatherDayForecast.Day == null || accuWeatherDayForecast.Day.Icon == null

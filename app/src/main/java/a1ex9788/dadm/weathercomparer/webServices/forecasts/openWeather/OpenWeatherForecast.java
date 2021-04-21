@@ -56,7 +56,8 @@ public class OpenWeatherForecast extends WeatherForecast {
     private List<DayForecast> convertToDailyStandard(OpenWeatherCompleteForecast openWeatherCompleteForecast) {
         List<DayForecast> dailyForecast = new ArrayList();
 
-        for (OpenWeatherCompleteForecast.OpenWeatherDayForecast openWeatherDayForecast : openWeatherCompleteForecast.daily) {
+        // The first element is today's forecast so it has to be skipped.
+        for (OpenWeatherCompleteForecast.OpenWeatherDayForecast openWeatherDayForecast : openWeatherCompleteForecast.daily.subList(1, openWeatherCompleteForecast.daily.size())) {
             dailyForecast.add(new DayForecast(
                     openWeatherDayForecast.dt == null ? null : UnitsConverter.unixUtcToDate(openWeatherDayForecast.dt),
                     openWeatherDayForecast.weather == null || openWeatherDayForecast.weather.get(0) == null || openWeatherDayForecast.weather.get(0).id == null
@@ -82,7 +83,8 @@ public class OpenWeatherForecast extends WeatherForecast {
     private List<HourForecast> convertToHourlyStandard(OpenWeatherCompleteForecast openWeatherCompleteForecast) {
         List<HourForecast> hourlyForecast = new ArrayList();
 
-        for (OpenWeatherCompleteForecast.OpenWeatherHourForecast openWeatherHourForecast : openWeatherCompleteForecast.hourly) {
+        // The first element is the forecast of the current hour so it has to be skipped.
+        for (OpenWeatherCompleteForecast.OpenWeatherHourForecast openWeatherHourForecast : openWeatherCompleteForecast.hourly.subList(1, openWeatherCompleteForecast.hourly.size())) {
             hourlyForecast.add(new HourForecast(
                     openWeatherHourForecast.dt == null ? null : UnitsConverter.unixUtcToDate(openWeatherHourForecast.dt),
                     openWeatherHourForecast.weather == null || openWeatherHourForecast.weather.get(0) == null || openWeatherHourForecast.weather.get(0).id == null
