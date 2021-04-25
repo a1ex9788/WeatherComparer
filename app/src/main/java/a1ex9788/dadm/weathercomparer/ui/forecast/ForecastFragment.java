@@ -29,7 +29,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -136,11 +139,6 @@ public class ForecastFragment extends Fragment {
         // Set default data. It will be seen before the real one is loaded and in case of error.
         setWeatherConditionAnimation(WeatherCondition.UnknownPrecipitation);
 
-        MapPlace mapPlace = new MapPlace();
-        mapPlace.setName("Valencia");
-        mapPlace.setTimeZone("16:14 Mar 16");
-        binding.setPlace(mapPlace);
-
         CurrentWeather currentWeather = new CurrentWeather(
                 "No data",
                 "-",
@@ -167,7 +165,32 @@ public class ForecastFragment extends Fragment {
 
                         setCurrentForecastData(location.getLatitude(), location.getLongitude());
 
-                        Log.d("current",location.toString());
+                        new Thread(() -> {
+                            try {
+                                forecastViewModel.getPlace(getContext(), location.getLatitude(), location.getLongitude(), detailsResponse -> {
+                                    Place placeFounded = ((FetchPlaceResponse) detailsResponse).getPlace();
+                                    MapPlace place = new MapPlace(placeFounded);
+
+                                    getActivity().runOnUiThread(() -> {
+                                        binding.setPlace(place);
+
+                                        if (place.getPhoto() != null) {
+                                            Picasso.get()
+                                                    .load(place.getPhoto())
+                                                    .into(binding.ivForecastPlace);
+                                        }
+                                    });
+
+
+                                });
+                            } catch (Exception e) {
+
+                            }
+                        }).start();
+
+
+
+
                     });
                 }).start();
 
@@ -190,10 +213,6 @@ public class ForecastFragment extends Fragment {
                 try {
                     HourForecast hourForecast = forecastViewModel.getCurrentWeather(latitude, longitude);
 
-                    MapPlace mapPlace = new MapPlace();
-                    mapPlace.setName("Valencia");
-                    mapPlace.setTimeZone("16:14 Mar 16");
-                    binding.setPlace(mapPlace);
 
                     CurrentWeather currentWeather = new CurrentWeather(
                             hourForecast.getWeatherCondition().getText(),
