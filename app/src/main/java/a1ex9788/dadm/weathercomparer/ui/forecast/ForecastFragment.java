@@ -5,10 +5,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +44,7 @@ import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.model.MapPlace;
 import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
+import a1ex9788.dadm.weathercomparer.webServices.LocationService;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeatherDailyForecast;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
@@ -77,11 +80,9 @@ public class ForecastFragment extends Fragment {
 
         setDefaultForecastData();
 
-        recoverMapPlace(bundle);
-
-        setCurrentForecastData();
-
         configureBottomSheet(root);
+
+        recoverMapPlace(bundle);
 
         return root;
     }
@@ -152,10 +153,26 @@ public class ForecastFragment extends Fragment {
     }
 
     private void recoverMapPlace(Bundle bundle) {
-        if(bundle != null) {
+        if (bundle != null) {
 
         } else {
             getLocationPermission();
+
+            if (binding.getLocationPermissionGranted()) {
+                LocationService locationService = new LocationService(getContext());
+
+                new Thread(() -> {
+                    locationService.getLocation(getContext(), locationResponse -> {
+                        Location location = (Location) locationResponse;
+
+                        setCurrentForecastData(location.getLatitude(), location.getLongitude());
+
+                        Log.d("current",location.toString());
+                    });
+                }).start();
+
+
+            }
         }
         /* To provide parameters to the ForecastFragment the following code is needed:
             Bundle result = new Bundle();
@@ -164,14 +181,13 @@ public class ForecastFragment extends Fragment {
          */
     }
 
-    private void setCurrentForecastData() {
+    private void setCurrentForecastData(double latitude, double longitude) {
         new Thread() {
             @Override
             public void run() {
                 Looper.prepare();
 
                 try {
-                    double latitude = 39.289, longitude = -0.799;
                     HourForecast hourForecast = forecastViewModel.getCurrentWeather(latitude, longitude);
 
                     MapPlace mapPlace = new MapPlace();
