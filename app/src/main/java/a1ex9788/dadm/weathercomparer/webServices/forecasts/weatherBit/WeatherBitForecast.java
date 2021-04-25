@@ -55,7 +55,8 @@ public class WeatherBitForecast extends WeatherForecast {
     private List<DayForecast> convertToStandard(WeatherBitDailyForecast weatherBitDailyForecast) {
         List<DayForecast> dailyForecast = new ArrayList();
 
-        for (WeatherBitDailyForecast.WeatherBitDayForecast weatherBitDayForecast : weatherBitDailyForecast.data) {
+        // The first element is today's forecast so it has to be skipped.
+        for (WeatherBitDailyForecast.WeatherBitDayForecast weatherBitDayForecast : weatherBitDailyForecast.data.subList(1, weatherBitDailyForecast.data.size())) {
             dailyForecast.add(new DayForecast(
                     weatherBitDayForecast.datetime,
                     weatherBitDayForecast.weather == null || weatherBitDayForecast.weather.code == null
