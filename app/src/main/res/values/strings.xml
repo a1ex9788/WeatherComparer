@@ -22,6 +22,8 @@
     <string name="nameFragmentParameter_key">name</string>
     <string name="photoFragmentParameter_key">photo</string>
     <string name="timeZoneFragmentParameter_key">timeZone</string>
+    <string name="tvNoLocation">Please active your location</string>
+    <string name="tvAllowLocation">Allow location</string>
 
     <!-- Forecast bottom sheet -->
     <string name="tvToday">Today</string>

@@ -1,13 +1,19 @@
 package a1ex9788.dadm.weathercomparer.webServices.places;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.util.Arrays;
@@ -18,7 +24,9 @@ import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 import a1ex9788.dadm.weathercomparer.webServices.WebServicesHelper;
 
 public class GooglePlaces {
+
     PlacesClient placesClient;
+    private List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.LAT_LNG, Place.Field.UTC_OFFSET);
 
     public GooglePlaces(Context context) {
         this.placesClient = Places.createClient(context);
@@ -54,10 +62,10 @@ public class GooglePlaces {
     }
 
     public void getDetails(String id, OnSuccessListener onFounded) {
-        final List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.LAT_LNG, Place.Field.UTC_OFFSET);
         final FetchPlaceRequest request = FetchPlaceRequest.newInstance(id, placeFields);
 
         placesClient.fetchPlace(request).addOnSuccessListener(onFounded);
     }
+
 }
 

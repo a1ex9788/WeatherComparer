@@ -1,6 +1,10 @@
 package a1ex9788.dadm.weathercomparer.ui.forecast;
 
+import android.content.Context;
+
 import androidx.lifecycle.ViewModel;
+
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.List;
 
@@ -11,6 +15,7 @@ import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeath
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.average.AverageWeatherForecast;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather.OpenWeatherForecast;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit.WeatherBitForecast;
+import a1ex9788.dadm.weathercomparer.webServices.places.GooglePlaces;
 
 public class ForecastViewModel extends ViewModel {
 
@@ -64,6 +69,12 @@ public class ForecastViewModel extends ViewModel {
         WeatherForecast weatherBitForecast = new WeatherBitForecast(latitude, longitude);
 
         return weatherBitForecast.getHourlyForecast();
+    }
+
+    public void getPlace(Context context, double latitude, double longitude, OnSuccessListener onPlaceFounded) throws Exception {
+        GooglePlaces googlePlaces = new GooglePlaces(context);
+        String id = googlePlaces.searchLocalityByNearby(latitude, longitude);
+        googlePlaces.getDetails(id, onPlaceFounded);
     }
 
 }

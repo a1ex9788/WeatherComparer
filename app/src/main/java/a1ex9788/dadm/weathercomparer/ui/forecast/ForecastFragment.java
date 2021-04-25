@@ -1,7 +1,10 @@
 package a1ex9788.dadm.weathercomparer.ui.forecast;
 
+import android.Manifest;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -18,6 +21,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -51,11 +56,6 @@ import lecho.lib.hellocharts.view.LineChartView;
 
 public class ForecastFragment extends Fragment {
 
-    List<PointValue> mPointValues = new ArrayList<PointValue>();
-    List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();
-    String[] date = {"10-22", "11-22", "12-22", "1-22", "6-22", "5-23", "5-22", "6-22", "5-23", "5-22"};//Marking of X-axis
-    int[] score = {50, 42, 90, 33, 10, 74, 22, 18, 79, 20};//Data Points of Charts
-    LineChartView chartView;
     private ForecastViewModel forecastViewModel;
     private FragmentForecastBinding binding;
     private boolean chartConfigured;
@@ -63,7 +63,7 @@ public class ForecastFragment extends Fragment {
 
     private LottieAnimationView animationView;
 
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         binding = FragmentForecastBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -77,7 +77,7 @@ public class ForecastFragment extends Fragment {
 
         setDefaultForecastData();
 
-        recoverMapPlace();
+        recoverMapPlace(bundle);
 
         setCurrentForecastData();
 
@@ -151,19 +151,12 @@ public class ForecastFragment extends Fragment {
         binding.setCurrentWeather(currentWeather);
     }
 
-    private void recoverMapPlace() {
-        getParentFragmentManager().setFragmentResultListener(String.valueOf(R.string.listenerRequest_key), this, (key, bundle) -> {
-            String name = bundle.getString(String.valueOf(R.string.nameFragmentParameter_key));
-            String photo = bundle.getString(String.valueOf(R.string.photoFragmentParameter_key));
-            String timeZone = bundle.getString(String.valueOf(R.string.timeZoneFragmentParameter_key));
+    private void recoverMapPlace(Bundle bundle) {
+        if(bundle != null) {
 
-            if (name == null || photo == null || timeZone == null) {
-                // TODO: Show the current location forecast.
-            } else {
-                // TODO: Show the recovered info.
-            }
-        });
-
+        } else {
+            getLocationPermission();
+        }
         /* To provide parameters to the ForecastFragment the following code is needed:
             Bundle result = new Bundle();
             result.putString(String.valueOf(R.string.nameFragmentParameter_key), "Valencia");
@@ -256,6 +249,9 @@ public class ForecastFragment extends Fragment {
 
                     List<HourForecast> hourForecastsList = forecastViewModel.getAverageHourlyForecast(latitude, longitude);
                     List<DayForecast> dayForecastsList = forecastViewModel.getAverageDailyForecast(latitude, longitude);
+                    //List<HourForecast> hourForecastsAccuWeather = forecastViewModel.getAccuWeatherHourlyForecast(latitude, longitude);
+                    List<HourForecast> hourForecastsOpenWeather = forecastViewModel.getOpenWeatherHourlyForecast(latitude, longitude);
+                    List<HourForecast> hourForecastsWeatherBit = forecastViewModel.getWeatherBitHourlyForecast(latitude, longitude);
 
                     ((MainActivity) getActivity()).runOnUiThread(new Runnable() {
                         @Override
@@ -284,19 +280,19 @@ public class ForecastFragment extends Fragment {
                             tvTemp6.setText(hourForecastsList.get(7).getAvgTemperature_celsius().toString().
                                     substring(0, 4) + getString(R.string.temperature_metricUnits));
                             lavWeatherIcon6.setAnimationFromUrl(hourForecastsList.get(8).getWeatherCondition().getIconAddress());
-                            tvFeelsLike.setText(dayForecastsList.get(1).getRealFeel_celsius().toString().
+                            tvFeelsLike.setText(hourForecastsList.get(1).getRealFeel_celsius().toString().
                                     substring(0, 4) + getString(R.string.temperature_metricUnits));
-                            tvPressure.setText(dayForecastsList.get(1).getPressure_millibars().toString() +
-                                    getString(R.string.milibar_pressureUnit));
-                            tvUVIndex.setText(dayForecastsList.get(1).getUvIndex().toString().substring(0, 1));
-                            tvProbabilityOfRain.setText(dayForecastsList.get(1).getPrecipitationProbability().
-                                    toString().substring(0, 5) + getString(R.string.probability_sign));
-                            tvSunrise.setText(dayForecastsList.get(1).getSunrise().toString().substring(11, 16));
-                            tvSunset.setText(dayForecastsList.get(1).getSunset().toString().substring(11, 16));
+                            tvPressure.setText(hourForecastsList.get(1).getPressure_millibars().toString().
+                                    substring(0, 7) + getString(R.string.milibar_pressureUnit));
+                            tvUVIndex.setText(hourForecastsList.get(1).getUvIndex().toString().substring(0, 1));
+                            tvProbabilityOfRain.setText(hourForecastsList.get(1).getPrecipitationProbability().
+                                    toString()+ getString(R.string.probability_sign));
+                            tvSunrise.setText(dayForecastsList.get(0).getSunrise().toString().substring(11, 16));
+                            tvSunset.setText(dayForecastsList.get(0).getSunset().toString().substring(11, 16));
                         }
                     });
 
-                    chartView = root.findViewById(R.id.chart);
+                    LineChartView chartView = root.findViewById(R.id.chart);
                     bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
                         @Override
                         public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -328,6 +324,7 @@ public class ForecastFragment extends Fragment {
                                         substring(0, 4) + getString(R.string.temperature_metricUnits));
                                 lavWeatherIcon6.setAnimationFromUrl(hourForecastsList.get(8).getWeatherCondition().getIconAddress());
                                 hourPrediction6.setVisibility(View.VISIBLE);
+                                hourPrediction5.setVisibility(View.VISIBLE);
                             } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                                 tvToday.setText(R.string.tvToday_daily);
                                 tvHour1.setText(dayForecastsList.get(0).getDate().toString().substring(0, 4));
@@ -342,16 +339,18 @@ public class ForecastFragment extends Fragment {
                                 tvHour4.setText(dayForecastsList.get(3).getDate().toString().substring(0, 4));
                                 tvTemp4.setText("");
                                 lavWeatherIcon4.setAnimationFromUrl(dayForecastsList.get(3).getWeatherCondition().getIconAddress());
-                                tvHour5.setText(dayForecastsList.get(4).getDate().toString().substring(0, 4));
-                                tvTemp5.setText("");
-                                lavWeatherIcon5.setAnimationFromUrl(dayForecastsList.get(4).getWeatherCondition().getIconAddress());
+                                hourPrediction5.setVisibility(View.INVISIBLE);
                                 hourPrediction6.setVisibility(View.INVISIBLE);
                             } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
                                 chartView.setVisibility(View.VISIBLE);
                                 if (!chartConfigured) {
-                                    getAxisXLables();
-                                    getAxisPoints();
-                                    initLineChart();
+                                    List<AxisValue> axisXValues = getAxisXLables(hourForecastsList);
+                                    List<PointValue> pointValuesAverage = getAxisPoints(hourForecastsList);
+                                    List<PointValue> pointValuesOpenWeather = getAxisPoints(hourForecastsOpenWeather);
+                                    List<PointValue> pointValuesWeatherBit = getAxisPoints(hourForecastsWeatherBit);
+                                    //List<PointValue> pointValuesAccuWeather = getAxisPoints(hourForecastsAccuWeather);
+                                    initLineChart(chartView, axisXValues, pointValuesAverage, pointValuesOpenWeather,
+                                            pointValuesWeatherBit/*, pointValuesAccuWeather*/);
                                     chartConfigured = true;
                                 }
                             }
@@ -386,50 +385,81 @@ public class ForecastFragment extends Fragment {
         return super.getExitTransition();
     }
 
-    private void getAxisXLables() {
-        for (int i = 0; i < date.length; i++) {
-            mAxisXValues.add(new AxisValue(i).setLabel(date[i]));
+    private List<AxisValue> getAxisXLables(List<HourForecast> hourForecastList) {
+        List<AxisValue> axisXValues =  new ArrayList<AxisValue>();
+        for(int i = 0; i < hourForecastList.size(); i++){
+            axisXValues.add(new AxisValue(i).setLabel(hourForecastList.get(i).getDate().
+                    toString().substring(11, 16)));
         }
+        return axisXValues;
     }
 
-    private void getAxisPoints() {
-        for (int i = 0; i < score.length; i++) {
-            mPointValues.add(new PointValue(i, score[i]));
+    private List<PointValue> getAxisPoints(List<HourForecast> hourForecastList) {
+        List<PointValue> pointValues = new ArrayList<PointValue>();
+        for(int i = 0; i < 12; i++){
+            double temp = hourForecastList.get(i).getAvgTemperature_celsius();
+            pointValues.add(new PointValue(i, (float) temp));
         }
+        return pointValues;
     }
 
-    private void initLineChart() {
-        Line line = new Line(mPointValues).setColor(Color.parseColor("#FFCD41"));  //The color of the broken line (orange)
-        List<Line> lines = new ArrayList<Line>();
-        line.setShape(ValueShape.CIRCLE);//The shape of each data point on a broken line chart is circular here (there are three kinds: ValueShape. SQUARE ValueShape. CIRCLE ValueShape. DIAMOND)
-        line.setCubic(false);//Whether the curve is smooth, that is, whether it is a curve or a broken line
-        line.setFilled(false);//Whether or not to fill the area of the curve
-        line.setHasLabels(true);//Whether to add notes to the data coordinates of curves
+    private void initLineChart(LineChartView chartView, List<AxisValue> axisXValues, List<PointValue> pointValuesAverage,
+                               List<PointValue> pointValuesOpenWeather, List<PointValue> pointValuesWeatherBit/*,
+                               List<PointValue> pointValuesAccuWeather*/) {
+        Line lineAverage = new Line(pointValuesAverage).setColor(Color.parseColor("#1B1B1B"));
+        Line lineOpenWeather = new Line(pointValuesOpenWeather).setColor(Color.parseColor("#E59866"));
+        Line lineWeatherBit = new Line(pointValuesWeatherBit).setColor(Color.parseColor("#82E0AA"));
+        //Line lineAccuWeather = new Line(pointValuesAccuWeather).setColor(Color.parseColor("#CD6155"));
+        List<Line> lines = new ArrayList<>();
+        lineAverage.setShape(ValueShape.CIRCLE);//The shape of each data point on a broken line chart is circular here (there are three kinds: ValueShape. SQUARE ValueShape. CIRCLE ValueShape. DIAMOND)
+        lineAverage.setCubic(false);//Whether the curve is smooth, that is, whether it is a curve or a broken line
+        lineAverage.setFilled(true);//Whether or not to fill the area of the curve
+        lineAverage.setHasLabels(true);//Whether to add notes to the data coordinates of curves
+        lineAverage.setHasLines(true);//Whether to display with line or not. If it is false, there is no curve but point display
+        lineAverage.setHasPoints(false);//Whether to display a dot if it is false, there is no origin but only a dot (each data point is a large dot)
+        lineOpenWeather.setShape(ValueShape.CIRCLE);
+        lineOpenWeather.setCubic(false);
+        lineOpenWeather.setFilled(false);
+        lineOpenWeather.setHasLabels(true);
+        lineOpenWeather.setHasLines(true);
+        lineOpenWeather.setHasPoints(false);
+        lineWeatherBit.setShape(ValueShape.CIRCLE);
+        lineWeatherBit.setCubic(false);
+        lineWeatherBit.setFilled(false);
+        lineWeatherBit.setHasLabels(true);
+        lineWeatherBit.setHasLines(true);
+        lineWeatherBit.setHasPoints(false);
+        /*lineAccuWeather.setShape(ValueShape.CIRCLE);//The shape of each data point on a broken line chart is circular here (there are three kinds: ValueShape. SQUARE ValueShape. CIRCLE ValueShape. DIAMOND)
+        lineAccuWeather.setCubic(false);//Whether the curve is smooth, that is, whether it is a curve or a broken line
+        lineAccuWeather.setFilled(false);//Whether or not to fill the area of the curve
+        lineAccuWeather.setHasLabels(true);//Whether to add notes to the data coordinates of curves
         //      Line. setHasLabels OnlyForSelected (true); // Click on the data coordinates to prompt the data (set this line.setHasLabels(true); invalid)
-        line.setHasLines(true);//Whether to display with line or not. If it is false, there is no curve but point display
-        line.setHasPoints(false);//Whether to display a dot if it is false, there is no origin but only a dot (each data point is a large dot)
-        lines.add(line);
+        lineAccuWeather.setHasLines(true);//Whether to display with line or not. If it is false, there is no curve but point display
+        lineAccuWeather.setHasPoints(false);*/
+        lines.add(lineAverage);
+        lines.add(lineOpenWeather);
+        lines.add(lineWeatherBit);
+        //lines.add(lineAccuWeather);
         LineChartData data = new LineChartData();
         data.setLines(lines);
 
         //Axis of coordinates
         Axis axisX = new Axis(); //X axis
         axisX.setHasTiltedLabels(true);  //Is the font on the X axis oblique or straight, and true oblique?
-        axisX.setTextColor(Color.GRAY);  //Setting font color
-        //axisX.setName("date"); // table name
+        axisX.setTextColor(Color.BLACK);  //Setting font color
+        axisX.setName("hour"); // table name
         axisX.setTextSize(10);//Set font size
         axisX.setMaxLabelChars(8); //Up to a few X-axis coordinates, which means that your scaling allows the number of data on the X-axis to be 7<=x<=mAxisXValues.length.
-        axisX.setValues(mAxisXValues);  //Fill in the coordinate name of the X-axis
+        axisX.setValues(axisXValues);  //Fill in the coordinate name of the X-axis
         data.setAxisXBottom(axisX); //The x-axis is at the bottom.
-        //Data. setAxisXTop (axisX); //x axis at top
         axisX.setHasLines(true); //x-axis dividing line
 
         // The Y-axis automatically sets the Y-axis limit according to the size of the data (below I will give a solution for fixing the number of Y-axis data)
         Axis axisY = new Axis();  //Y axis
-        axisY.setName("");//y axis annotation
+        axisY.setName("temperature");//y axis annotation
+        axisY.setTextColor(Color.BLACK);
         axisY.setTextSize(10);//Set font size
         data.setAxisYLeft(axisY);  //The Y-axis is set on the left
-        //Data. setAxisYRight (axisY); the // Y axis is set to the right
 
         //Setting behavioral properties to support zooming, sliding, and Translation
         chartView.setInteractive(true);
@@ -437,6 +467,7 @@ public class ForecastFragment extends Fragment {
         chartView.setMaxZoom((float) 2);//Maximum method ratio
         chartView.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
         chartView.setLineChartData(data);
+
         chartView.setVisibility(View.VISIBLE);
         /**Note: The following 7, 10 just represent a number to analogize.
          * At that time, it was to solve the fixed number of X-axis data. See (http://forum.xda-developers.com/tools/programming/library-hellocharts-charting-library-t2904456/page2);
@@ -445,6 +476,21 @@ public class ForecastFragment extends Fragment {
         v.left = 0;
         v.right = 7;
         chartView.setCurrentViewport(v);
+    }
+
+    private void getLocationPermission() {
+
+        if (ContextCompat.checkSelfPermission(getContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            binding.setLocationPermissionGranted(true);
+        } else {
+            ActivityCompat
+                    .requestPermissions(
+                            getActivity(),
+                            new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                            1);
+        }
     }
 
 }

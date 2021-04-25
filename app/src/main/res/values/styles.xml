@@ -10,7 +10,7 @@
 
     <style name="SemiBlackTitle" parent="TextAppearance.AppCompat.Title">
         <item name="android:textColor">@color/eerieBlack</item>
-        <item name="android:textSize">26dp</item>
+        <item name="android:textSize">18dp</item>
     </style>
 
     <style name="GraySubtitle" parent="TextAppearance.AppCompat.Title">
