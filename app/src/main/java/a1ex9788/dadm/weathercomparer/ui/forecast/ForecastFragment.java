@@ -81,8 +81,6 @@ public class ForecastFragment extends Fragment {
 
         setNavigationDrawerCheckedItem();
 
-        setDefaultForecastData();
-
         configureBottomSheet(root);
 
         recoverMapPlace(bundle);
@@ -134,20 +132,6 @@ public class ForecastFragment extends Fragment {
         else {
             return getString(R.string.temperature_metricUnits);
         }
-    }
-    private void setDefaultForecastData() {
-        // Set default data. It will be seen before the real one is loaded and in case of error.
-        setWeatherConditionAnimation(WeatherCondition.UnknownPrecipitation);
-
-        CurrentWeather currentWeather = new CurrentWeather(
-                "No data",
-                "-",
-                getSpeedUnits(),
-                "-",
-                getTemperatureUnits(),
-                "-",
-                "%");
-        binding.setCurrentWeather(currentWeather);
     }
 
     private void recoverMapPlace(Bundle bundle) {

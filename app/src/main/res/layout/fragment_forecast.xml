@@ -37,7 +37,7 @@
                 android:id="@+id/fcvForecast"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{ locationPermissionGranted ? View.VISIBLE : View.INVISIBLE }">
+                android:visibility="@{ !locationPermissionGranted || place == null || currentWeather == null  ? View.INVISIBLE : View.VISIBLE }">
 
 
                 <LinearLayout
@@ -45,23 +45,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
+                    android:gravity="center"
                     android:orientation="horizontal"
                     map:layout_constraintEnd_toEndOf="parent"
                     map:layout_constraintTop_toTopOf="parent">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
                         android:orientation="vertical">
 
                         <android.widget.TextClock
                             android:id="@+id/tcForecastPlace"
                             style="@style/GraySubtitle"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:format12Hour="k:mm"
                             android:format24Hour="k:mm"
-                            android:textAlignment="center"
                             android:timeZone="@{ place.getTimeZone() }" />
 
                         <TextView
@@ -69,14 +70,13 @@
                             style="@style/SemiBlackTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
                             android:maxWidth="300dp"
                             android:text="@{ place.getName() }" />
 
                     </LinearLayout>
 
                     <Space
-                        android:layout_width="5dp"
+                        android:layout_width="10dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
@@ -245,6 +245,7 @@
 
 
                 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageButton
@@ -281,6 +282,22 @@
 
 
             </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:visibility="@{ locationPermissionGranted &amp;&amp; place == null || currentWeather == null  ? View.VISIBLE : View.INVISIBLE }"
+                android:layout_height="match_parent">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    map:layout_constraintBottom_toBottomOf="parent"
+                    map:layout_constraintEnd_toEndOf="parent"
+                    map:layout_constraintStart_toStartOf="parent"
+                    map:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </FrameLayout>
 
