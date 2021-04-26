@@ -24,23 +24,46 @@ public class DayForecast extends HourForecast {
         return minTemperature_celsius;
     }
 
-    public Double getMinTemperature_fahrenheit() {
+    private Double getMinTemperature_fahrenheit() {
         return UnitsConverter.celsiusToFahrenheit(minTemperature_celsius);
     }
 
-    public Double getMinTemperature_kelvin() {
+    private Double getMinTemperature_kelvin() {
         return UnitsConverter.celsiusToKelvin(minTemperature_celsius);
     }
-
+    public Double getMinTemperature(String valueUnit) {
+        switch (valueUnit) {
+            case "0":
+                return getMinTemperature_celsius();
+            case "1":
+                return getMinTemperature_fahrenheit();
+            case "2":
+                return getMinTemperature_kelvin();
+            default:
+                return getMinTemperature_celsius();
+        }
+    }
+    public Double getMaxTemperature(String valueUnit) {
+        switch (valueUnit) {
+            case "0":
+                return getMaxTemperature_celsius();
+            case "1":
+                return getMaxTemperature_fahrenheit();
+            case "2":
+                return getMaxTemperature_kelvin();
+            default:
+                return getMaxTemperature_celsius();
+        }
+    }
     public Double getMaxTemperature_celsius() {
         return maxTemperature_celsius;
     }
 
-    public Double getMaxTemperature_fahrenheit() {
+    private Double getMaxTemperature_fahrenheit() {
         return UnitsConverter.celsiusToFahrenheit(maxTemperature_celsius);
     }
 
-    public Double getMaxTemperature_kelvin() {
+    private Double getMaxTemperature_kelvin() {
         return UnitsConverter.celsiusToKelvin(maxTemperature_celsius);
     }
 
