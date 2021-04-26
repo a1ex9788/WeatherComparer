@@ -43,7 +43,7 @@ public class WebServicesHelper {
 
         int responseCode = connection.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new Exception("An error response code '" + responseCode + "' was obtained from the URL: " + url.getPath());
+            throw new Exception("An error response code '" + responseCode + "' was obtained from the URL: " + url.toString());
         }
 
         Gson gson = new Gson();
