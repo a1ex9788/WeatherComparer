@@ -10,12 +10,12 @@
 
     <style name="SemiBlackTitle" parent="TextAppearance.AppCompat.Title">
         <item name="android:textColor">@color/eerieBlack</item>
-        <item name="android:textSize">18dp</item>
+        <item name="android:textSize">24dp</item>
     </style>
 
     <style name="GraySubtitle" parent="TextAppearance.AppCompat.Title">
         <item name="android:textColor">@color/spanishGray</item>
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">16dp</item>
     </style>
 
     <style name="WhiteTitle" parent="TextAppearance.AppCompat.Title">
@@ -25,11 +25,11 @@
 
     <style name="WhiteSubtitle" parent="TextAppearance.AppCompat.Title">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">16dp</item>
     </style>
 
     <style name="WhiteIndex" parent="TextAppearance.AppCompat.Title">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">8dp</item>
+        <item name="android:textSize">10dp</item>
     </style>
 </resources>

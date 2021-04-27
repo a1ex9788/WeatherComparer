@@ -172,9 +172,6 @@ public class ForecastFragment extends Fragment {
                             }
                         }).start();
 
-
-
-
                     });
                 }).start();
 
@@ -196,7 +193,6 @@ public class ForecastFragment extends Fragment {
 
                 try {
                     HourForecast hourForecast = forecastViewModel.getCurrentWeather(latitude, longitude);
-
 
                     CurrentWeather currentWeather = new CurrentWeather(
                             hourForecast.getWeatherCondition().getText(),
