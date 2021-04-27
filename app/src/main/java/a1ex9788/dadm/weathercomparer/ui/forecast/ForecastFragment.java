@@ -4,20 +4,16 @@ import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +24,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,9 +35,10 @@ import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.MainActivity;
@@ -57,7 +53,6 @@ import a1ex9788.dadm.weathercomparer.model.MapPlace;
 import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
 import a1ex9788.dadm.weathercomparer.utils.UnitsGetter;
 import a1ex9788.dadm.weathercomparer.webServices.LocationService;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeatherDailyForecast;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Axis;
@@ -74,16 +69,17 @@ public class ForecastFragment extends Fragment {
     private ForecastViewModel forecastViewModel;
     private FragmentForecastBinding binding;
     private boolean chartConfigured;
-    private SharedPreferences prefs ;
+    private SharedPreferences prefs;
     private String metric;
     private LottieAnimationView animationView;
+    private MapPlace currentPlace;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         binding = FragmentForecastBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         forecastViewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
-        metric =  prefs.getString("units",getString(R.string.valueUnits0));
+        metric = prefs.getString("units", getString(R.string.valueUnits0));
         animationView = root.findViewById(R.id.animationViewWeather);
 
         setNavigationDrawerButtonOnClickListener(root);
@@ -152,32 +148,24 @@ public class ForecastFragment extends Fragment {
                             try {
                                 forecastViewModel.getPlace(getContext(), location.getLatitude(), location.getLongitude(), detailsResponse -> {
                                     Place placeFounded = ((FetchPlaceResponse) detailsResponse).getPlace();
-                                    MapPlace place = new MapPlace(placeFounded);
+                                    currentPlace = new MapPlace(placeFounded);
 
                                     getActivity().runOnUiThread(() -> {
-                                        binding.setPlace(place);
+                                        binding.setPlace(currentPlace);
 
-                                        if (place.getPhoto() != null) {
+                                        if (currentPlace.getPhoto() != null) {
                                             Picasso.get()
-                                                    .load(place.getPhoto())
+                                                    .load(currentPlace.getPhoto())
                                                     .into(binding.ivForecastPlace);
                                         }
                                     });
-
-
                                 });
                             } catch (Exception e) {
 
                             }
                         }).start();
-
-
-
-
                     });
                 }).start();
-
-
             }
         }
         /* To provide parameters to the ForecastFragment the following code is needed:
@@ -196,9 +184,8 @@ public class ForecastFragment extends Fragment {
                 try {
                     HourForecast hourForecast = forecastViewModel.getCurrentWeather(latitude, longitude);
 
-
                     CurrentWeather currentWeather = new CurrentWeather(
-                            getString( hourForecast.getWeatherCondition().getTextResourceIdentifier()),
+                            getString(hourForecast.getWeatherCondition().getTextResourceIdentifier()),
                             roundToOneDecimal(hourForecast.getWindSpeed_kilometersPerHour()) + "",
                             UnitsGetter.getSpeedUnits(metric),
                             roundToOneDecimal(hourForecast.getAvgTemperature(metric)) + "",
@@ -260,26 +247,26 @@ public class ForecastFragment extends Fragment {
 
                     LottieAnimationView lavWeatherIcon6 = hourPrediction6.findViewById(R.id.lavWeatherIcon);
                     List<HourForecast> hourForecastsList, hourForecastsAccuWeather, hourForecastsOpenWeather
-                    /*, hourForecastsWeatherBit*/;
+                            /*, hourForecastsWeatherBit*/;
                     List<DayForecast> dayForecastsList;
-                    try{
+                    try {
                         hourForecastsList = forecastViewModel.getAverageHourlyForecast(latitude, longitude);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         hourForecastsList = new ArrayList<>();
                     }
-                    try{
+                    try {
                         dayForecastsList = forecastViewModel.getAverageDailyForecast(latitude, longitude);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         dayForecastsList = new ArrayList<>();
                     }
-                    try{
+                    try {
                         hourForecastsAccuWeather = forecastViewModel.getAccuWeatherHourlyForecast(latitude, longitude);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         hourForecastsAccuWeather = new ArrayList<>();
                     }
-                    try{
+                    try {
                         hourForecastsOpenWeather = forecastViewModel.getOpenWeatherHourlyForecast(latitude, longitude);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         hourForecastsOpenWeather = new ArrayList<>();
                     }
                     /* La función se ha convertido de pago, por lo que ya no funciona
@@ -323,12 +310,17 @@ public class ForecastFragment extends Fragment {
                             recyclerView.setLayoutManager(manager);
                             List<MoreInfo> list = new ArrayList<>();
                             MoreInfo moreInfoFeelsLike = new MoreInfo(getString(R.string.feels_like), finalHourForecastsList.get(1).getRealFeel_celsius().toString().
-                                    substring(0, 4) + getString(R.string.temperature_metricUnits), R.drawable.temperature );
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits), R.drawable.temperature);
                             MoreInfo moreInfoPressure = new MoreInfo(getString(R.string.pressure), finalHourForecastsList.get(1).getPressure_millibars().toString().
-                                    substring(0, 4) + getString(R.string.milibar_pressureUnit), R.drawable.ic_pressure );
-                            MoreInfo moreInfoUVIndex = new MoreInfo(getString(R.string.UVIndex), finalHourForecastsList.get(1).getUvIndex().toString().substring(0, 1), R.drawable.ic_uv_index );
-                            MoreInfo moreInfoSunrise = new MoreInfo(getString(R.string.sunrise), finalDayForecastsList.get(0).getSunrise().toString().substring(11, 16), R.drawable.ic_sunrise );
-                            MoreInfo moreInfoSunset = new MoreInfo(getString(R.string.sunset), finalDayForecastsList.get(0).getSunset().toString().substring(11, 16), R.drawable.ic_sunset );
+                                    substring(0, 4) + getString(R.string.milibar_pressureUnit), R.drawable.ic_pressure);
+                            MoreInfo moreInfoUVIndex = new MoreInfo(getString(R.string.UVIndex), finalHourForecastsList.get(1).getUvIndex().toString().substring(0, 1), R.drawable.ic_uv_index);
+                            ZoneId zoneId = ZoneId.of(currentPlace.getTimeZoneId());
+                            Date sunrise = finalDayForecastsList.get(0).getSunrise();
+                            Date sunset = finalDayForecastsList.get(0).getSunset();
+                            LocalDateTime localDateTimeSunrise = LocalDateTime.ofInstant(sunrise.toInstant(), zoneId);
+                            LocalDateTime localDateTimeSunset = LocalDateTime.ofInstant(sunset.toInstant(), zoneId);
+                            MoreInfo moreInfoSunrise = new MoreInfo(getString(R.string.sunrise), localDateTimeSunrise.toString().substring(11, 16), R.drawable.ic_sunrise);
+                            MoreInfo moreInfoSunset = new MoreInfo(getString(R.string.sunset), localDateTimeSunset.toString().substring(11, 16), R.drawable.ic_sunset);
                             list.add(moreInfoFeelsLike);
                             list.add(moreInfoPressure);
                             list.add(moreInfoUVIndex);
@@ -397,14 +389,14 @@ public class ForecastFragment extends Fragment {
                                     List<PointValue> pointValuesAccuWeather = null;
                                     /* The function to obtain the HourForecast of WeatherBit is now premium, so we can not use it */
                                     /* List<PointValue> pointValuesWeatherBit = null; */
-                                    if(finalDayForecastsList.size() != 0) {
+                                    if (finalDayForecastsList.size() != 0) {
                                         axisXValues = getAxisXLables(finalHourForecastsList);
                                         pointValuesAverage = getAxisPoints(finalHourForecastsList);
                                     }
-                                    if(finalHourForecastsListOpenWeather.size() != 0) {
+                                    if (finalHourForecastsListOpenWeather.size() != 0) {
                                         pointValuesOpenWeather = getAxisPoints(finalHourForecastsListOpenWeather);
                                     }
-                                    if(finalHourForecastsAccuWeather.size() != 0) {
+                                    if (finalHourForecastsAccuWeather.size() != 0) {
                                         pointValuesAccuWeather = getAxisPoints(finalHourForecastsAccuWeather);
                                     }
                                     /* The function to obtain the HourForecast of WeatherBit is now premium, so we can not use it */
@@ -423,7 +415,7 @@ public class ForecastFragment extends Fragment {
 
                         }
                     });
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -448,8 +440,8 @@ public class ForecastFragment extends Fragment {
     }
 
     private List<AxisValue> getAxisXLables(List<HourForecast> hourForecastList) {
-        List<AxisValue> axisXValues =  new ArrayList<AxisValue>();
-        for(int i = 0; i < hourForecastList.size(); i++){
+        List<AxisValue> axisXValues = new ArrayList<AxisValue>();
+        for (int i = 0; i < hourForecastList.size(); i++) {
             axisXValues.add(new AxisValue(i).setLabel(hourForecastList.get(i).getDate().
                     toString().substring(11, 16)));
         }
@@ -458,7 +450,7 @@ public class ForecastFragment extends Fragment {
 
     private List<PointValue> getAxisPoints(List<HourForecast> hourForecastList) {
         List<PointValue> pointValues = new ArrayList<PointValue>();
-        for(int i = 0; i < 12; i++){
+        for (int i = 0; i < 12; i++) {
             double temp = hourForecastList.get(i).getAvgTemperature_celsius();
             pointValues.add(new PointValue(i, (float) temp));
         }
@@ -466,8 +458,8 @@ public class ForecastFragment extends Fragment {
     }
 
     private void initLineChart(LineChartView chartView, List<AxisValue> axisXValues, List<PointValue> pointValuesAverage,
-                               List<PointValue> pointValuesOpenWeather,List<PointValue> pointValuesAccuWeather
-                                /*, List<PointValue> pointValuesWeatherBit*/) {
+                               List<PointValue> pointValuesOpenWeather, List<PointValue> pointValuesAccuWeather
+            /*, List<PointValue> pointValuesWeatherBit*/) {
         Line lineAverage = new Line(pointValuesAverage).setColor(Color.parseColor("#1B1B1B"));
         Line lineOpenWeather = new Line(pointValuesOpenWeather).setColor(Color.parseColor("#E59866"));
         Line lineAccuWeather = new Line(pointValuesAccuWeather).setColor(Color.parseColor("#CD6155"));
@@ -550,7 +542,7 @@ public class ForecastFragment extends Fragment {
             ActivityCompat
                     .requestPermissions(
                             getActivity(),
-                            new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                             1);
         }
     }
