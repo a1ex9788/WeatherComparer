@@ -28,6 +28,7 @@
     <!-- Forecast bottom sheet -->
     <string name="tvToday">Today</string>
     <string name="tvToday_daily">Daily</string>
+    <string name="tvTodayMoreInfo">Today more info</string>
     <string name="feels_like">Feels like</string>
     <string name="UVIndex">UV Index</string>
     <string name="pressure">Pressure</string>

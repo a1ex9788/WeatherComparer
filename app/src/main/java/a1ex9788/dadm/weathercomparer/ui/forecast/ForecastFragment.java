@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,6 +28,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.libraries.places.api.model.Place;
@@ -41,6 +47,8 @@ import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
+import a1ex9788.dadm.weathercomparer.adapters.CustomRecyclerAdapter;
+import a1ex9788.dadm.weathercomparer.adapters.MoreInfo;
 import a1ex9788.dadm.weathercomparer.bindings.CurrentWeather;
 import a1ex9788.dadm.weathercomparer.databinding.FragmentForecastBinding;
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
@@ -224,19 +232,12 @@ public class ForecastFragment extends Fragment {
                 try {
                     ConstraintLayout clBottomSheet = getActivity().findViewById(R.id.clBottomSheet);
                     BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(clBottomSheet);
-                    DisplayMetrics metrics = new DisplayMetrics();
 
+                    DisplayMetrics metrics = new DisplayMetrics();
                     ((MainActivity) getActivity()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
                     int height = metrics.heightPixels;
-                    int width = metrics.heightPixels;
 
                     TextView tvToday = getActivity().findViewById(R.id.tvToday);
-                    TextView tvFeelsLike = clBottomSheet.findViewById(R.id.tvFeelsLikeValue);
-                    TextView tvPressure = clBottomSheet.findViewById(R.id.tvPressureValue);
-                    TextView tvUVIndex = clBottomSheet.findViewById(R.id.tvUVIndexValue);
-                    TextView tvProbabilityOfRain = clBottomSheet.findViewById(R.id.tvProbabilityOfRainValue);
-                    TextView tvSunrise = clBottomSheet.findViewById(R.id.tvSunriseValue);
-                    TextView tvSunset = clBottomSheet.findViewById(R.id.tvSunsetValue);
 
                     ConstraintLayout hourPrediction1 = getActivity().findViewById(R.id.hourPrediction1);
                     TextView tvHour1 = hourPrediction1.findViewById(R.id.tvHour);
@@ -261,7 +262,13 @@ public class ForecastFragment extends Fragment {
                     ConstraintLayout hourPrediction6 = getActivity().findViewById(R.id.hourPrediction6);
                     TextView tvHour6 = hourPrediction6.findViewById(R.id.tvHour);
                     TextView tvTemp6 = hourPrediction6.findViewById(R.id.tvTemp);
+
+                    RecyclerView recyclerView = getActivity().findViewById(R.id.rvMoreInfo);
+                    RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
+                    SnapHelper snapHelper = new LinearSnapHelper();
+
                     LottieAnimationView lavWeatherIcon6 = hourPrediction6.findViewById(R.id.lavWeatherIcon);
+                    /* The function to obtain the HourForecast of WeatherBit is now premium, so we can not use it */
                     List<HourForecast> hourForecastsList, hourForecastsAccuWeather, hourForecastsOpenWeather
                     /*, hourForecastsWeatherBit*/;
                     List<DayForecast> dayForecastsList;
@@ -285,17 +292,19 @@ public class ForecastFragment extends Fragment {
                     }catch (Exception e){
                         hourForecastsOpenWeather = new ArrayList<>();
                     }
-                    /* La función se ha convertido de pago, por lo que ya no funciona
-                    List<HourForecast> hourForecastsWeatherBit = forecastViewModel.getWeatherBitHourlyForecast(latitude, longitude);
-                    */
+                    /* The function to obtain the HourForecast of WeatherBit is now premium, so we can not use it */
+                    /* List<HourForecast> hourForecastsWeatherBit = forecastViewModel.getWeatherBitHourlyForecast(latitude, longitude); */
                     List<HourForecast> finalHourForecastsList = hourForecastsList;
                     List<DayForecast> finalDayForecastsList = dayForecastsList;
                     List<HourForecast> finalHourForecastsAccuWeather = hourForecastsAccuWeather;
                     List<HourForecast> finalHourForecastsListOpenWeather = hourForecastsOpenWeather;
+                    /* The function to obtain the HourForecast of WeatherBit is now premium, so we can not use it */
+                    /* List<HourForecast> finalHourForecastsWeatherBit = hourForecastsOpenWeather; */
                     ((MainActivity) getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             bottomSheetBehavior.setPeekHeight(height / 4);
+                            clBottomSheet.setMaxHeight(1784);
                             clBottomSheet.getLayoutParams().height = (3 * height) / 4;
                             tvHour1.setText(finalHourForecastsList.get(2).getDate().toString().substring(11, 16));
                             tvTemp1.setText(finalHourForecastsList.get(2).getAvgTemperature_celsius().toString().
@@ -321,15 +330,23 @@ public class ForecastFragment extends Fragment {
                             tvTemp6.setText(finalHourForecastsList.get(7).getAvgTemperature_celsius().toString().
                                     substring(0, 4) + getString(R.string.temperature_metricUnits));
                             lavWeatherIcon6.setAnimationFromUrl(finalHourForecastsList.get(8).getWeatherCondition().getIconAddress());
-                            tvFeelsLike.setText(finalHourForecastsList.get(1).getRealFeel_celsius().toString().
-                                    substring(0, 4) + getString(R.string.temperature_metricUnits));
-                            tvPressure.setText(finalHourForecastsList.get(1).getPressure_millibars().toString().
-                                    substring(0, 6) + getString(R.string.milibar_pressureUnit));
-                            tvUVIndex.setText(finalHourForecastsList.get(1).getUvIndex().toString().substring(0, 1));
-                            tvProbabilityOfRain.setText(finalHourForecastsList.get(1).getPrecipitationProbability().
-                                    toString()+ getString(R.string.probability_sign));
-                            tvSunrise.setText(finalDayForecastsList.get(0).getSunrise().toString().substring(11, 16));
-                            tvSunset.setText(finalDayForecastsList.get(0).getSunset().toString().substring(11, 16));
+                            snapHelper.attachToRecyclerView(recyclerView);
+                            recyclerView.setLayoutManager(manager);
+                            List<MoreInfo> list = new ArrayList<>();
+                            MoreInfo moreInfoFeelsLike = new MoreInfo(getString(R.string.feels_like), finalHourForecastsList.get(1).getRealFeel_celsius().toString().
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits), R.drawable.temperature );
+                            MoreInfo moreInfoPressure = new MoreInfo(getString(R.string.pressure), finalHourForecastsList.get(1).getPressure_millibars().toString().
+                                    substring(0, 4) + getString(R.string.milibar_pressureUnit), R.drawable.ic_pressure );
+                            MoreInfo moreInfoUVIndex = new MoreInfo(getString(R.string.UVIndex), finalHourForecastsList.get(1).getUvIndex().toString().substring(0, 1), R.drawable.ic_uv_index );
+                            MoreInfo moreInfoSunrise = new MoreInfo(getString(R.string.sunrise), finalDayForecastsList.get(0).getSunrise().toString().substring(11, 16), R.drawable.ic_sunrise );
+                            MoreInfo moreInfoSunset = new MoreInfo(getString(R.string.sunset), finalDayForecastsList.get(0).getSunset().toString().substring(11, 16), R.drawable.ic_sunset );
+                            list.add(moreInfoFeelsLike);
+                            list.add(moreInfoPressure);
+                            list.add(moreInfoUVIndex);
+                            list.add(moreInfoSunrise);
+                            list.add(moreInfoSunset);
+                            CustomRecyclerAdapter adapter = new CustomRecyclerAdapter(list);
+                            recyclerView.setAdapter(adapter);
                         }
                     });
 
@@ -389,6 +406,8 @@ public class ForecastFragment extends Fragment {
                                     List<PointValue> pointValuesAverage = null;
                                     List<PointValue> pointValuesOpenWeather = null;
                                     List<PointValue> pointValuesAccuWeather = null;
+                                    /* The function to obtain the HourForecast of WeatherBit is now premium, so we can not use it */
+                                    /* List<PointValue> pointValuesWeatherBit = null; */
                                     if(finalDayForecastsList.size() != 0) {
                                         axisXValues = getAxisXLables(finalHourForecastsList);
                                         pointValuesAverage = getAxisPoints(finalHourForecastsList);
@@ -399,7 +418,10 @@ public class ForecastFragment extends Fragment {
                                     if(finalHourForecastsAccuWeather.size() != 0) {
                                         pointValuesAccuWeather = getAxisPoints(finalHourForecastsAccuWeather);
                                     }
-                                    /* List<PointValue> pointValuesWeatherBit = getAxisPoints(hourForecastsWeatherBit); */
+                                    /* The function to obtain the HourForecast of WeatherBit is now premium, so we can not use it */
+                                    /* if(finalHourForecastsWeatherBit.size() != 0) {
+                                        pointValuesWeatherBit = getAxisPoints(hourForecastsWeatherBit);
+                                    } */
                                     initLineChart(chartView, axisXValues, pointValuesAverage, pointValuesOpenWeather,
                                             pointValuesAccuWeather/*,pointValuesWeatherBit*/);
                                     chartConfigured = true;
@@ -460,6 +482,7 @@ public class ForecastFragment extends Fragment {
         Line lineAverage = new Line(pointValuesAverage).setColor(Color.parseColor("#1B1B1B"));
         Line lineOpenWeather = new Line(pointValuesOpenWeather).setColor(Color.parseColor("#E59866"));
         Line lineAccuWeather = new Line(pointValuesAccuWeather).setColor(Color.parseColor("#CD6155"));
+        /* The function to obtain the HourForecast of WeatherBit is now premium, so we can not use it */
         //Line lineWeatherBit = new Line(pointValuesWeatherBit).setColor(Color.parseColor("#82E0AA"));
         List<Line> lines = new ArrayList<>();
         lineAverage.setShape(ValueShape.CIRCLE);//The shape of each data point on a broken line chart is circular here (there are three kinds: ValueShape. SQUARE ValueShape. CIRCLE ValueShape. DIAMOND)
@@ -480,6 +503,7 @@ public class ForecastFragment extends Fragment {
         lineAccuWeather.setHasLabels(true);
         lineAccuWeather.setHasLines(true);
         lineAccuWeather.setHasPoints(false);
+        /* The function to obtain the HourForecast of WeatherBit is now premium, so we can not use it */
         /*lineWeatherBit.setShape(ValueShape.CIRCLE);
         lineWeatherBit.setCubic(false);
         lineWeatherBit.setFilled(false);
@@ -520,9 +544,7 @@ public class ForecastFragment extends Fragment {
         chartView.setLineChartData(data);
 
         chartView.setVisibility(View.VISIBLE);
-        /**Note: The following 7, 10 just represent a number to analogize.
-         * At that time, it was to solve the fixed number of X-axis data. See (http://forum.xda-developers.com/tools/programming/library-hellocharts-charting-library-t2904456/page2);
-         */
+
         Viewport v = new Viewport(chartView.getMaximumViewport());
         v.left = 0;
         v.right = 7;
