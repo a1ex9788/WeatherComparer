@@ -55,6 +55,7 @@ import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.model.MapPlace;
 import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
+import a1ex9788.dadm.weathercomparer.utils.UnitsGetter;
 import a1ex9788.dadm.weathercomparer.webServices.LocationService;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeatherDailyForecast;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
@@ -291,7 +292,7 @@ public class ForecastFragment extends Fragment {
                     ((MainActivity) getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            bottomSheetBehavior.setPeekHeight(height / 4);
+                            bottomSheetBehavior.setPeekHeight(466);
                             clBottomSheet.setMaxHeight(1784);
                             clBottomSheet.getLayoutParams().height = (3 * height) / 4;
                             tvHour1.setText(finalHourForecastsList.get(2).getDate().toString().substring(11, 16));
