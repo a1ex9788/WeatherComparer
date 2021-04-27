@@ -45,15 +45,7 @@
 
 
     <!-- Strings related to Settings -->
-    <!-- Language Settings -->
-    <string name="language_category">Language Configuration</string>
-    <string name="language_content">Choose your language</string>
-    <string name="englishString">English</string>
-    <string name="spanishString">Spanish</string>
-    <string name="frenchString">French</string>
-    <string name="valueLanguage0" translatable="false">0</string>
-    <string name="valueLanguage1" translatable="false">1</string>
-    <string name="valueLanguage2" translatable="false">2</string>
+
     <!-- Units Settings -->
     <string name="units_category">Units Configuration</string>
     <string name="units_content">Select your unit</string>

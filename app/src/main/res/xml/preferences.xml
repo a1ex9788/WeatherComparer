@@ -2,13 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <!--Language-->
-        <ListPreference
-            android:title="@string/language_category"
-            android:summary="@string/language_content"
-            android:entries="@array/languagesArray"
-            android:entryValues="@array/languagesArrayValue"
-            android:key="language" />
+
 
         <!--Units-->
         <ListPreference

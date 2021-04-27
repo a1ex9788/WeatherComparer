@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="languagesArray">
-        <item>@string/englishString</item>
-        <item>@string/spanishString</item>
-        <item>@string/frenchString</item>
-    </string-array>
-    <string-array name="languagesArrayValue">
-        <item>@string/valueLanguage0</item>
-        <item>@string/valueLanguage1</item>
-        <item>@string/valueLanguage2</item>
-    </string-array>
+
 
     <string-array name="unitsArray">
         <item>@string/metricUnitsString</item>
