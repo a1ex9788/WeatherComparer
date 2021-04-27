@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="header_image_description">Icono de la aplicación</string>
+    <string name="title_forecast">Predicción</string>
+    <string name="title_places">Lugares</string>
+    <string name="title_map">Mapa</string>
+    <string name="title_settings">Ajustes</string>
+    <string name="toast_forecastError">Ha habido un problema y la predicción no pudo ser obtenida.</string>
+    <string name="tvNoLocation">Por favor activa tu localización.</string>
+    <string name="tvAllowLocation">Permitir localización</string>
+    <string name="sunny">Soleado</string>
+    <string name="cloudy">Nublado</string>
+    <string name="overcast">Cubierto</string>
+    <string name="rainy">Lluvioso</string>
+    <string name="snow">Nieve</string>
+    <string name="foggy">Niebla</string>
+    <string name="thunderstorm">Tormenta</string>
+    <string name="thunderstormWithRain">Tormenta con lluvia</string>
+    <string name="flurries">Viento</string>
+    <string name="unknownPrecipitation">Precipitación desconocida</string>
+    <string name="unknown">Desconocido</string>
+    <string name="tvToday">Hoy</string>
+    <string name="tvToday_daily">Diario</string>
+    <string name="tvTodayMoreInfo">Más información de hoy</string>
+    <string name="feels_like">Sensación térmica</string>
+    <string name="UVIndex">Índice UV</string>
+    <string name="pressure">Presión</string>
+    <string name="probability_of_rain">Probabilidad de lluvia</string>
+    <string name="sunset">Amanecer</string>
+    <string name="sunrise">Atardecer</string>
+    <string name="tvEmpty">Lista vacía</string>
+    <string name="tUnknownLocation">Disculpe, localización desconocida</string>
+    <string name="tAdd">Añadido</string>
+    <string name="tDelete">Borrado</string>
+    <string name="units_category">Configuración de unidades</string>
+    <string name="units_content">Selecciona tus unidades</string>
+    <string name="metricUnitsString">Métricas (km/h - °C)</string>
+    <string name="imperialUnitsString">Imperiales (mile/h - °F)</string>
+    <string name="scientificUnitsString">Científicas (m/s - K)</string>
+</resources>
