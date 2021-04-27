@@ -10,6 +10,7 @@
             android:summary="@string/units_content"
             android:entries="@array/unitsArray"
             android:entryValues="@array/unitsArrayValue"
-            android:key="units" />
+            android:key="units"
+            android:defaultValue="@string/valueUnits0"/>
 
 </PreferenceScreen>
