@@ -1,11 +1,15 @@
 package a1ex9788.dadm.weathercomparer.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import java.util.Date;
 
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.UnitsConverter;
 
 // 'Double' class is used instead of primitive type 'double' in order to allow null values.
-public class HourForecast {
+public class HourForecast  {
 
     protected Date date;
     protected WeatherCondition weatherCondition;
@@ -43,14 +47,24 @@ public class HourForecast {
         return avgTemperature_celsius;
     }
 
-    public Double getAvgTemperature_fahrenheit() {
+    private Double getAvgTemperature_fahrenheit() {
         return UnitsConverter.celsiusToFahrenheit(avgTemperature_celsius);
     }
 
-    public Double getAvgTemperature_kelvin() {
+    private Double getAvgTemperature_kelvin() {
         return UnitsConverter.celsiusToKelvin(avgTemperature_celsius);
     }
-
+    public Double getAvgTemperature(String valueUnit) {
+        switch (valueUnit) {
+            case "1":
+                return getAvgTemperature_fahrenheit();
+            case "2":
+                return getAvgTemperature_kelvin();
+            case "0":
+            default:
+                return getAvgTemperature_celsius();
+        }
+    }
     public Double getRealFeel_celsius() {
         return realFeel_celsius;
     }
@@ -85,6 +99,17 @@ public class HourForecast {
 
     public Double getWindSpeed_metersPerSecond() {
         return UnitsConverter.kilometersPerHourToMetersPerSecond(windSpeed_kilometersPerHour);
+    }
+    public Double getWindSpeed(String valueUnit) {
+        switch (valueUnit) {
+            case "1":
+                return getWindSpeed_milesPerHour();
+            case "2":
+                return getWindSpeed_metersPerSecond();
+            case "0":
+            default:
+                return getWindSpeed_kilometersPerHour();
+        }
     }
 
     public Double getPressure_millibars() {

@@ -22,8 +22,9 @@ import a1ex9788.dadm.weathercomparer.webServices.forecasts.average.AverageWeathe
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
 
     private List<MapPlace> places = new ArrayList<>();
-
-    public PlaceAdapter() {
+    private String metric;
+    public PlaceAdapter(String metric) {
+        this.metric = metric;
     }
 
     @NonNull
@@ -39,7 +40,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull PlaceAdapter.ViewHolder holder, int position) {
         MapPlace place = places.get(position);
         holder.binding.setPlace(place);
-
+        holder.binding.setMetric(metric);
         if (place.getPhoto() != null) {
             Picasso.get()
                     .load(place.getPhoto())

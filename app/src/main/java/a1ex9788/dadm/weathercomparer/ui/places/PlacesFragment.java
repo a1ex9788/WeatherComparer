@@ -1,7 +1,9 @@
 package a1ex9788.dadm.weathercomparer.ui.places;
 
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,13 +33,15 @@ public class PlacesFragment extends Fragment {
     private PlacesViewModel placesViewModel;
     private PlaceAdapter adapter;
     private FragmentPlacesBinding binding;
-
+    private SharedPreferences prefs ;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         placesViewModel =
                 new ViewModelProvider(this).get(PlacesViewModel.class);
 
         binding = FragmentPlacesBinding.inflate(inflater, container, false);
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+
         View root = binding.getRoot();
 
         setNavigationDrawerCheckedItem();
@@ -70,7 +74,7 @@ public class PlacesFragment extends Fragment {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
 
-        adapter = new PlaceAdapter();
+        adapter = new PlaceAdapter(prefs.getString("units",getString(R.string.valueUnits0)));
         recyclerView.setAdapter(adapter);
 
         new Thread(() -> {

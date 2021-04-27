@@ -1,7 +1,9 @@
 package a1ex9788.dadm.weathercomparer.ui.map;
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -55,11 +57,13 @@ public class MapFragment extends Fragment {
     private AutocompleteSupportFragment autocompleteFragment;
     private FragmentMapBinding binding;
     private PlaceViewBinding placeBinding;
+    private SharedPreferences prefs ;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMapBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         setNavigationDrawerCheckedItem();
 
@@ -98,7 +102,7 @@ public class MapFragment extends Fragment {
                 showTools();
             }
         });
-
+        placeBinding.setMetric(prefs.getString("units",getString(R.string.valueUnits0)));
         return root;
     }
 

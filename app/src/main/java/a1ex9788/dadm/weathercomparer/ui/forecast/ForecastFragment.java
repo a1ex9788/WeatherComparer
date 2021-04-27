@@ -74,7 +74,7 @@ public class ForecastFragment extends Fragment {
     private FragmentForecastBinding binding;
     private boolean chartConfigured;
     private SharedPreferences prefs ;
-
+    private String metric;
     private LottieAnimationView animationView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle bundle) {
@@ -82,7 +82,7 @@ public class ForecastFragment extends Fragment {
         View root = binding.getRoot();
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         forecastViewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
-
+        metric =  prefs.getString("units",getString(R.string.valueUnits0));
         animationView = root.findViewById(R.id.animationViewWeather);
 
         setNavigationDrawerButtonOnClickListener(root);
@@ -109,35 +109,25 @@ public class ForecastFragment extends Fragment {
             }
         }
     }
-    private String getSpeedUnits() {
-        final String metric =  prefs.getString("units",getString(R.string.valueUnits0));
-        if (metric.equals(getString(R.string.valueUnits0))) {
-            return getString(R.string.speed_metricUnits);
-        }
-        else if (metric.equals(getString(R.string.valueUnits1))) {
-            return getString(R.string.speed_imperialUnits);
-        }
-        else if (metric.equals(getString(R.string.valueUnits2))) {
-            return getString(R.string.speed_scientificUnits);
-        }
-        else {
-            return getString(R.string.speed_metricUnits);
-        }
-    }
-    private String getTemperatureUnits() {
-        final String metric =  prefs.getString("units",getString(R.string.valueUnits0));
-        if (metric.equals(getString(R.string.valueUnits0))) {
-            return getString(R.string.temperature_metricUnits);
-        }
-        else if (metric.equals(getString(R.string.valueUnits1))) {
-            return getString(R.string.temperature_imperialUnits);
-        }
-        else if (metric.equals(getString(R.string.valueUnits2))) {
-            return getString(R.string.temperature_scientificUnits);
-        }
-        else {
-            return getString(R.string.temperature_metricUnits);
-        }
+
+    private void setDefaultForecastData() {
+        // Set default data. It will be seen before the real one is loaded and in case of error.
+        setWeatherConditionAnimation(WeatherCondition.UnknownPrecipitation);
+
+        MapPlace mapPlace = new MapPlace();
+        mapPlace.setName("Valencia");
+        mapPlace.setTimeZone("16:14 Mar 16");
+        binding.setPlace(mapPlace);
+
+        CurrentWeather currentWeather = new CurrentWeather(
+                "No data",
+                "-",
+                UnitsGetter.getSpeedUnits(metric),
+                "-",
+                UnitsGetter.getTemperatureUnits(metric),
+                "-",
+                "%");
+        binding.setCurrentWeather(currentWeather);
     }
 
     private void recoverMapPlace(Bundle bundle) {
@@ -207,11 +197,11 @@ public class ForecastFragment extends Fragment {
 
 
                     CurrentWeather currentWeather = new CurrentWeather(
-                            hourForecast.getWeatherCondition().getText(),
+                            getString( hourForecast.getWeatherCondition().getTextResourceIdentifier()),
                             roundToOneDecimal(hourForecast.getWindSpeed_kilometersPerHour()) + "",
-                            getSpeedUnits(),
-                            roundToOneDecimal(hourForecast.getAvgTemperature_celsius()) + "",
-                            getTemperatureUnits(),
+                            UnitsGetter.getSpeedUnits(metric),
+                            roundToOneDecimal(hourForecast.getAvgTemperature(metric)) + "",
+                            UnitsGetter.getTemperatureUnits(metric),
                             roundToOneDecimal(hourForecast.getPrecipitationProbability()) + "",
                             "%");
                     binding.setCurrentWeather(currentWeather);
@@ -232,8 +222,8 @@ public class ForecastFragment extends Fragment {
                 try {
                     ConstraintLayout clBottomSheet = getActivity().findViewById(R.id.clBottomSheet);
                     BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(clBottomSheet);
-
                     DisplayMetrics metrics = new DisplayMetrics();
+
                     ((MainActivity) getActivity()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
                     int height = metrics.heightPixels;
 
@@ -268,7 +258,6 @@ public class ForecastFragment extends Fragment {
                     SnapHelper snapHelper = new LinearSnapHelper();
 
                     LottieAnimationView lavWeatherIcon6 = hourPrediction6.findViewById(R.id.lavWeatherIcon);
-                    /* The function to obtain the HourForecast of WeatherBit is now premium, so we can not use it */
                     List<HourForecast> hourForecastsList, hourForecastsAccuWeather, hourForecastsOpenWeather
                     /*, hourForecastsWeatherBit*/;
                     List<DayForecast> dayForecastsList;
@@ -292,14 +281,13 @@ public class ForecastFragment extends Fragment {
                     }catch (Exception e){
                         hourForecastsOpenWeather = new ArrayList<>();
                     }
-                    /* The function to obtain the HourForecast of WeatherBit is now premium, so we can not use it */
-                    /* List<HourForecast> hourForecastsWeatherBit = forecastViewModel.getWeatherBitHourlyForecast(latitude, longitude); */
+                    /* La función se ha convertido de pago, por lo que ya no funciona
+                    List<HourForecast> hourForecastsWeatherBit = forecastViewModel.getWeatherBitHourlyForecast(latitude, longitude);
+                    */
                     List<HourForecast> finalHourForecastsList = hourForecastsList;
                     List<DayForecast> finalDayForecastsList = dayForecastsList;
                     List<HourForecast> finalHourForecastsAccuWeather = hourForecastsAccuWeather;
                     List<HourForecast> finalHourForecastsListOpenWeather = hourForecastsOpenWeather;
-                    /* The function to obtain the HourForecast of WeatherBit is now premium, so we can not use it */
-                    /* List<HourForecast> finalHourForecastsWeatherBit = hourForecastsOpenWeather; */
                     ((MainActivity) getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
