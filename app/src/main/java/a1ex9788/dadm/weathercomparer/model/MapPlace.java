@@ -38,6 +38,9 @@ public class MapPlace {
     @NonNull
     @ColumnInfo(name = "timeZone")
     private String timeZone;
+    @NonNull
+    @ColumnInfo(name = "timeZoneId")
+    private String timeZoneId;
 
     public MapPlace() {
     }
@@ -53,6 +56,7 @@ public class MapPlace {
             photo = "https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAiKQz6mYGVdAYfIWDxkTiOIa0x86e2ntA&maxheight=200&photoreference=" + photos.get(rand.nextInt(photos.size())).zza();
         }
         timeZone = getTimeZone(googlePlace).getDisplayName();
+        timeZoneId = getTimeZone(googlePlace).getID();
     }
 
     public MapPlace(String identifier, String name, double latitude, double longitude, String photo) {
@@ -127,6 +131,15 @@ public class MapPlace {
             timeZoneId += ":" + minutes;
         }
         return TimeZone.getTimeZone(timeZoneId);
+    }
+
+    @NonNull
+    public String getTimeZoneId() {
+        return timeZoneId;
+    }
+
+    public void setTimeZoneId(@NonNull String timeZoneId) {
+        this.timeZoneId = timeZoneId;
     }
 
     public class PlaceResponse {
