@@ -6,19 +6,16 @@ import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +33,6 @@ import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +46,6 @@ import a1ex9788.dadm.weathercomparer.model.MapPlace;
 import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
 import a1ex9788.dadm.weathercomparer.utils.UnitsGetter;
 import a1ex9788.dadm.weathercomparer.webServices.LocationService;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeatherDailyForecast;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Axis;
@@ -192,7 +186,7 @@ public class ForecastFragment extends Fragment {
 
 
                     CurrentWeather currentWeather = new CurrentWeather(
-                            hourForecast.getWeatherCondition().getText(),
+                            getString( hourForecast.getWeatherCondition().getTextResourceIdentifier()),
                             roundToOneDecimal(hourForecast.getWindSpeed_kilometersPerHour()) + "",
                             UnitsGetter.getSpeedUnits(metric),
                             roundToOneDecimal(hourForecast.getAvgTemperature(metric)) + "",

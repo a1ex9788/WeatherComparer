@@ -24,7 +24,17 @@
     <string name="timeZoneFragmentParameter_key" translatable="false">timeZone</string>
     <string name="tvNoLocation">Please active your location</string>
     <string name="tvAllowLocation">Allow location</string>
-
+    <string name="sunny">Sunny</string>
+    <string name="cloudy">Cloudy</string>
+    <string name="overcast">Overcast</string>
+    <string name="rainy">Rainy</string>
+    <string name="snow">Snow</string>
+    <string name="foggy">Foggy</string>
+    <string name="flurries">Flurries</string>
+    <string name="thunderstorm">Thunderstorm</string>
+    <string name="thunderstormWithRain">Thunderstorm with Rain</string>
+    <string name="unknownPrecipitation">Unknown Precipitation</string>
+    <string name="unknown">Unknown</string>
     <!-- Forecast bottom sheet -->
     <string name="tvToday">Today</string>
     <string name="tvToday_daily">Daily</string>
@@ -55,4 +65,5 @@
     <string name="valueUnits0" translatable="false">0</string>
     <string name="valueUnits1" translatable="false">1</string>
     <string name="valueUnits2" translatable="false">2</string>
+
 </resources>

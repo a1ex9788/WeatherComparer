@@ -25,4 +25,15 @@
     <string name="metricUnitsString">Metrique (km/h - °C)</string>
     <string name="imperialUnitsString">Imperial (mile/h - °F)</string>
     <string name="scientificUnitsString">Scientific (m/s - K)</string>
+    <string name="sunny">Ensoleillé</string>
+    <string name="cloudy">Nuageux</string>
+    <string name="overcast">Couvert</string>
+    <string name="rainy">Pluvieux</string>
+    <string name="snow">Neige</string>
+    <string name="foggy">Brouillard</string>
+    <string name="flurries">Rafales</string>
+    <string name="thunderstorm">Orages</string>
+    <string name="thunderstormWithRain">Orages avec pluie</string>
+    <string name="unknownPrecipitation">Précipatation inconnue</string>
+    <string name="unknown">Inconnue</string>
 </resources>
