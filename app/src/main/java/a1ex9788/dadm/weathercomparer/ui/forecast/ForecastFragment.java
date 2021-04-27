@@ -42,6 +42,8 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -80,6 +82,7 @@ public class ForecastFragment extends Fragment {
     private SharedPreferences prefs;
     private String metric;
     private LottieAnimationView animationView;
+    private MapPlace currentPlace;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         binding = FragmentForecastBinding.inflate(inflater, container, false);
@@ -231,7 +234,6 @@ public class ForecastFragment extends Fragment {
                     RecyclerView.LayoutManager managerHourDay = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
                     SnapHelper snapHelper = new LinearSnapHelper();
 
-                    LottieAnimationView lavWeatherIcon6 = hourPrediction6.findViewById(R.id.lavWeatherIcon);
                     List<HourForecast> hourForecastsList, hourForecastsAccuWeather, hourForecastsOpenWeather
                             /*, hourForecastsWeatherBit*/;
                     List<DayForecast> dayForecastsList;
@@ -321,8 +323,13 @@ public class ForecastFragment extends Fragment {
                                 uvIndexText = finalHourForecastsList.get(1).getUvIndex().toString().substring(0, 1) + ", " + getString(R.string.extreme);
                             }
                             MoreInfo moreInfoUVIndex = new MoreInfo(getString(R.string.UVIndex), uvIndexText, R.drawable.ic_uv_index );
-                            MoreInfo moreInfoSunrise = new MoreInfo(getString(R.string.sunrise), finalDayForecastsList.get(0).getSunrise().toString().substring(11, 16), R.drawable.ic_sunrise );
-                            MoreInfo moreInfoSunset = new MoreInfo(getString(R.string.sunset), finalDayForecastsList.get(0).getSunset().toString().substring(11, 16), R.drawable.ic_sunset );
+                            ZoneId zoneId = ZoneId.of(currentPlace.getTimeZoneId());
+                            Date sunrise = finalDayForecastsList.get(0).getSunrise();
+                            Date sunset = finalDayForecastsList.get(0).getSunset();
+                            LocalDateTime localDateTimeSunrise = LocalDateTime.ofInstant(sunrise.toInstant(), zoneId);
+                            LocalDateTime localDateTimeSunset = LocalDateTime.ofInstant(sunset.toInstant(), zoneId);
+                            MoreInfo moreInfoSunrise = new MoreInfo(getString(R.string.sunrise), localDateTimeSunrise.toString().substring(11, 16), R.drawable.ic_sunrise);
+                            MoreInfo moreInfoSunset = new MoreInfo(getString(R.string.sunset), localDateTimeSunset.toString().substring(11, 16), R.drawable.ic_sunset);
                             list.add(moreInfoFeelsLike);
                             list.add(moreInfoPressure);
                             list.add(moreInfoUVIndex);
