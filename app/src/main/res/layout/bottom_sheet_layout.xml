@@ -5,6 +5,7 @@
     android:id="@+id/clBottomSheet"
     android:layout_width="match_parent"
     android:layout_height="500dp"
+    android:maxHeight="1794dp"
     android:background="@drawable/bottom_sheet_shape"
     android:orientation="vertical"
     app:behavior_hideable="false"
@@ -45,7 +46,8 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvToday">
+        app:layout_constraintTop_toBottomOf="@+id/tvToday"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -129,187 +131,37 @@
     <lecho.lib.hellocharts.view.LineChartView
         android:id="@+id/chart"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="160dp"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
+
         android:layout_marginEnd="2dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTodayMoreInfo" />
+
+    <TextView
+        android:id="@+id/tvTodayMoreInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/tvTodayMoreInfo"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hsvHourPrediction" />
 
-    <ScrollView
-        android:id="@+id/scrollView2"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMoreInfo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chart">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.15"
-                    android:orientation="vertical"></LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvFeelsLike"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/feels_like"
-                        android:textAlignment="inherit"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvFeelsLikeValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="24"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/white"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/tvUVIndex"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/UVIndex"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="@+id/tvFeelsLike"
-                        app:layout_constraintTop_toBottomOf="@+id/tvFeelsLikeValue" />
-
-                    <TextView
-                        android:id="@+id/tvUVIndexValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="16.1"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/white"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/tvSunrise"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/sunrise"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvSunriseValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="6:38"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/white"
-                        android:textSize="18sp" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvPressure"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/pressure"
-                        android:textAlignment="inherit"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toEndOf="@+id/tvFeelsLike"
-                        app:layout_constraintTop_toBottomOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tvPressureValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1024"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/white"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/tvProbabilityOfRain"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/probability_of_rain"
-                        android:textAlignment="textStart"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvProbabilityOfRainValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="76"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/white"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/tvSunset"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/sunset"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvSunsetValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="17:58"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/white"
-                        android:textSize="18sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.1"
-                    android:orientation="vertical"></LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-
-
-
+        app:layout_constraintTop_toBottomOf="@+id/chart" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

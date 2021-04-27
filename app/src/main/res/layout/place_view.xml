@@ -7,11 +7,12 @@
     <data>
         <import type="android.view.View"/>
         <import type="a1ex9788.dadm.weathercomparer.utils.DoubleFormats"/>
-
+        <import type="a1ex9788.dadm.weathercomparer.utils.UnitsGetter"/>
         <variable name="place" type="a1ex9788.dadm.weathercomparer.model.MapPlace"/>
         <variable name="forecast" type="a1ex9788.dadm.weathercomparer.model.HourForecast"/>
         <variable name="url" type="String"/>
         <variable name="loading" type="Boolean"/>
+        <variable name="metric" type="String"/>
     </data>
 
     <androidx.cardview.widget.CardView
@@ -104,14 +105,14 @@
                                 style="@style/WhiteSubtitle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@{ DoubleFormats.TWO.format(forecast.getWindSpeed_kilometersPerHour())  }"
+                                android:text="@{ DoubleFormats.TWO.format(forecast.getWindSpeed(metric))  }"
                                 android:textAlignment="viewEnd" />
 
                             <TextView
                                 style="@style/WhiteIndex"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/speed_metricUnits"
+                                android:text="@{UnitsGetter.getSpeedUnits(metric)}"
                                 android:textAlignment="viewEnd" />
                         </LinearLayout>
 
@@ -143,14 +144,14 @@
                                 style="@style/WhiteSubtitle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@{ DoubleFormats.ZERO.format(forecast.getAvgTemperature_celsius()) }"
+                                android:text="@{ DoubleFormats.ZERO.format(forecast.getAvgTemperature(metric)) }"
                                 android:textAlignment="viewEnd" />
 
                             <TextView
                                 style="@style/WhiteIndex"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/temperature_metricUnits"
+                                android:text="@{UnitsGetter.getTemperatureUnits(metric)}"
                                 android:textAlignment="viewEnd" />
                         </LinearLayout>
 
