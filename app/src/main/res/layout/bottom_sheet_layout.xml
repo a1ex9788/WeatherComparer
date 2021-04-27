@@ -9,7 +9,7 @@
     android:background="@drawable/bottom_sheet_shape"
     android:orientation="vertical"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="170dp"
+    app:behavior_peekHeight="400dp"
     app:layout_anchor="@+id/clBottomSheet"
     app:layout_anchorGravity="top|center"
     app:layout_behavior="@string/bottom_sheet_behavior">
@@ -39,15 +39,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvHourDayPrediction"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvTodayMoreInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvToday" />
+
     <HorizontalScrollView
         android:id="@+id/hsvHourPrediction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:scrollbars="none"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvToday"
-        android:scrollbars="none">
+        app:layout_constraintTop_toBottomOf="@+id/tvToday">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -58,7 +70,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-
                 <include
                     android:id="@+id/hourPrediction1"
                     layout="@layout/bottom_sheet_today_element"
@@ -66,63 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toStartOf="@+id/hourPrediction2"
                     app:layout_constraintStart_toStartOf="parent" />
-
-                <include
-                    android:id="@+id/hourPrediction2"
-                    layout="@layout/bottom_sheet_today_element"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toStartOf="@+id/hourPrediction3"
-                    app:layout_constraintStart_toEndOf="@+id/hourPrediction1"
-                    app:layout_constraintTop_toTopOf="@+id/hourPrediction1" />
-
-                <include
-                    android:id="@+id/hourPrediction3"
-                    layout="@layout/bottom_sheet_today_element"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toStartOf="@+id/hourPrediction4"
-                    app:layout_constraintStart_toEndOf="@+id/hourPrediction2"
-                    app:layout_constraintTop_toTopOf="@+id/hourPrediction2" />
-
-                <include
-                    android:id="@+id/hourPrediction4"
-                    layout="@layout/bottom_sheet_today_element"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toEndOf="@id/hourPrediction5"
-                    app:layout_constraintStart_toEndOf="@+id/hourPrediction3"
-                    app:layout_constraintTop_toTopOf="@+id/hourPrediction3" />
-
-                <include
-                    android:id="@+id/hourPrediction5"
-                    layout="@layout/bottom_sheet_today_element"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toEndOf="@id/hourPrediction4"
-                    app:layout_constraintStart_toEndOf="@+id/hourPrediction4"
-                    app:layout_constraintTop_toTopOf="@+id/hourPrediction4" />
-
-                <include
-                    android:id="@+id/hourPrediction6"
-                    layout="@layout/bottom_sheet_today_element"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/hourPrediction5"
-                    app:layout_constraintTop_toTopOf="@+id/hourPrediction5" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

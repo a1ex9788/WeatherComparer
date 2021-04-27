@@ -13,11 +13,11 @@ import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.R;
 
-public class CustomRecyclerAdapter extends RecyclerView.Adapter<CustomRecyclerAdapter.ViewHolder> {
+public class CustomRecyclerAdapterMoreInfo extends RecyclerView.Adapter<CustomRecyclerAdapterMoreInfo.ViewHolder> {
 
     private List<MoreInfo> list;
 
-    public CustomRecyclerAdapter (List<MoreInfo> list){
+    public CustomRecyclerAdapterMoreInfo(List<MoreInfo> list){
         this.list = list;
     }
 
@@ -25,7 +25,7 @@ public class CustomRecyclerAdapter extends RecyclerView.Adapter<CustomRecyclerAd
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bottom_sheet_more_info, parent, false);
-        CustomRecyclerAdapter.ViewHolder holder = new ViewHolder(view);
+        CustomRecyclerAdapterMoreInfo.ViewHolder holder = new ViewHolder(view);
         return holder;
     }
 

@@ -24,6 +24,11 @@
     <string name="tvTodayMoreInfo">Más información de hoy</string>
     <string name="feels_like">Sensación térmica</string>
     <string name="UVIndex">Índice UV</string>
+    <string name="low">Bajo</string>
+    <string name="mid">Moderado</string>
+    <string name="high">Alto</string>
+    <string name="veryHigh">Muy Alto</string>
+    <string name="extreme">Extremo</string>
     <string name="pressure">Presión</string>
     <string name="probability_of_rain">Probabilidad de lluvia</string>
     <string name="sunset">Amanecer</string>

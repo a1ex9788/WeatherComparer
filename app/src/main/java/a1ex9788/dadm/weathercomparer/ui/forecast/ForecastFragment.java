@@ -4,20 +4,16 @@ import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +24,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,14 +35,14 @@ import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
-import a1ex9788.dadm.weathercomparer.adapters.CustomRecyclerAdapter;
+import a1ex9788.dadm.weathercomparer.adapters.CustomRecyclerAdapterMoreInfo;
+import a1ex9788.dadm.weathercomparer.adapters.CustomRecyclerAdapterHourDayForecast;
+import a1ex9788.dadm.weathercomparer.adapters.HourDayForecast;
 import a1ex9788.dadm.weathercomparer.adapters.MoreInfo;
 import a1ex9788.dadm.weathercomparer.bindings.CurrentWeather;
 import a1ex9788.dadm.weathercomparer.databinding.FragmentForecastBinding;
@@ -57,7 +52,6 @@ import a1ex9788.dadm.weathercomparer.model.MapPlace;
 import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
 import a1ex9788.dadm.weathercomparer.utils.UnitsGetter;
 import a1ex9788.dadm.weathercomparer.webServices.LocationService;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeatherDailyForecast;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Axis;
@@ -230,35 +224,12 @@ public class ForecastFragment extends Fragment {
 
                     TextView tvToday = getActivity().findViewById(R.id.tvToday);
 
-                    ConstraintLayout hourPrediction1 = getActivity().findViewById(R.id.hourPrediction1);
-                    TextView tvHour1 = hourPrediction1.findViewById(R.id.tvHour);
-                    TextView tvTemp1 = hourPrediction1.findViewById(R.id.tvTemp);
-                    LottieAnimationView lavWeatherIcon1 = hourPrediction1.findViewById(R.id.lavWeatherIcon);
-                    ConstraintLayout hourPrediction2 = getActivity().findViewById(R.id.hourPrediction2);
-                    TextView tvHour2 = hourPrediction2.findViewById(R.id.tvHour);
-                    TextView tvTemp2 = hourPrediction2.findViewById(R.id.tvTemp);
-                    LottieAnimationView lavWeatherIcon2 = hourPrediction2.findViewById(R.id.lavWeatherIcon);
-                    ConstraintLayout hourPrediction3 = getActivity().findViewById(R.id.hourPrediction3);
-                    TextView tvHour3 = hourPrediction3.findViewById(R.id.tvHour);
-                    TextView tvTemp3 = hourPrediction3.findViewById(R.id.tvTemp);
-                    LottieAnimationView lavWeatherIcon3 = hourPrediction3.findViewById(R.id.lavWeatherIcon);
-                    ConstraintLayout hourPrediction4 = getActivity().findViewById(R.id.hourPrediction4);
-                    TextView tvHour4 = hourPrediction4.findViewById(R.id.tvHour);
-                    TextView tvTemp4 = hourPrediction4.findViewById(R.id.tvTemp);
-                    LottieAnimationView lavWeatherIcon4 = hourPrediction4.findViewById(R.id.lavWeatherIcon);
-                    ConstraintLayout hourPrediction5 = getActivity().findViewById(R.id.hourPrediction5);
-                    TextView tvHour5 = hourPrediction5.findViewById(R.id.tvHour);
-                    TextView tvTemp5 = hourPrediction5.findViewById(R.id.tvTemp);
-                    LottieAnimationView lavWeatherIcon5 = hourPrediction5.findViewById(R.id.lavWeatherIcon);
-                    ConstraintLayout hourPrediction6 = getActivity().findViewById(R.id.hourPrediction6);
-                    TextView tvHour6 = hourPrediction6.findViewById(R.id.tvHour);
-                    TextView tvTemp6 = hourPrediction6.findViewById(R.id.tvTemp);
-
-                    RecyclerView recyclerView = getActivity().findViewById(R.id.rvMoreInfo);
-                    RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
+                    RecyclerView rvMoreInfo = getActivity().findViewById(R.id.rvMoreInfo);
+                    RecyclerView rvHourDayPrediction = getActivity().findViewById(R.id.rvHourDayPrediction);
+                    RecyclerView.LayoutManager managerMoreInfo = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
+                    RecyclerView.LayoutManager managerHourDay = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
                     SnapHelper snapHelper = new LinearSnapHelper();
 
-                    LottieAnimationView lavWeatherIcon6 = hourPrediction6.findViewById(R.id.lavWeatherIcon);
                     List<HourForecast> hourForecastsList, hourForecastsAccuWeather, hourForecastsOpenWeather
                     /*, hourForecastsWeatherBit*/;
                     List<DayForecast> dayForecastsList;
@@ -292,41 +263,62 @@ public class ForecastFragment extends Fragment {
                     ((MainActivity) getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            bottomSheetBehavior.setPeekHeight(466);
+                            bottomSheetBehavior.setPeekHeight(484);
                             clBottomSheet.setMaxHeight(1784);
                             clBottomSheet.getLayoutParams().height = (3 * height) / 4;
-                            tvHour1.setText(finalHourForecastsList.get(2).getDate().toString().substring(11, 16));
-                            tvTemp1.setText(finalHourForecastsList.get(2).getAvgTemperature_celsius().toString().
-                                    substring(0, 4) + getString(R.string.temperature_metricUnits));
-                            lavWeatherIcon1.setAnimationFromUrl(finalHourForecastsList.get(2).getWeatherCondition().getIconAddress());
-                            tvHour2.setText(finalHourForecastsList.get(3).getDate().toString().substring(11, 16));
-                            tvTemp2.setText(finalHourForecastsList.get(3).getAvgTemperature_celsius().toString().
-                                    substring(0, 4) + getString(R.string.temperature_metricUnits));
-                            lavWeatherIcon2.setAnimationFromUrl(finalHourForecastsList.get(3).getWeatherCondition().getIconAddress());
-                            tvHour3.setText(finalHourForecastsList.get(4).getDate().toString().substring(11, 16));
-                            tvTemp3.setText(finalHourForecastsList.get(4).getAvgTemperature_celsius().toString().
-                                    substring(0, 4) + getString(R.string.temperature_metricUnits));
-                            lavWeatherIcon3.setAnimationFromUrl(finalHourForecastsList.get(4).getWeatherCondition().getIconAddress());
-                            tvHour4.setText(finalHourForecastsList.get(5).getDate().toString().substring(11, 16));
-                            tvTemp4.setText(finalHourForecastsList.get(5).getAvgTemperature_celsius().toString().
-                                    substring(0, 4) + getString(R.string.temperature_metricUnits));
-                            lavWeatherIcon4.setAnimationFromUrl(finalHourForecastsList.get(5).getWeatherCondition().getIconAddress());
-                            tvHour5.setText(finalHourForecastsList.get(6).getDate().toString().substring(11, 16));
-                            tvTemp5.setText(finalHourForecastsList.get(6).getAvgTemperature_celsius().toString().
-                                    substring(0, 4) + getString(R.string.temperature_metricUnits));
-                            lavWeatherIcon5.setAnimationFromUrl(finalHourForecastsList.get(6).getWeatherCondition().getIconAddress());
-                            tvHour6.setText(finalHourForecastsList.get(7).getDate().toString().substring(11, 16));
-                            tvTemp6.setText(finalHourForecastsList.get(7).getAvgTemperature_celsius().toString().
-                                    substring(0, 4) + getString(R.string.temperature_metricUnits));
-                            lavWeatherIcon6.setAnimationFromUrl(finalHourForecastsList.get(8).getWeatherCondition().getIconAddress());
-                            snapHelper.attachToRecyclerView(recyclerView);
-                            recyclerView.setLayoutManager(manager);
+                            snapHelper.attachToRecyclerView(rvMoreInfo);
+                            rvMoreInfo.setLayoutManager(managerMoreInfo);
+                            rvHourDayPrediction.setLayoutManager(managerHourDay);
+                            List<HourDayForecast> hoursList = new ArrayList<>();
+                            HourDayForecast hourForecast1 = new HourDayForecast(finalHourForecastsList.get(2).getDate().toString().substring(11, 16),
+                                    finalHourForecastsList.get(2).getAvgTemperature_celsius().toString().
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits), finalHourForecastsList.get(2).getWeatherCondition().getIconAddress());
+                            HourDayForecast hourForecast2 = new HourDayForecast(finalHourForecastsList.get(3).getDate().toString().substring(11, 16),
+                                    finalHourForecastsList.get(3).getAvgTemperature_celsius().toString().
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits), finalHourForecastsList.get(3).getWeatherCondition().getIconAddress());
+                            HourDayForecast hourForecast3 = new HourDayForecast(finalHourForecastsList.get(4).getDate().toString().substring(11, 16),
+                                    finalHourForecastsList.get(4).getAvgTemperature_celsius().toString().
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits), finalHourForecastsList.get(4).getWeatherCondition().getIconAddress());
+                            HourDayForecast hourForecast4 = new HourDayForecast(finalHourForecastsList.get(5).getDate().toString().substring(11, 16),
+                                    finalHourForecastsList.get(5).getAvgTemperature_celsius().toString().
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits), finalHourForecastsList.get(5).getWeatherCondition().getIconAddress());
+                            HourDayForecast hourForecast5 = new HourDayForecast(finalHourForecastsList.get(6).getDate().toString().substring(11, 16),
+                                    finalHourForecastsList.get(6).getAvgTemperature_celsius().toString().
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits), finalHourForecastsList.get(6).getWeatherCondition().getIconAddress());
+                            HourDayForecast hourForecast6 = new HourDayForecast(finalHourForecastsList.get(7).getDate().toString().substring(11, 16),
+                                    finalHourForecastsList.get(7).getAvgTemperature_celsius().toString().
+                                    substring(0, 4) + getString(R.string.temperature_metricUnits), finalHourForecastsList.get(7).getWeatherCondition().getIconAddress());
+                            hoursList.add(hourForecast1);
+                            hoursList.add(hourForecast2);
+                            hoursList.add(hourForecast3);
+                            hoursList.add(hourForecast4);
+                            hoursList.add(hourForecast5);
+                            hoursList.add(hourForecast6);
+                            CustomRecyclerAdapterHourDayForecast adapterHourDay = new CustomRecyclerAdapterHourDayForecast(hoursList);
+                            rvHourDayPrediction.setAdapter(adapterHourDay);
                             List<MoreInfo> list = new ArrayList<>();
                             MoreInfo moreInfoFeelsLike = new MoreInfo(getString(R.string.feels_like), finalHourForecastsList.get(1).getRealFeel_celsius().toString().
                                     substring(0, 4) + getString(R.string.temperature_metricUnits), R.drawable.temperature );
                             MoreInfo moreInfoPressure = new MoreInfo(getString(R.string.pressure), finalHourForecastsList.get(1).getPressure_millibars().toString().
                                     substring(0, 4) + getString(R.string.milibar_pressureUnit), R.drawable.ic_pressure );
-                            MoreInfo moreInfoUVIndex = new MoreInfo(getString(R.string.UVIndex), finalHourForecastsList.get(1).getUvIndex().toString().substring(0, 1), R.drawable.ic_uv_index );
+                            int uvIndex = finalHourForecastsList.get(1).getUvIndex().intValue();
+                            String uvIndexText = "";
+                            if(uvIndex < 3){
+                                uvIndexText = finalHourForecastsList.get(1).getUvIndex().toString().substring(0, 1) + ", " + getString(R.string.low);
+                            }
+                            else if(uvIndex < 6){
+                                uvIndexText = finalHourForecastsList.get(1).getUvIndex().toString().substring(0, 1) + ", " + getString(R.string.mid);
+                            }
+                            else if(uvIndex < 8){
+                                uvIndexText = finalHourForecastsList.get(1).getUvIndex().toString().substring(0, 1) + ", " + getString(R.string.high);
+                            }
+                            else if(uvIndex < 11){
+                                uvIndexText = finalHourForecastsList.get(1).getUvIndex().toString().substring(0, 1) + ", " + getString(R.string.veryHigh);
+                            }
+                            else{
+                                uvIndexText = finalHourForecastsList.get(1).getUvIndex().toString().substring(0, 1) + ", " + getString(R.string.extreme);
+                            }
+                            MoreInfo moreInfoUVIndex = new MoreInfo(getString(R.string.UVIndex), uvIndexText, R.drawable.ic_uv_index );
                             MoreInfo moreInfoSunrise = new MoreInfo(getString(R.string.sunrise), finalDayForecastsList.get(0).getSunrise().toString().substring(11, 16), R.drawable.ic_sunrise );
                             MoreInfo moreInfoSunset = new MoreInfo(getString(R.string.sunset), finalDayForecastsList.get(0).getSunset().toString().substring(11, 16), R.drawable.ic_sunset );
                             list.add(moreInfoFeelsLike);
@@ -334,8 +326,8 @@ public class ForecastFragment extends Fragment {
                             list.add(moreInfoUVIndex);
                             list.add(moreInfoSunrise);
                             list.add(moreInfoSunset);
-                            CustomRecyclerAdapter adapter = new CustomRecyclerAdapter(list);
-                            recyclerView.setAdapter(adapter);
+                            CustomRecyclerAdapterMoreInfo adapter = new CustomRecyclerAdapterMoreInfo(list);
+                            rvMoreInfo.setAdapter(adapter);
                         }
                     });
 
@@ -346,48 +338,44 @@ public class ForecastFragment extends Fragment {
                             if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
                                 chartView.setVisibility(View.INVISIBLE);
                                 tvToday.setText(R.string.tvToday);
-                                tvHour1.setText(finalHourForecastsList.get(2).getDate().toString().substring(11, 16));
-                                tvTemp1.setText(finalHourForecastsList.get(2).getAvgTemperature_celsius().toString().
-                                        substring(0, 4) + getString(R.string.temperature_metricUnits));
-                                lavWeatherIcon1.setAnimationFromUrl(finalHourForecastsList.get(2).getWeatherCondition().getIconAddress());
-                                tvHour2.setText(finalHourForecastsList.get(3).getDate().toString().substring(11, 16));
-                                tvTemp2.setText(finalHourForecastsList.get(3).getAvgTemperature_celsius().toString().
-                                        substring(0, 4) + getString(R.string.temperature_metricUnits));
-                                lavWeatherIcon2.setAnimationFromUrl(finalHourForecastsList.get(3).getWeatherCondition().getIconAddress());
-                                tvHour3.setText(finalHourForecastsList.get(4).getDate().toString().substring(11, 16));
-                                tvTemp3.setText(finalHourForecastsList.get(4).getAvgTemperature_celsius().toString().
-                                        substring(0, 4) + getString(R.string.temperature_metricUnits));
-                                lavWeatherIcon3.setAnimationFromUrl(finalHourForecastsList.get(4).getWeatherCondition().getIconAddress());
-                                tvHour4.setText(finalHourForecastsList.get(5).getDate().toString().substring(11, 16));
-                                tvTemp4.setText(finalHourForecastsList.get(5).getAvgTemperature_celsius().toString().
-                                        substring(0, 4) + getString(R.string.temperature_metricUnits));
-                                lavWeatherIcon4.setAnimationFromUrl(finalHourForecastsList.get(5).getWeatherCondition().getIconAddress());
-                                tvHour5.setText(finalHourForecastsList.get(6).getDate().toString().substring(11, 16));
-                                tvTemp5.setText(finalHourForecastsList.get(6).getAvgTemperature_celsius().toString().
-                                        substring(0, 4) + getString(R.string.temperature_metricUnits));
-                                lavWeatherIcon5.setAnimationFromUrl(finalHourForecastsList.get(6).getWeatherCondition().getIconAddress());
-                                tvHour6.setText(finalHourForecastsList.get(7).getDate().toString().substring(11, 16));
-                                tvTemp6.setText(finalHourForecastsList.get(7).getAvgTemperature_celsius().toString().
-                                        substring(0, 4) + getString(R.string.temperature_metricUnits));
-                                lavWeatherIcon6.setAnimationFromUrl(finalHourForecastsList.get(8).getWeatherCondition().getIconAddress());
-                                hourPrediction6.setVisibility(View.VISIBLE);
-                                hourPrediction5.setVisibility(View.VISIBLE);
+                                List<HourDayForecast> hoursList = new ArrayList<>();
+                                HourDayForecast hourForecast1 = new HourDayForecast(finalHourForecastsList.get(2).getDate().toString().substring(11, 16), finalHourForecastsList.get(2).getAvgTemperature_celsius().toString().
+                                        substring(0, 4) + getString(R.string.temperature_metricUnits), finalHourForecastsList.get(2).getWeatherCondition().getIconAddress());
+                                HourDayForecast hourForecast2 = new HourDayForecast(finalHourForecastsList.get(3).getDate().toString().substring(11, 16), finalHourForecastsList.get(3).getAvgTemperature_celsius().toString().
+                                        substring(0, 4) + getString(R.string.temperature_metricUnits), finalHourForecastsList.get(3).getWeatherCondition().getIconAddress());
+                                HourDayForecast hourForecast3 = new HourDayForecast(finalHourForecastsList.get(4).getDate().toString().substring(11, 16), finalHourForecastsList.get(4).getAvgTemperature_celsius().toString().
+                                        substring(0, 4) + getString(R.string.temperature_metricUnits), finalHourForecastsList.get(4).getWeatherCondition().getIconAddress());
+                                HourDayForecast hourForecast4 = new HourDayForecast(finalHourForecastsList.get(5).getDate().toString().substring(11, 16), finalHourForecastsList.get(5).getAvgTemperature_celsius().toString().
+                                        substring(0, 4) + getString(R.string.temperature_metricUnits), finalHourForecastsList.get(5).getWeatherCondition().getIconAddress());
+                                HourDayForecast hourForecast5 = new HourDayForecast(finalHourForecastsList.get(6).getDate().toString().substring(11, 16), finalHourForecastsList.get(6).getAvgTemperature_celsius().toString().
+                                        substring(0, 4) + getString(R.string.temperature_metricUnits), finalHourForecastsList.get(6).getWeatherCondition().getIconAddress());
+                                HourDayForecast hourForecast6 = new HourDayForecast(finalHourForecastsList.get(7).getDate().toString().substring(11, 16), finalHourForecastsList.get(7).getAvgTemperature_celsius().toString().
+                                        substring(0, 4) + getString(R.string.temperature_metricUnits), finalHourForecastsList.get(7).getWeatherCondition().getIconAddress());
+                                hoursList.add(hourForecast1);
+                                hoursList.add(hourForecast2);
+                                hoursList.add(hourForecast3);
+                                hoursList.add(hourForecast4);
+                                hoursList.add(hourForecast5);
+                                hoursList.add(hourForecast6);
+                                CustomRecyclerAdapterHourDayForecast adapterHourDay = new CustomRecyclerAdapterHourDayForecast(hoursList);
+                                rvHourDayPrediction.setAdapter(adapterHourDay);
                             } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                                 tvToday.setText(R.string.tvToday_daily);
-                                tvHour1.setText(finalDayForecastsList.get(0).getDate().toString().substring(0, 4));
-                                tvTemp1.setText("");
-                                lavWeatherIcon1.setAnimationFromUrl(finalDayForecastsList.get(0).getWeatherCondition().getIconAddress());
-                                tvHour2.setText(finalDayForecastsList.get(1).getDate().toString().substring(0, 4));
-                                tvTemp2.setText("");
-                                lavWeatherIcon2.setAnimationFromUrl(finalDayForecastsList.get(1).getWeatherCondition().getIconAddress());
-                                tvHour3.setText(finalDayForecastsList.get(2).getDate().toString().substring(0, 4));
-                                tvTemp3.setText("");
-                                lavWeatherIcon3.setAnimationFromUrl(finalDayForecastsList.get(2).getWeatherCondition().getIconAddress());
-                                tvHour4.setText(finalDayForecastsList.get(3).getDate().toString().substring(0, 4));
-                                tvTemp4.setText("");
-                                lavWeatherIcon4.setAnimationFromUrl(finalDayForecastsList.get(3).getWeatherCondition().getIconAddress());
-                                hourPrediction5.setVisibility(View.INVISIBLE);
-                                hourPrediction6.setVisibility(View.INVISIBLE);
+                                List<HourDayForecast> daysList = new ArrayList<>();
+                                HourDayForecast dayForecast1 = new HourDayForecast(finalDayForecastsList.get(0).getDate().toString().substring(0, 4), "",
+                                        finalDayForecastsList.get(0).getWeatherCondition().getIconAddress());
+                                HourDayForecast dayForecast2 = new HourDayForecast(finalDayForecastsList.get(1).getDate().toString().substring(0, 4), "",
+                                        finalDayForecastsList.get(1).getWeatherCondition().getIconAddress());
+                                HourDayForecast dayForecast3= new HourDayForecast(finalDayForecastsList.get(2).getDate().toString().substring(0, 4), "",
+                                        finalDayForecastsList.get(2).getWeatherCondition().getIconAddress());
+                                HourDayForecast dayForecast4 = new HourDayForecast(finalDayForecastsList.get(3).getDate().toString().substring(0, 4), "",
+                                        finalDayForecastsList.get(3).getWeatherCondition().getIconAddress());
+                                daysList.add(dayForecast1);
+                                daysList.add(dayForecast2);
+                                daysList.add(dayForecast3);
+                                daysList.add(dayForecast4);
+                                CustomRecyclerAdapterHourDayForecast adapterHourDay = new CustomRecyclerAdapterHourDayForecast(daysList);
+                                rvHourDayPrediction.setAdapter(adapterHourDay);
                             } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
                                 chartView.setVisibility(View.VISIBLE);
                                 if (!chartConfigured) {

@@ -45,6 +45,11 @@
     <string name="probability_of_rain">Probability of rain</string>
     <string name="sunset">Sunset</string>
     <string name="sunrise">Sunrise</string>
+    <string name="low">Low</string>
+    <string name="mid">Mid</string>
+    <string name="high">High</string>
+    <string name="veryHigh">Very high</string>
+    <string name="extreme">Extreme</string>
 
     <!-- Places fragment -->
     <string name="tvEmpty">Empty list</string>

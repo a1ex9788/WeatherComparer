@@ -12,6 +12,11 @@
     <string name="tvToday_daily">Aujourd\'hui</string>
     <string name="feels_like">Ressenti</string>
     <string name="UVIndex">UV Index</string>
+    <string name="low">Faible</string>
+    <string name="mid">Modéré</string>
+    <string name="high">Grand</string>
+    <string name="veryHigh">Très grand</string>
+    <string name="extreme">Extrême</string>
     <string name="pressure">Pression</string>
     <string name="probability_of_rain">Probabilité de pluie</string>
     <string name="sunset">Coucher du soleil</string>

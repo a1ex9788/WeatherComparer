@@ -2,7 +2,7 @@ package a1ex9788.dadm.weathercomparer.adapters;
 
 import java.io.Serializable;
 
-public class MoreInfo implements Serializable {
+public class MoreInfo {
 
     private String title, value;
     private int image;
