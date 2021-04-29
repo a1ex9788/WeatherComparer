@@ -35,6 +35,10 @@
     <string name="thunderstormWithRain">Thunderstorm with Rain</string>
     <string name="unknownPrecipitation">Unknown Precipitation</string>
     <string name="unknown">Unknown</string>
+    <string name="averageOption">Average</string>
+    <string name="openWeatherOption" translatable="false">OpenWeather</string>
+    <string name="accuWeatherOption" translatable="false">AccuWeather</string>
+    <string name="weatherBitOption" translatable="false">WeatherBit</string>
     <!-- Forecast bottom sheet -->
     <string name="tvToday">Today</string>
     <string name="tvToday_daily">Daily</string>
@@ -71,5 +75,8 @@
     <string name="valueUnits0" translatable="false">0</string>
     <string name="valueUnits1" translatable="false">1</string>
     <string name="valueUnits2" translatable="false">2</string>
+
+
+
 
 </resources>

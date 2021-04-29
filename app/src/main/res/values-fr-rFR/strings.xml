@@ -42,4 +42,5 @@
     <string name="unknownPrecipitation">Précipatation inconnue</string>
     <string name="unknown">Inconnue</string>
     <string name="tvTodayMoreInfo">Plus d\'informations aujourd\'hui</string>
+    <string name="averageOption">Moyenne</string>
 </resources>

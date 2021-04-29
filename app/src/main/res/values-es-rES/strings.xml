@@ -42,4 +42,5 @@
     <string name="metricUnitsString">Métricas (km/h - °C)</string>
     <string name="imperialUnitsString">Imperiales (mile/h - °F)</string>
     <string name="scientificUnitsString">Científicas (m/s - K)</string>
+    <string name="averageOption">Media</string>
 </resources>

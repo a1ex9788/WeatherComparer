@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
@@ -38,6 +39,8 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
@@ -84,6 +87,12 @@ public class ForecastFragment extends Fragment {
     private LottieAnimationView animationView;
     private MapPlace currentPlace;
 
+    FloatingActionButton mAverageOption, mOpenWeather,mAccuWeather,mWeatherBit;
+    ExtendedFloatingActionButton mSupplierButton;
+    TextView averageOptionText, openWeatherText, accuWeatherText, weatherBitText;
+    Boolean isAllFabsVisible;
+
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         binding = FragmentForecastBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -97,6 +106,105 @@ public class ForecastFragment extends Fragment {
         setNavigationDrawerCheckedItem();
 
         recoverMapPlace(bundle);
+
+
+        mSupplierButton = root.findViewById(R.id.supplierButton);
+
+        mAverageOption = root.findViewById(R.id.averageOption);
+        mOpenWeather = root.findViewById(R.id.openWeather);
+        mAccuWeather = root.findViewById(R.id.accuWeather);
+        mWeatherBit =root.findViewById(R.id.weatherBit);
+
+        averageOptionText = root.findViewById(R.id.averageOptionText);
+        openWeatherText = root.findViewById(R.id.openWeatherText);
+        accuWeatherText  = root.findViewById(R.id.accuWeatherText);
+        weatherBitText = root.findViewById(R.id.weatherBitText);
+
+        mAverageOption.setVisibility(View.GONE);
+        mOpenWeather.setVisibility(View.GONE);
+        mAccuWeather.setVisibility(View.GONE);
+        mWeatherBit.setVisibility(View.GONE);
+        averageOptionText.setVisibility(View.GONE);
+        openWeatherText.setVisibility(View.GONE);
+        accuWeatherText.setVisibility(View.GONE);
+        weatherBitText.setVisibility(View.GONE);
+
+        isAllFabsVisible = false;
+
+
+        mSupplierButton.shrink();
+
+
+        mSupplierButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!isAllFabsVisible) {
+
+
+                            mAverageOption.show();
+                            mOpenWeather.show();
+                            mAccuWeather.show();
+                            mWeatherBit.show();
+                            averageOptionText.setVisibility(View.VISIBLE);
+                            openWeatherText.setVisibility(View.VISIBLE);
+                            accuWeatherText.setVisibility(View.VISIBLE);
+                            weatherBitText.setVisibility(View.VISIBLE);
+
+                            mSupplierButton.extend();
+
+
+                            isAllFabsVisible = true;
+                        } else {
+
+
+                            mAverageOption.hide();
+                            mOpenWeather.hide();
+                            mAccuWeather.hide();
+                            mWeatherBit.hide();
+                            averageOptionText.setVisibility(View.GONE);
+                            openWeatherText.setVisibility(View.GONE);
+                            accuWeatherText.setVisibility(View.GONE);
+                            weatherBitText.setVisibility(View.GONE);
+
+                            mSupplierButton.shrink();
+
+
+                            isAllFabsVisible = false;
+                        }
+                    }
+                });
+
+        //AQUI PARA TI ALEJANDRO
+        mAverageOption.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+        mOpenWeather.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+        mAccuWeather.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+        mWeatherBit.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
 
         return root;
     }
