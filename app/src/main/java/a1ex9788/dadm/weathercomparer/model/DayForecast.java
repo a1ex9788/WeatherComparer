@@ -2,7 +2,7 @@ package a1ex9788.dadm.weathercomparer.model;
 
 import java.util.Date;
 
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.UnitsConverter;
+import a1ex9788.dadm.weathercomparer.utils.UnitsConverter;
 
 // 'Double' class is used instead of primitive type 'double' in order to allow null values.
 public class DayForecast extends HourForecast {

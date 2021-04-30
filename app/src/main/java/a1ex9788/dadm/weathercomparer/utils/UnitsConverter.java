@@ -1,4 +1,4 @@
-package a1ex9788.dadm.weathercomparer.webServices.forecasts;
+package a1ex9788.dadm.weathercomparer.utils;
 
 import java.util.Date;
 

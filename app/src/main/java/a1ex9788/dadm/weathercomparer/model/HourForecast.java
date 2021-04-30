@@ -1,12 +1,8 @@
 package a1ex9788.dadm.weathercomparer.model;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
 import java.util.Date;
 
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.UnitsConverter;
+import a1ex9788.dadm.weathercomparer.utils.UnitsConverter;
 
 // 'Double' class is used instead of primitive type 'double' in order to allow null values.
 public class HourForecast  {

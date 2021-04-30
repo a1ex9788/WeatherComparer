@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import a1ex9788.dadm.weathercomparer.model.UvIndex;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.UnitsConverter;
+import a1ex9788.dadm.weathercomparer.utils.UnitsConverter;
 
 import static org.junit.Assert.assertEquals;
 

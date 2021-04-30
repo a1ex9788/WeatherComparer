@@ -7,7 +7,7 @@ import java.util.List;
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.UnitsConverter;
+import a1ex9788.dadm.weathercomparer.utils.UnitsConverter;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecast;
 
 public class AverageForecastCalculator {
