@@ -2,9 +2,9 @@ package a1ex9788.dadm.weathercomparer.webServices.forecasts.average;
 
 import java.util.Arrays;
 
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeatherForecast;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather.OpenWeatherForecast;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit.WeatherBitForecast;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeatherMockForecast;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather.OpenWeatherMockForecast;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit.WeatherBitMockForecast;
 
 public class AverageWeatherMockForecast extends AverageWeatherForecast {
 
@@ -12,9 +12,9 @@ public class AverageWeatherMockForecast extends AverageWeatherForecast {
         super(latitude, longitude);
 
         weatherForecasts = Arrays.asList(
-                new AccuWeatherForecast(latitude, longitude),
-                new OpenWeatherForecast(latitude, longitude),
-                new WeatherBitForecast(latitude, longitude));
+                new AccuWeatherMockForecast(latitude, longitude),
+                new OpenWeatherMockForecast(latitude, longitude),
+                new WeatherBitMockForecast(latitude, longitude));
     }
 
 }
