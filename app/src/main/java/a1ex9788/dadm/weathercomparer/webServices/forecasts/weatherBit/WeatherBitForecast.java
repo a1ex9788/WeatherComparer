@@ -9,9 +9,9 @@ import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
+import a1ex9788.dadm.weathercomparer.utils.UnitsConverter;
 import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 import a1ex9788.dadm.weathercomparer.webServices.WebServicesHelper;
-import a1ex9788.dadm.weathercomparer.utils.UnitsConverter;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecast;
 
 public class WeatherBitForecast extends WeatherForecast {
@@ -22,18 +22,14 @@ public class WeatherBitForecast extends WeatherForecast {
 
     @Override
     public List<DayForecast> getDailyForecast() throws Exception {
-        Uri.Builder uriBuilder = prepareUriBuilder("daily");
-
-        WeatherBitDailyForecast weatherBitDailyForecast = WebServicesHelper.getWebServiceAnswer(uriBuilder, WeatherBitDailyForecast.class);
+        WeatherBitDailyForecast weatherBitDailyForecast = getWeatherBitDailyForecast();
 
         return convertToStandard(weatherBitDailyForecast);
     }
 
     @Override
     public List<HourForecast> getHourlyForecast() throws Exception {
-        Uri.Builder uriBuilder = prepareUriBuilder("hourly");
-
-        WeatherBitHourlyForecast weatherBitHourlyForecast = WebServicesHelper.getWebServiceAnswer(uriBuilder, WeatherBitHourlyForecast.class);
+        WeatherBitHourlyForecast weatherBitHourlyForecast = getWeatherBitHourlyForecast();
 
         return convertToStandard(weatherBitHourlyForecast);
     }
@@ -50,6 +46,20 @@ public class WeatherBitForecast extends WeatherForecast {
         uriBuilder.appendQueryParameter("key", ApiKeys.getWeatherBitApiKey());
 
         return uriBuilder;
+    }
+
+    protected WeatherBitDailyForecast getWeatherBitDailyForecast() throws Exception {
+        Uri.Builder uriBuilder = prepareUriBuilder("daily");
+
+        return WebServicesHelper.getWebServiceAnswer(uriBuilder, WeatherBitDailyForecast.class);
+    }
+
+    protected WeatherBitHourlyForecast getWeatherBitHourlyForecast() throws Exception {
+        throw new Exception("The pricing categories changed and we do not have more access to this feature.");
+
+        /*Uri.Builder uriBuilder = prepareUriBuilder("hourly");
+
+        return WebServicesHelper.getWebServiceAnswer(uriBuilder, WeatherBitHourlyForecast.class);*/
     }
 
     private List<DayForecast> convertToStandard(WeatherBitDailyForecast weatherBitDailyForecast) {

@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import com.google.gson.Gson;
 
+import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
@@ -14,6 +15,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class WebServicesHelper {
 
     public static boolean hasInternetConnection() {
+        // TODO: Check internet connection in all screens.
         /*boolean result = false;
 
         ConnectivityManager manager = (ConnectivityManager) reference.get().getSystemService(CONNECTIVITY_SERVICE);
@@ -43,17 +45,34 @@ public class WebServicesHelper {
 
         int responseCode = connection.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new Exception("An error response code '" + responseCode + "' was obtained from the URL: " + url.toString());
+            throw new Exception("An error response code '" + responseCode + "' was obtained from the URL '" + url.toString() + "'.");
         }
 
-        Gson gson = new Gson();
         InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
-        T webServiceAnswer = gson.fromJson(inputStreamReader, webServiceAnswerType);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        StringBuffer stringBuffer = new StringBuffer();
+        String answer;
+        while ((answer = bufferedReader.readLine()) != null) {
+            stringBuffer.append(answer);
+        }
 
+        T webServiceAnswer = convertWebServiceAnswer(stringBuffer.toString(), webServiceAnswerType);
+
+        bufferedReader.close();
         inputStreamReader.close();
         connection.disconnect();
 
+        if (webServiceAnswer == null) {
+            throw new Exception("The response of the web service could not be parsed to the type '" + webServiceAnswerType + "'.");
+        }
+
         return webServiceAnswer;
+    }
+
+    public static <T> T convertWebServiceAnswer(String webServiceAnswer, Type webServiceAnswerType) {
+        Gson gson = new Gson();
+
+        return gson.fromJson(webServiceAnswer, webServiceAnswerType);
     }
 
 }

@@ -1,6 +1,5 @@
 package a1ex9788.dadm.weathercomparer.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -17,12 +16,14 @@ import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.databinding.PlaceViewBinding;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.model.MapPlace;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecastCreator;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.average.AverageWeatherForecast;
 
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
 
     private List<MapPlace> places = new ArrayList<>();
     private String metric;
+
     public PlaceAdapter(String metric) {
         this.metric = metric;
     }
@@ -47,7 +48,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
                     .into(holder.binding.ivPlace);
         }
 
-        AverageWeatherForecast average = new AverageWeatherForecast(place.getLat(), place.getLng());
+        AverageWeatherForecast average = WeatherForecastCreator.getAverageWeatherForecast(place.getLat(), place.getLng());
 
         new Thread(
                 () -> {

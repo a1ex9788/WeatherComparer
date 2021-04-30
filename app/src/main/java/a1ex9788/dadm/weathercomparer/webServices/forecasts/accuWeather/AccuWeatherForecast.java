@@ -7,9 +7,9 @@ import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
+import a1ex9788.dadm.weathercomparer.utils.UnitsConverter;
 import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 import a1ex9788.dadm.weathercomparer.webServices.WebServicesHelper;
-import a1ex9788.dadm.weathercomparer.utils.UnitsConverter;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecast;
 
 public class AccuWeatherForecast extends WeatherForecast {
@@ -22,31 +22,39 @@ public class AccuWeatherForecast extends WeatherForecast {
 
     @Override
     public List<DayForecast> getDailyForecast() throws Exception {
-        if (locationKey == null) {
-            getLocationKey();
-        }
-
-        Uri.Builder uriBuilder = prepareForecastUriBuilder("daily", "5day");
-
-        AccuWeatherDailyForecast accuWeatherDailyForecast = WebServicesHelper.getWebServiceAnswer(uriBuilder, AccuWeatherDailyForecast.class);
+        AccuWeatherDailyForecast accuWeatherDailyForecast = getAccuWeatherDailyForecast();
 
         return convertToStandard(accuWeatherDailyForecast);
     }
 
     @Override
     public List<HourForecast> getHourlyForecast() throws Exception {
-        if (locationKey == null) {
-            getLocationKey();
-        }
-
-        Uri.Builder uriBuilder = prepareForecastUriBuilder("hourly", "12hour");
-
-        AccuWeatherHourlyForecast.AccuWeatherHourForecast[] accuWeatherHourForecasts = WebServicesHelper.getWebServiceAnswer(uriBuilder, (new AccuWeatherHourlyForecast.AccuWeatherHourForecast[1]).getClass());
+        AccuWeatherHourlyForecast.AccuWeatherHourForecast[] accuWeatherHourForecasts = getAccuWeatherHourForecasts();
 
         return convertToStandard(accuWeatherHourForecasts);
     }
 
-    private void getLocationKey() throws Exception {
+    protected AccuWeatherDailyForecast getAccuWeatherDailyForecast() throws Exception {
+        if (locationKey == null) {
+            locationKey = getLocationKey();
+        }
+
+        Uri.Builder uriBuilder = prepareForecastUriBuilder("daily", "5day");
+
+        return WebServicesHelper.getWebServiceAnswer(uriBuilder, AccuWeatherDailyForecast.class);
+    }
+
+    protected AccuWeatherHourlyForecast.AccuWeatherHourForecast[] getAccuWeatherHourForecasts() throws Exception {
+        if (locationKey == null) {
+            locationKey = getLocationKey();
+        }
+
+        Uri.Builder uriBuilder = prepareForecastUriBuilder("hourly", "12hour");
+
+        return WebServicesHelper.getWebServiceAnswer(uriBuilder, AccuWeatherHourlyForecast.AccuWeatherHourForecast[].class);
+    }
+
+    private String getLocationKey() throws Exception {
         Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme("https");
         uriBuilder.authority("dataservice.accuweather.com");
@@ -60,7 +68,7 @@ public class AccuWeatherForecast extends WeatherForecast {
 
         AccuWeatherLocation accuWeatherLocation = WebServicesHelper.getWebServiceAnswer(uriBuilder, AccuWeatherLocation.class);
 
-        locationKey = accuWeatherLocation.Key;
+        return accuWeatherLocation.Key;
     }
 
     private Uri.Builder prepareForecastUriBuilder(String forecastType, String timeQuantity) {

@@ -7,9 +7,9 @@ import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
+import a1ex9788.dadm.weathercomparer.utils.UnitsConverter;
 import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 import a1ex9788.dadm.weathercomparer.webServices.WebServicesHelper;
-import a1ex9788.dadm.weathercomparer.utils.UnitsConverter;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecast;
 
 public class OpenWeatherForecast extends WeatherForecast {
@@ -23,7 +23,7 @@ public class OpenWeatherForecast extends WeatherForecast {
     @Override
     public List<DayForecast> getDailyForecast() throws Exception {
         if (openWeatherCompleteForecast == null) {
-            GetOpenWeatherCompleteForecast();
+            openWeatherCompleteForecast = GetOpenWeatherCompleteForecast();
         }
 
         return convertToDailyStandard(openWeatherCompleteForecast);
@@ -32,13 +32,13 @@ public class OpenWeatherForecast extends WeatherForecast {
     @Override
     public List<HourForecast> getHourlyForecast() throws Exception {
         if (openWeatherCompleteForecast == null) {
-            GetOpenWeatherCompleteForecast();
+            openWeatherCompleteForecast = GetOpenWeatherCompleteForecast();
         }
 
         return convertToHourlyStandard(openWeatherCompleteForecast);
     }
 
-    private void GetOpenWeatherCompleteForecast() throws Exception {
+    protected OpenWeatherCompleteForecast GetOpenWeatherCompleteForecast() throws Exception {
         Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme("https");
         uriBuilder.authority("api.openweathermap.org");
@@ -50,7 +50,7 @@ public class OpenWeatherForecast extends WeatherForecast {
         uriBuilder.appendQueryParameter("units", "metric");
         uriBuilder.appendQueryParameter("appid", ApiKeys.getOpenWeatherApiKey());
 
-        openWeatherCompleteForecast = WebServicesHelper.getWebServiceAnswer(uriBuilder, OpenWeatherCompleteForecast.class);
+        return WebServicesHelper.getWebServiceAnswer(uriBuilder, OpenWeatherCompleteForecast.class);
     }
 
     private List<DayForecast> convertToDailyStandard(OpenWeatherCompleteForecast openWeatherCompleteForecast) {

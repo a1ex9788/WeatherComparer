@@ -15,7 +15,7 @@ public class AverageWeatherForecast extends WeatherForecast {
     private final int DAYS_IN_DAILY_FORECAST = 4;
     private final int HOURS_IN_HOURLY_FORECAST = 12;
 
-    List<WeatherForecast> weatherForecasts = Arrays.asList(
+    protected List<WeatherForecast> weatherForecasts = Arrays.asList(
             new AccuWeatherForecast(latitude, longitude),
             new OpenWeatherForecast(latitude, longitude),
             new WeatherBitForecast(latitude, longitude));
