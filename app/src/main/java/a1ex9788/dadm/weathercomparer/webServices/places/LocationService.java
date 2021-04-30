@@ -1,8 +1,7 @@
-package a1ex9788.dadm.weathercomparer.webServices;
+package a1ex9788.dadm.weathercomparer.webServices.places;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
