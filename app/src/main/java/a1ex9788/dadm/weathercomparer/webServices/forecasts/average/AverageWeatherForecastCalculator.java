@@ -10,12 +10,12 @@ import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
 import a1ex9788.dadm.weathercomparer.utils.UnitsConverter;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecast;
 
-public class AverageForecastCalculator {
+public class AverageWeatherForecastCalculator {
 
     private List<WeatherForecast> weatherForecasts;
     private int daysInDailyForecast, hoursInHourlyForecast;
 
-    public AverageForecastCalculator(List<WeatherForecast> weatherForecasts, int daysInDailyForecast, int hoursInHourlyForecast) {
+    public AverageWeatherForecastCalculator(List<WeatherForecast> weatherForecasts, int daysInDailyForecast, int hoursInHourlyForecast) {
         this.weatherForecasts = weatherForecasts;
         this.daysInDailyForecast = daysInDailyForecast;
         this.hoursInHourlyForecast = hoursInHourlyForecast;

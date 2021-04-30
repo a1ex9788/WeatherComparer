@@ -20,22 +20,22 @@ public class AverageWeatherForecast extends WeatherForecast {
             new OpenWeatherForecast(latitude, longitude),
             new WeatherBitForecast(latitude, longitude));
 
-    private AverageForecastCalculator averageForecastCalculator;
+    private AverageWeatherForecastCalculator averageWeatherForecastCalculator;
 
     public AverageWeatherForecast(double latitude, double longitude) {
         super(latitude, longitude);
 
-        averageForecastCalculator = new AverageForecastCalculator(weatherForecasts, DAYS_IN_DAILY_FORECAST, HOURS_IN_HOURLY_FORECAST);
+        averageWeatherForecastCalculator = new AverageWeatherForecastCalculator(weatherForecasts, DAYS_IN_DAILY_FORECAST, HOURS_IN_HOURLY_FORECAST);
     }
 
     @Override
     public List<DayForecast> getDailyForecast() {
-        return averageForecastCalculator.getAverageDailyForecast();
+        return averageWeatherForecastCalculator.getAverageDailyForecast();
     }
 
     @Override
     public List<HourForecast> getHourlyForecast() {
-        return averageForecastCalculator.getAverageHourlyForecast();
+        return averageWeatherForecastCalculator.getAverageHourlyForecast();
     }
 
 }
