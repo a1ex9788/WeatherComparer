@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-
     <string-array name="unitsArray">
         <item>@string/metricUnitsString</item>
         <item>@string/imperialUnitsString</item>
@@ -12,5 +10,4 @@
         <item>@string/valueUnits1</item>
         <item>@string/valueUnits2</item>
     </string-array>
-
 </resources>

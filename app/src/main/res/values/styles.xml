@@ -38,6 +38,7 @@
         <item name="colorAccent">@color/spanishGray</item>
         <item name="textAppearanceButton">@style/AppTextAppearance.Button</item>
     </style>
+
     <style name="AppTextAppearance.Button" parent="TextAppearance.MaterialComponents.Button">
         <item name="android:textAllCaps">true</item>
     </style>

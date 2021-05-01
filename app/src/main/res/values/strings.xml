@@ -5,7 +5,6 @@
     <string name="title_places">Places</string>
     <string name="title_map">Map</string>
     <string name="title_settings">Settings</string>
-
     <!-- Units -->
     <string name="speed_metricUnits" translatable="false">km/h</string>
     <string name="temperature_metricUnits" translatable="false">°C</string>
@@ -14,7 +13,6 @@
     <string name="speed_scientificUnits" translatable="false">m/s</string>
     <string name="temperature_scientificUnits" translatable="false">K</string>
     <string name="milibar_pressureUnit" translatable="false">mb</string>
-
     <!-- Forecast fragment -->
     <string name="probability_sign" translatable="false">%</string>
     <string name="toast_forecastError">There was a problem and the forecast data could not be obtained.</string>
@@ -54,18 +52,13 @@
     <string name="high">High</string>
     <string name="veryHigh">Very high</string>
     <string name="extreme">Extreme</string>
-
     <!-- Places fragment -->
     <string name="tvEmpty">Empty list</string>
     <string name="tUnknownLocation">Sorry, unknown location</string>
-
     <!-- Map fragment -->
     <string name="tAdd">added</string>
     <string name="tDelete">deleted</string>
-
-
     <!-- Strings related to Settings -->
-
     <!-- Units Settings -->
     <string name="units_category">Units Configuration</string>
     <string name="units_content">Select your unit</string>
@@ -75,8 +68,4 @@
     <string name="valueUnits0" translatable="false">0</string>
     <string name="valueUnits1" translatable="false">1</string>
     <string name="valueUnits2" translatable="false">2</string>
-
-
-
-
 </resources>

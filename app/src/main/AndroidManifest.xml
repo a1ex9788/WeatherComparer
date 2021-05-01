@@ -21,7 +21,6 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -33,5 +32,4 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAiKQz6mYGVdAYfIWDxkTiOIa0x86e2ntA" />
     </application>
-
 </manifest>

@@ -73,7 +73,6 @@
                         android:layout_height="wrap_content"
                         android:scaleType="centerCrop" />
                 </androidx.cardview.widget.CardView>
-
             </RelativeLayout>
 
             <Space
@@ -136,7 +135,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/ic_baseline_air" />
-
                     </LinearLayout>
 
                     <Space
@@ -175,7 +173,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/ic_baseline_thermostat" />
-
                     </LinearLayout>
 
                     <Space
@@ -210,21 +207,17 @@
                                 android:textAlignment="viewEnd" />
                         </LinearLayout>
 
-
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/ic_baseline_invert_colors" />
-
                     </LinearLayout>
 
                     <Space
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
-
                 </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout
@@ -251,8 +244,6 @@
                     android:textAlignment="center"
                     android:timeZone="@{ place.getTimeZone() }" />
             </LinearLayout>
-
         </LinearLayout>
-
     </androidx.cardview.widget.CardView>
 </layout>

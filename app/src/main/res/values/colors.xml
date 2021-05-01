@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFFFFF</color>
-
     <color name="blueVioletCrayola">#6B5CA5</color>
     <color name="lightGray">#D7D7D7</color>
     <color name="spanishGray">#929292</color>

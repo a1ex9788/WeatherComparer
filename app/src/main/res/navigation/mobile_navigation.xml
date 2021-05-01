@@ -4,29 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_forecast">
-
     <fragment
         android:id="@+id/navigation_places"
         android:name="a1ex9788.dadm.weathercomparer.ui.places.PlacesFragment"
         android:label="@string/title_places"
         tools:layout="@layout/fragment_places" />
-
     <fragment
         android:id="@+id/navigation_forecast"
         android:name="a1ex9788.dadm.weathercomparer.ui.forecast.ForecastFragment"
         android:label="@string/title_forecast"
         tools:layout="@layout/fragment_forecast" />
-
     <fragment
         android:id="@+id/navigation_map"
         android:name="a1ex9788.dadm.weathercomparer.ui.map.MapFragment"
         android:label="@string/title_map"
         tools:layout="@layout/fragment_map" />
-
     <fragment
         android:id="@+id/navigation_settings"
         android:name="a1ex9788.dadm.weathercomparer.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
-
 </navigation>
