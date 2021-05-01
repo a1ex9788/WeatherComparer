@@ -12,31 +12,29 @@ import a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit.WeatherBit
 
 public class AverageWeatherForecast extends WeatherForecast {
 
-    private final int DAYS_IN_DAILY_FORECAST = 4;
-    private final int HOURS_IN_HOURLY_FORECAST = 12;
+	private final int DAYS_IN_DAILY_FORECAST = 4;
+	private final int HOURS_IN_HOURLY_FORECAST = 12;
+	private final AverageWeatherForecastCalculator averageWeatherForecastCalculator;
+	protected List<WeatherForecast> weatherForecasts = Arrays.asList(new AccuWeatherForecast(latitude, longitude),
+			new OpenWeatherForecast(latitude, longitude),
+			new WeatherBitForecast(latitude, longitude));
 
-    protected List<WeatherForecast> weatherForecasts = Arrays.asList(
-            new AccuWeatherForecast(latitude, longitude),
-            new OpenWeatherForecast(latitude, longitude),
-            new WeatherBitForecast(latitude, longitude));
+	public AverageWeatherForecast(double latitude, double longitude) {
+		super(latitude, longitude);
 
-    private final AverageWeatherForecastCalculator averageWeatherForecastCalculator;
+		averageWeatherForecastCalculator = new AverageWeatherForecastCalculator(weatherForecasts,
+				DAYS_IN_DAILY_FORECAST,
+				HOURS_IN_HOURLY_FORECAST);
+	}
 
-    public AverageWeatherForecast(double latitude, double longitude) {
-        super(latitude, longitude);
+	@Override
+	public List<DayForecast> getDailyForecast() {
+		return averageWeatherForecastCalculator.getAverageDailyForecast();
+	}
 
-        averageWeatherForecastCalculator = new AverageWeatherForecastCalculator(weatherForecasts,
-                DAYS_IN_DAILY_FORECAST, HOURS_IN_HOURLY_FORECAST);
-    }
-
-    @Override
-    public List<DayForecast> getDailyForecast() {
-        return averageWeatherForecastCalculator.getAverageDailyForecast();
-    }
-
-    @Override
-    public List<HourForecast> getHourlyForecast() {
-        return averageWeatherForecastCalculator.getAverageHourlyForecast();
-    }
+	@Override
+	public List<HourForecast> getHourlyForecast() {
+		return averageWeatherForecastCalculator.getAverageHourlyForecast();
+	}
 
 }

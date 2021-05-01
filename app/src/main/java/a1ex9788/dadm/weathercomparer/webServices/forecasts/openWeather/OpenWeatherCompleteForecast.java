@@ -9,64 +9,64 @@ import java.util.List;
 // 'long' in order to allow null values.
 public class OpenWeatherCompleteForecast {
 
-    public List<OpenWeatherDayForecast> daily = new ArrayList();
-    public List<OpenWeatherHourForecast> hourly = new ArrayList();
+	public List<OpenWeatherDayForecast> daily = new ArrayList();
+	public List<OpenWeatherHourForecast> hourly = new ArrayList();
 
-    public class OpenWeatherDayForecast {
+	public class OpenWeatherDayForecast {
 
-        public Long dt;
-        public List<Weather> weather;
-        public Temperature temp;
-        public FeelTemperature feels_like;
-        public Double pop;
-        public Double humidity;
-        public Double clouds;
-        public Double wind_speed;
-        public Double pressure;
-        public Double uvi;
-        public Long sunrise;
-        public Long sunset;
+		public Long dt;
+		public List<Weather> weather;
+		public Temperature temp;
+		public FeelTemperature feels_like;
+		public Double pop;
+		public Double humidity;
+		public Double clouds;
+		public Double wind_speed;
+		public Double pressure;
+		public Double uvi;
+		public Long sunrise;
+		public Long sunset;
 
-        public class Weather {
+		public class Weather {
 
-            public Integer id;
+			public Integer id;
 
-        }
+		}
 
-        public class Temperature {
+		public class Temperature {
 
-            public Double max;
-            public Double min;
+			public Double max;
+			public Double min;
 
-        }
+		}
 
-        public class FeelTemperature {
+		public class FeelTemperature {
 
-            public Double day;
+			public Double day;
 
-        }
+		}
 
-    }
+	}
 
-    public class OpenWeatherHourForecast {
+	public class OpenWeatherHourForecast {
 
-        public Long dt;
-        public List<Weather> weather;
-        public Double temp;
-        public Double feels_like;
-        public Double pop;
-        public Double humidity;
-        public Double clouds;
-        public Double wind_speed;
-        public Double pressure;
-        public Double uvi;
+		public Long dt;
+		public List<Weather> weather;
+		public Double temp;
+		public Double feels_like;
+		public Double pop;
+		public Double humidity;
+		public Double clouds;
+		public Double wind_speed;
+		public Double pressure;
+		public Double uvi;
 
-        public class Weather {
+		public class Weather {
 
-            public Integer id;
+			public Integer id;
 
-        }
+		}
 
-    }
+	}
 
 }

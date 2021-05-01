@@ -11,19 +11,18 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 public class LocationService {
 
-    private final FusedLocationProviderClient fusedLocationClient;
+	private final FusedLocationProviderClient fusedLocationClient;
 
-    public LocationService(Context context) {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-    }
+	public LocationService(Context context) {
+		fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+	}
 
-    public void getLocation(Context context, OnSuccessListener onFounded) {
-        if (ContextCompat.checkSelfPermission(context,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.getLastLocation().addOnSuccessListener(onFounded);
-        }
+	public void getLocation(Context context, OnSuccessListener onFounded) {
+		if (ContextCompat.checkSelfPermission(context,
+				android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+			fusedLocationClient.getLastLocation().addOnSuccessListener(onFounded);
+		}
 
-    }
+	}
 
 }

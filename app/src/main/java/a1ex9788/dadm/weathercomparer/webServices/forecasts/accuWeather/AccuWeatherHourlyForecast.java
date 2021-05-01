@@ -8,42 +8,42 @@ import java.util.Date;
 // do too.
 public class AccuWeatherHourlyForecast {
 
-    // 'Integer' and 'Double' classes are used instead of primitive types 'int' and 'double' in
-    // order to allow null values.
-    public class AccuWeatherHourForecast {
+	// 'Integer' and 'Double' classes are used instead of primitive types 'int' and 'double' in
+	// order to allow null values.
+	public class AccuWeatherHourForecast {
 
-        public Date DateTime;
-        public Integer WeatherIcon;
-        public Temperature Temperature;
-        public RealFeelTemperature RealFeelTemperature;
-        public Double PrecipitationProbability;
-        public Double RelativeHumidity;
-        public Double CloudCover;
-        public Wind Wind;
-        public Double UVIndex;
+		public Date DateTime;
+		public Integer WeatherIcon;
+		public Temperature Temperature;
+		public RealFeelTemperature RealFeelTemperature;
+		public Double PrecipitationProbability;
+		public Double RelativeHumidity;
+		public Double CloudCover;
+		public Wind Wind;
+		public Double UVIndex;
 
-        public class Temperature {
+		public class Temperature {
 
-            public Double Value;
+			public Double Value;
 
-        }
+		}
 
-        public class RealFeelTemperature extends Temperature {
+		public class RealFeelTemperature extends Temperature {
 
-        }
+		}
 
-        public class Wind {
+		public class Wind {
 
-            public Speed Speed;
+			public Speed Speed;
 
-            public class Speed {
+			public class Speed {
 
-                public Double Value;
+				public Double Value;
 
-            }
+			}
 
-        }
+		}
 
-    }
+	}
 
 }

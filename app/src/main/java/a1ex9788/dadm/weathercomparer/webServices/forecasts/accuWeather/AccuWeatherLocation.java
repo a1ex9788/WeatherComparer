@@ -6,6 +6,6 @@ package a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather;
 // too.
 public class AccuWeatherLocation {
 
-    public String Key;
+	public String Key;
 
 }

@@ -30,83 +30,81 @@ import a1ex9788.dadm.weathercomparer.ui.map.MapFragment;
 
 public class PlacesFragment extends Fragment {
 
-    private PlacesViewModel placesViewModel;
-    private PlaceAdapter adapter;
-    private FragmentPlacesBinding binding;
-    private SharedPreferences prefs;
+	private PlacesViewModel placesViewModel;
+	private PlaceAdapter adapter;
+	private FragmentPlacesBinding binding;
+	private SharedPreferences prefs;
 
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        placesViewModel = new ViewModelProvider(this).get(PlacesViewModel.class);
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		placesViewModel = new ViewModelProvider(this).get(PlacesViewModel.class);
 
-        binding = FragmentPlacesBinding.inflate(inflater, container, false);
-        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		binding = FragmentPlacesBinding.inflate(inflater, container, false);
+		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        View root = binding.getRoot();
+		View root = binding.getRoot();
 
-        setNavigationDrawerCheckedItem();
+		setNavigationDrawerCheckedItem();
 
-        RecyclerView recyclerView = root.findViewById(R.id.rv_places);
+		RecyclerView recyclerView = root.findViewById(R.id.rv_places);
 
-        SwipeController swipeController = new SwipeController(getContext(),
-                new SwipeControllerActions() {
-                    @Override
-                    public void onLeftClicked(int position) {
-                        MapPlace place = adapter.removePlaceAt(position);
-                        new Thread(() -> {
-                            placesViewModel.deletePlace(getContext(), place);
-                            getActivity().runOnUiThread(() -> {
-                                binding.tvEmpty.setVisibility(
-                                        adapter.getItemCount() == 0 ? View.VISIBLE
-                                                : View.INVISIBLE);
-                                Toast.makeText(getContext(),
-                                        place.getName() + " " + getString(R.string.tDelete),
-                                        Toast.LENGTH_SHORT).show();
-                            });
-                        }).start();
-                    }
-                });
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-        itemTouchhelper.attachToRecyclerView(recyclerView);
+		SwipeController swipeController = new SwipeController(getContext(), new SwipeControllerActions() {
+			@Override
+			public void onLeftClicked(int position) {
+				MapPlace place = adapter.removePlaceAt(position);
+				new Thread(() -> {
+					placesViewModel.deletePlace(getContext(), place);
+					getActivity().runOnUiThread(() -> {
+						binding.tvEmpty.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
+						Toast.makeText(getContext(),
+								place.getName() + " " + getString(R.string.tDelete),
+								Toast.LENGTH_SHORT)
+								.show();
+					});
+				}).start();
+			}
+		});
+		ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+		itemTouchhelper.attachToRecyclerView(recyclerView);
 
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                swipeController.onDraw(c);
-            }
-        });
+		recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+			@Override
+			public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+				swipeController.onDraw(c);
+			}
+		});
 
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(manager);
+		RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
+		recyclerView.setLayoutManager(manager);
 
-        adapter = new PlaceAdapter(prefs.getString("units", getString(R.string.valueUnits0)));
-        recyclerView.setAdapter(adapter);
+		adapter = new PlaceAdapter(prefs.getString("units", getString(R.string.valueUnits0)));
+		recyclerView.setAdapter(adapter);
 
-        new Thread(() -> {
-            List<MapPlace> places = placesViewModel.getPlaces(getContext());
+		new Thread(() -> {
+			List<MapPlace> places = placesViewModel.getPlaces(getContext());
 
-            getActivity().runOnUiThread(() -> {
-                binding.tvEmpty.setVisibility(places.isEmpty() ? View.VISIBLE : View.INVISIBLE);
-                adapter.setPlaces(places);
-            });
-        }).start();
+			getActivity().runOnUiThread(() -> {
+				binding.tvEmpty.setVisibility(places.isEmpty() ? View.VISIBLE : View.INVISIBLE);
+				adapter.setPlaces(places);
+			});
+		}).start();
 
-        binding.floatingActionButton.setOnClickListener(view -> {
-            Bundle params = new Bundle();
-            params.putBoolean("search", true);
-            getParentFragmentManager().beginTransaction().setReorderingAllowed(true).replace(
-                    R.id.fcv_navigation_drawer, MapFragment.class, params).commit();
-        });
+		binding.floatingActionButton.setOnClickListener(view -> {
+			Bundle params = new Bundle();
+			params.putBoolean("search", true);
+			getParentFragmentManager().beginTransaction()
+					.setReorderingAllowed(true)
+					.replace(R.id.fcv_navigation_drawer, MapFragment.class, params)
+					.commit();
+		});
 
-        return root;
-    }
+		return root;
+	}
 
-    private void setNavigationDrawerCheckedItem() {
-        for (int i = 0; i < 4; i++) {
-            MenuItem item =
-                    ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
-            item.setChecked(i == 1);
-        }
-    }
+	private void setNavigationDrawerCheckedItem() {
+		for (int i = 0; i < 4; i++) {
+			MenuItem item = ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
+			item.setChecked(i == 1);
+		}
+	}
 
 }

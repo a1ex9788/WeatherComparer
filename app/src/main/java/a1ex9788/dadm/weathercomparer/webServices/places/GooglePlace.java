@@ -6,20 +6,20 @@ import java.util.List;
 // the class and its access.
 class GooglePlace {
 
-    public List<GooglePlaceResult> results;
+	public List<GooglePlaceResult> results;
 
-    class GooglePlaceResult {
+	class GooglePlaceResult {
 
-        public String place_id;
-        public String name;
-        public List<Photo> photos;
+		public String place_id;
+		public String name;
+		public List<Photo> photos;
 
-        class Photo {
+		class Photo {
 
-            public String photo_reference;
+			public String photo_reference;
 
-        }
+		}
 
-    }
+	}
 
 }

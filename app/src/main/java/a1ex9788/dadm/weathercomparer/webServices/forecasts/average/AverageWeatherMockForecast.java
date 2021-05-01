@@ -8,12 +8,13 @@ import a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit.WeatherBit
 
 public class AverageWeatherMockForecast extends AverageWeatherForecast {
 
-    public AverageWeatherMockForecast(double latitude, double longitude) {
-        super(latitude, longitude);
+	public AverageWeatherMockForecast(double latitude, double longitude) {
+		super(latitude, longitude);
 
-        weatherForecasts = Arrays.asList(new AccuWeatherMockForecast(latitude, longitude),
-                new OpenWeatherMockForecast(latitude, longitude),
-                new WeatherBitMockForecast(latitude, longitude));
-    }
+		weatherForecasts = Arrays.asList(
+				new AccuWeatherMockForecast(latitude, longitude),
+				new OpenWeatherMockForecast(latitude, longitude),
+				new WeatherBitMockForecast(latitude, longitude));
+	}
 
 }

@@ -7,30 +7,30 @@ import java.util.List;
 // the class and its access.
 public class WeatherBitHourlyForecast {
 
-    public List<WeatherBitHourForecast> data = new ArrayList();
+	public List<WeatherBitHourForecast> data = new ArrayList();
 
-    // 'Integer', 'Double' classes are used instead of primitive types 'int' and 'double' in
-    // order to allow null values.
-    public class WeatherBitHourForecast {
+	// 'Integer', 'Double' classes are used instead of primitive types 'int' and 'double' in
+	// order to allow null values.
+	public class WeatherBitHourForecast {
 
-        public String datetime;
-        public Weather weather;
-        public Double temp;
-        public Double app_temp;
-        public Double pop;
-        public Double rh;
-        public Double clouds;
-        public Double wind_spd;
-        public Double pres;
-        public Double uv;
+		public String datetime;
+		public Weather weather;
+		public Double temp;
+		public Double app_temp;
+		public Double pop;
+		public Double rh;
+		public Double clouds;
+		public Double wind_spd;
+		public Double pres;
+		public Double uv;
 
-        public class Weather {
+		public class Weather {
 
-            public Integer code;
+			public Integer code;
 
-        }
+		}
 
-    }
+	}
 
 }
 

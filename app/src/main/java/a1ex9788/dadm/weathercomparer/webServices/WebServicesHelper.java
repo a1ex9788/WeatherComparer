@@ -14,8 +14,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class WebServicesHelper {
 
-    public static boolean hasInternetConnection() {
-        // TODO: Check internet connection in all screens.
+	public static boolean hasInternetConnection() {
+		// TODO: Check internet connection in all screens.
         /*boolean result = false;
 
         ConnectivityManager manager = (ConnectivityManager) reference.get().getSystemService
@@ -37,50 +37,45 @@ public class WebServicesHelper {
         }
 
         return result;*/
-        return true;
-    }
+		return true;
+	}
 
-    public static <T> T getWebServiceAnswer(Uri.Builder uriBuilder, Type webServiceAnswerType)
-            throws Exception {
-        URL url = new URL(uriBuilder.build().toString());
-        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.setDoInput(true);
+	public static <T> T getWebServiceAnswer(Uri.Builder uriBuilder, Type webServiceAnswerType) throws Exception {
+		URL url = new URL(uriBuilder.build().toString());
+		HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+		connection.setRequestMethod("GET");
+		connection.setDoInput(true);
 
-        int responseCode = connection.getResponseCode();
-        if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new Exception(
-                    "An error response code '" + responseCode + "' was obtained from the URL '"
-                            + url.toString() + "'.");
-        }
+		int responseCode = connection.getResponseCode();
+		if (responseCode != HttpURLConnection.HTTP_OK) {
+			throw new Exception("An error response code '" + responseCode + "' was obtained from the URL '" + url.toString() + "'.");
+		}
 
-        InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        StringBuffer stringBuffer = new StringBuffer();
-        String answer;
-        while ((answer = bufferedReader.readLine()) != null) {
-            stringBuffer.append(answer);
-        }
+		InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
+		BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+		StringBuffer stringBuffer = new StringBuffer();
+		String answer;
+		while ((answer = bufferedReader.readLine()) != null) {
+			stringBuffer.append(answer);
+		}
 
-        T webServiceAnswer = convertWebServiceAnswer(stringBuffer.toString(), webServiceAnswerType);
+		T webServiceAnswer = convertWebServiceAnswer(stringBuffer.toString(), webServiceAnswerType);
 
-        bufferedReader.close();
-        inputStreamReader.close();
-        connection.disconnect();
+		bufferedReader.close();
+		inputStreamReader.close();
+		connection.disconnect();
 
-        if (webServiceAnswer == null) {
-            throw new Exception("The response of the web service could not be parsed to the type '"
-                    + webServiceAnswerType + "'.");
-        }
+		if (webServiceAnswer == null) {
+			throw new Exception("The response of the web service could not be parsed to the type '" + webServiceAnswerType + "'.");
+		}
 
-        return webServiceAnswer;
-    }
+		return webServiceAnswer;
+	}
 
-    public static <T> T convertWebServiceAnswer(String webServiceAnswer,
-            Type webServiceAnswerType) {
-        Gson gson = new Gson();
+	public static <T> T convertWebServiceAnswer(String webServiceAnswer, Type webServiceAnswerType) {
+		Gson gson = new Gson();
 
-        return gson.fromJson(webServiceAnswer, webServiceAnswerType);
-    }
+		return gson.fromJson(webServiceAnswer, webServiceAnswerType);
+	}
 
 }

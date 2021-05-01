@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="ProgressBar" parent="android:Widget.ProgressBar.Horizontal">
-        <item name="android:indeterminateOnly">true</item>
-        <item name="android:indeterminateDrawable">@drawable/progress_bar</item>
-        <item name="android:minHeight">10dip</item>
-        <item name="android:maxHeight">20dip</item>
-    </style>
+	<style name="ProgressBar" parent="android:Widget.ProgressBar.Horizontal">
+		<item name="android:indeterminateOnly">true</item>
+		<item name="android:indeterminateDrawable">@drawable/progress_bar</item>
+		<item name="android:minHeight">10dip</item>
+		<item name="android:maxHeight">20dip</item>
+	</style>
 
-    <style name="SemiBlackTitle" parent="TextAppearance.AppCompat.Title">
-        <item name="android:textColor">@color/eerieBlack</item>
-        <item name="android:textSize">18dp</item>
-    </style>
+	<style name="SemiBlackTitle" parent="TextAppearance.AppCompat.Title">
+		<item name="android:textColor">@color/eerieBlack</item>
+		<item name="android:textSize">18dp</item>
+	</style>
 
-    <style name="GraySubtitle" parent="TextAppearance.AppCompat.Title">
-        <item name="android:textColor">@color/spanishGray</item>
-        <item name="android:textSize">12dp</item>
-    </style>
+	<style name="GraySubtitle" parent="TextAppearance.AppCompat.Title">
+		<item name="android:textColor">@color/spanishGray</item>
+		<item name="android:textSize">12dp</item>
+	</style>
 
-    <style name="WhiteTitle" parent="TextAppearance.AppCompat.Title">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">26dp</item>
-    </style>
+	<style name="WhiteTitle" parent="TextAppearance.AppCompat.Title">
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">26dp</item>
+	</style>
 
-    <style name="WhiteSubtitle" parent="TextAppearance.AppCompat.Title">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">14dp</item>
-    </style>
+	<style name="WhiteSubtitle" parent="TextAppearance.AppCompat.Title">
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">14dp</item>
+	</style>
 
-    <style name="WhiteIndex" parent="TextAppearance.AppCompat.Title">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">8dp</item>
-    </style>
+	<style name="WhiteIndex" parent="TextAppearance.AppCompat.Title">
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">8dp</item>
+	</style>
 
-    <style name="floatingButtonTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/eerieBlack</item>
-        <item name="colorAccent">@color/spanishGray</item>
-        <item name="textAppearanceButton">@style/AppTextAppearance.Button</item>
-    </style>
+	<style name="floatingButtonTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+		<item name="colorPrimary">@color/eerieBlack</item>
+		<item name="colorAccent">@color/spanishGray</item>
+		<item name="textAppearanceButton">@style/AppTextAppearance.Button</item>
+	</style>
 
-    <style name="AppTextAppearance.Button" parent="TextAppearance.MaterialComponents.Button">
-        <item name="android:textAllCaps">true</item>
-    </style>
+	<style name="AppTextAppearance.Button" parent="TextAppearance.MaterialComponents.Button">
+		<item name="android:textAllCaps">true</item>
+	</style>
 </resources>

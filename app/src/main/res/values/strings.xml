@@ -1,71 +1,71 @@
 <resources>
-    <string name="app_name" translatable="false">Weather Comparer</string>
-    <string name="header_image_description">App icon</string>
-    <string name="title_forecast">Forecast</string>
-    <string name="title_places">Places</string>
-    <string name="title_map">Map</string>
-    <string name="title_settings">Settings</string>
-    <!-- Units -->
-    <string name="speed_metricUnits" translatable="false">km/h</string>
-    <string name="temperature_metricUnits" translatable="false">°C</string>
-    <string name="speed_imperialUnits" translatable="false">mile/h</string>
-    <string name="temperature_imperialUnits" translatable="false">°F</string>
-    <string name="speed_scientificUnits" translatable="false">m/s</string>
-    <string name="temperature_scientificUnits" translatable="false">K</string>
-    <string name="milibar_pressureUnit" translatable="false">mb</string>
-    <!-- Forecast fragment -->
-    <string name="probability_sign" translatable="false">%</string>
-    <string name="toast_forecastError">There was a problem and the forecast data could not be obtained.</string>
-    <string name="listenerRequest_key" translatable="false">listener</string>
-    <string name="nameFragmentParameter_key" translatable="false">name</string>
-    <string name="photoFragmentParameter_key" translatable="false">photo</string>
-    <string name="timeZoneFragmentParameter_key" translatable="false">timeZone</string>
-    <string name="tvNoLocation">Please active your location</string>
-    <string name="tvAllowLocation">Allow location</string>
-    <string name="sunny">Sunny</string>
-    <string name="cloudy">Cloudy</string>
-    <string name="overcast">Overcast</string>
-    <string name="rainy">Rainy</string>
-    <string name="snow">Snow</string>
-    <string name="foggy">Foggy</string>
-    <string name="flurries">Flurries</string>
-    <string name="thunderstorm">Thunderstorm</string>
-    <string name="thunderstormWithRain">Thunderstorm with Rain</string>
-    <string name="unknownPrecipitation">Unknown Precipitation</string>
-    <string name="unknown">Unknown</string>
-    <string name="averageOption">Average</string>
-    <string name="openWeatherOption" translatable="false">OpenWeather</string>
-    <string name="accuWeatherOption" translatable="false">AccuWeather</string>
-    <string name="weatherBitOption" translatable="false">WeatherBit</string>
-    <!-- Forecast bottom sheet -->
-    <string name="tvToday">Today</string>
-    <string name="tvToday_daily">Daily</string>
-    <string name="tvTodayMoreInfo">Todays more info</string>
-    <string name="feels_like">Feels like</string>
-    <string name="UVIndex">UV Index</string>
-    <string name="pressure">Pressure</string>
-    <string name="probability_of_rain">Probability of rain</string>
-    <string name="sunset">Sunset</string>
-    <string name="sunrise">Sunrise</string>
-    <string name="low">Low</string>
-    <string name="mid">Mid</string>
-    <string name="high">High</string>
-    <string name="veryHigh">Very high</string>
-    <string name="extreme">Extreme</string>
-    <!-- Places fragment -->
-    <string name="tvEmpty">Empty list</string>
-    <string name="tUnknownLocation">Sorry, unknown location</string>
-    <!-- Map fragment -->
-    <string name="tAdd">added</string>
-    <string name="tDelete">deleted</string>
-    <!-- Strings related to Settings -->
-    <!-- Units Settings -->
-    <string name="units_category">Units Configuration</string>
-    <string name="units_content">Select your unit</string>
-    <string name="metricUnitsString">Metric (km/h - °C)</string>
-    <string name="imperialUnitsString">Imperial (mile/h - °F)</string>
-    <string name="scientificUnitsString">Scientific (m/s - K)</string>
-    <string name="valueUnits0" translatable="false">0</string>
-    <string name="valueUnits1" translatable="false">1</string>
-    <string name="valueUnits2" translatable="false">2</string>
+	<string name="app_name" translatable="false">Weather Comparer</string>
+	<string name="header_image_description">App icon</string>
+	<string name="title_forecast">Forecast</string>
+	<string name="title_places">Places</string>
+	<string name="title_map">Map</string>
+	<string name="title_settings">Settings</string>
+	<!-- Units -->
+	<string name="speed_metricUnits" translatable="false">km/h</string>
+	<string name="temperature_metricUnits" translatable="false">°C</string>
+	<string name="speed_imperialUnits" translatable="false">mile/h</string>
+	<string name="temperature_imperialUnits" translatable="false">°F</string>
+	<string name="speed_scientificUnits" translatable="false">m/s</string>
+	<string name="temperature_scientificUnits" translatable="false">K</string>
+	<string name="milibar_pressureUnit" translatable="false">mb</string>
+	<!-- Forecast fragment -->
+	<string name="probability_sign" translatable="false">%</string>
+	<string name="toast_forecastError">There was a problem and the forecast data could not be obtained.</string>
+	<string name="listenerRequest_key" translatable="false">listener</string>
+	<string name="nameFragmentParameter_key" translatable="false">name</string>
+	<string name="photoFragmentParameter_key" translatable="false">photo</string>
+	<string name="timeZoneFragmentParameter_key" translatable="false">timeZone</string>
+	<string name="tvNoLocation">Please active your location</string>
+	<string name="tvAllowLocation">Allow location</string>
+	<string name="sunny">Sunny</string>
+	<string name="cloudy">Cloudy</string>
+	<string name="overcast">Overcast</string>
+	<string name="rainy">Rainy</string>
+	<string name="snow">Snow</string>
+	<string name="foggy">Foggy</string>
+	<string name="flurries">Flurries</string>
+	<string name="thunderstorm">Thunderstorm</string>
+	<string name="thunderstormWithRain">Thunderstorm with Rain</string>
+	<string name="unknownPrecipitation">Unknown Precipitation</string>
+	<string name="unknown">Unknown</string>
+	<string name="averageOption">Average</string>
+	<string name="openWeatherOption" translatable="false">OpenWeather</string>
+	<string name="accuWeatherOption" translatable="false">AccuWeather</string>
+	<string name="weatherBitOption" translatable="false">WeatherBit</string>
+	<!-- Forecast bottom sheet -->
+	<string name="tvToday">Today</string>
+	<string name="tvToday_daily">Daily</string>
+	<string name="tvTodayMoreInfo">Todays more info</string>
+	<string name="feels_like">Feels like</string>
+	<string name="UVIndex">UV Index</string>
+	<string name="pressure">Pressure</string>
+	<string name="probability_of_rain">Probability of rain</string>
+	<string name="sunset">Sunset</string>
+	<string name="sunrise">Sunrise</string>
+	<string name="low">Low</string>
+	<string name="mid">Mid</string>
+	<string name="high">High</string>
+	<string name="veryHigh">Very high</string>
+	<string name="extreme">Extreme</string>
+	<!-- Places fragment -->
+	<string name="tvEmpty">Empty list</string>
+	<string name="tUnknownLocation">Sorry, unknown location</string>
+	<!-- Map fragment -->
+	<string name="tAdd">added</string>
+	<string name="tDelete">deleted</string>
+	<!-- Strings related to Settings -->
+	<!-- Units Settings -->
+	<string name="units_category">Units Configuration</string>
+	<string name="units_content">Select your unit</string>
+	<string name="metricUnitsString">Metric (km/h - °C)</string>
+	<string name="imperialUnitsString">Imperial (mile/h - °F)</string>
+	<string name="scientificUnitsString">Scientific (m/s - K)</string>
+	<string name="valueUnits0" translatable="false">0</string>
+	<string name="valueUnits1" translatable="false">1</string>
+	<string name="valueUnits2" translatable="false">2</string>
 </resources>
