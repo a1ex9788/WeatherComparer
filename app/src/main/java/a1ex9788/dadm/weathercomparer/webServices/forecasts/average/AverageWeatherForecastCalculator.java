@@ -12,10 +12,12 @@ import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecast;
 
 public class AverageWeatherForecastCalculator {
 
-    private List<WeatherForecast> weatherForecasts;
-    private int daysInDailyForecast, hoursInHourlyForecast;
+    private final List<WeatherForecast> weatherForecasts;
+    private final int daysInDailyForecast;
+    private final int hoursInHourlyForecast;
 
-    public AverageWeatherForecastCalculator(List<WeatherForecast> weatherForecasts, int daysInDailyForecast, int hoursInHourlyForecast) {
+    public AverageWeatherForecastCalculator(List<WeatherForecast> weatherForecasts,
+            int daysInDailyForecast, int hoursInHourlyForecast) {
         this.weatherForecasts = weatherForecasts;
         this.daysInDailyForecast = daysInDailyForecast;
         this.hoursInHourlyForecast = hoursInHourlyForecast;
@@ -65,8 +67,7 @@ public class AverageWeatherForecastCalculator {
                 sunsets.add(UnitsConverter.dateToUnixUTC(dayForecast.getSunset()));
             }
 
-            averageDailyForecast.add(new DayForecast(
-                    dailyForecasts.get(0).get(i).getDate(),
+            averageDailyForecast.add(new DayForecast(dailyForecasts.get(0).get(i).getDate(),
                     calculateWeatherConditionAverage(weatherConditions),
                     calculateAverageDoubles(averageTemperatures),
                     calculateAverageDoubles(minTemperatures),
@@ -75,12 +76,10 @@ public class AverageWeatherForecastCalculator {
                     calculateAverageDoubles(precipitationProbabilities),
                     calculateAverageDoubles(humidityProbabilities),
                     calculateAverageDoubles(cloudinessProbabilities),
-                    calculateAverageDoubles(windSpeeds),
-                    calculateAverageDoubles(pressures),
+                    calculateAverageDoubles(windSpeeds), calculateAverageDoubles(pressures),
                     calculateAverageDoubles(uvIndexes),
                     UnitsConverter.unixUtcToDate(calculateLongAverage(sunrises)),
-                    UnitsConverter.unixUtcToDate(calculateLongAverage(sunsets))
-            ));
+                    UnitsConverter.unixUtcToDate(calculateLongAverage(sunsets))));
         }
 
         return averageDailyForecast;
@@ -122,18 +121,15 @@ public class AverageWeatherForecastCalculator {
                 uvIndexes.add(hourForecast.getUvIndex());
             }
 
-            averageHourlyForecast.add(new HourForecast(
-                    hourlyForecasts.get(0).get(i).getDate(),
+            averageHourlyForecast.add(new HourForecast(hourlyForecasts.get(0).get(i).getDate(),
                     calculateWeatherConditionAverage(weatherConditions),
                     calculateAverageDoubles(averageTemperatures),
                     calculateAverageDoubles(realFeelTemperatures),
                     calculateAverageDoubles(precipitationProbabilities),
                     calculateAverageDoubles(humidityProbabilities),
                     calculateAverageDoubles(cloudinessProbabilities),
-                    calculateAverageDoubles(windSpeeds),
-                    calculateAverageDoubles(pressures),
-                    calculateAverageDoubles(uvIndexes)
-            ));
+                    calculateAverageDoubles(windSpeeds), calculateAverageDoubles(pressures),
+                    calculateAverageDoubles(uvIndexes)));
         }
 
         return averageHourlyForecast;
@@ -154,7 +150,8 @@ public class AverageWeatherForecastCalculator {
             }
         }
 
-        return UnitsConverter.getWeatherConditionFromValue(calculateLongAverage(weatherConditions).intValue());
+        return UnitsConverter.getWeatherConditionFromValue(
+                calculateLongAverage(weatherConditions).intValue());
     }
 
     private Double calculateAverageDoubles(List<Double> doubles) {

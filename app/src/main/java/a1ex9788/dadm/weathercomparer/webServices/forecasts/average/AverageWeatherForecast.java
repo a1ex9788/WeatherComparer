@@ -20,12 +20,13 @@ public class AverageWeatherForecast extends WeatherForecast {
             new OpenWeatherForecast(latitude, longitude),
             new WeatherBitForecast(latitude, longitude));
 
-    private AverageWeatherForecastCalculator averageWeatherForecastCalculator;
+    private final AverageWeatherForecastCalculator averageWeatherForecastCalculator;
 
     public AverageWeatherForecast(double latitude, double longitude) {
         super(latitude, longitude);
 
-        averageWeatherForecastCalculator = new AverageWeatherForecastCalculator(weatherForecasts, DAYS_IN_DAILY_FORECAST, HOURS_IN_HOURLY_FORECAST);
+        averageWeatherForecastCalculator = new AverageWeatherForecastCalculator(weatherForecasts,
+                DAYS_IN_DAILY_FORECAST, HOURS_IN_HOURLY_FORECAST);
     }
 
     @Override

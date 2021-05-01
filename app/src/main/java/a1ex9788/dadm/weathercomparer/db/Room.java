@@ -13,10 +13,9 @@ abstract public class Room extends RoomDatabase {
     static private Room instance;
 
     public synchronized static Room getInstance(Context context) {
-        if (instance == null) instance = androidx.room.Room
-                .databaseBuilder(context, Room.class, "db")
-                .build();
-        ;
+        if (instance == null) {
+            instance = androidx.room.Room.databaseBuilder(context, Room.class, "db").build();
+        }
         return instance;
     }
 

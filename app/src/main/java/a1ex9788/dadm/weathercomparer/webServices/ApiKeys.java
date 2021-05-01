@@ -7,8 +7,7 @@ import java.util.Random;
 public class ApiKeys {
 
     private static final List<String> accuWeatherApiKeys = Arrays.asList(
-            "yOLINkCqLbJQEg8YcjA1juHumFGgpIp0",
-            "weGTdLNUGLnzcqp1XZdgmXgiyHqWkmZj",
+            "yOLINkCqLbJQEg8YcjA1juHumFGgpIp0", "weGTdLNUGLnzcqp1XZdgmXgiyHqWkmZj",
             "AwPKW43ddOLFEGChdK5SLzAYhAJAxzGd");
 
     public static String getAccuWeatherApiKey() {

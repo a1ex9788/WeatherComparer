@@ -9,12 +9,14 @@ import a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather.OpenWeath
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit.WeatherBitForecast;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.weatherBit.WeatherBitMockForecast;
 
-// This class is created in order to manage the implementations of the weather forecast. It allows to simply use the mocks or not.
+// This class is created in order to manage the implementations of the weather forecast. It
+// allows to simply use the mocks or not.
 public class WeatherForecastCreator {
 
     private static final boolean USE_MOCKS = true;
 
-    public static AverageWeatherForecast getAverageWeatherForecast(double latitude, double longitude) {
+    public static AverageWeatherForecast getAverageWeatherForecast(double latitude,
+            double longitude) {
         if (USE_MOCKS) {
             return new AverageWeatherMockForecast(latitude, longitude);
         }

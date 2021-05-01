@@ -18,15 +18,18 @@ public class WebServicesHelper {
         // TODO: Check internet connection in all screens.
         /*boolean result = false;
 
-        ConnectivityManager manager = (ConnectivityManager) reference.get().getSystemService(CONNECTIVITY_SERVICE);
+        ConnectivityManager manager = (ConnectivityManager) reference.get().getSystemService
+        (CONNECTIVITY_SERVICE);
 
         if (Build.VERSION.SDK_INT > 22) {
             final Network activeNetwork = manager.getActiveNetwork();
             if (activeNetwork != null) {
-                final NetworkCapabilities networkCapabilities = manager.getNetworkCapabilities(activeNetwork);
+                final NetworkCapabilities networkCapabilities = manager.getNetworkCapabilities
+                (activeNetwork);
                 result = networkCapabilities != null && (
                         networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI));
+                                networkCapabilities.hasTransport(NetworkCapabilities
+                                .TRANSPORT_WIFI));
             }
         } else {
             NetworkInfo info = manager.getActiveNetworkInfo();
@@ -37,7 +40,8 @@ public class WebServicesHelper {
         return true;
     }
 
-    public static <T> T getWebServiceAnswer(Uri.Builder uriBuilder, Type webServiceAnswerType) throws Exception {
+    public static <T> T getWebServiceAnswer(Uri.Builder uriBuilder, Type webServiceAnswerType)
+            throws Exception {
         URL url = new URL(uriBuilder.build().toString());
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
@@ -45,7 +49,9 @@ public class WebServicesHelper {
 
         int responseCode = connection.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new Exception("An error response code '" + responseCode + "' was obtained from the URL '" + url.toString() + "'.");
+            throw new Exception(
+                    "An error response code '" + responseCode + "' was obtained from the URL '"
+                            + url.toString() + "'.");
         }
 
         InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
@@ -63,13 +69,15 @@ public class WebServicesHelper {
         connection.disconnect();
 
         if (webServiceAnswer == null) {
-            throw new Exception("The response of the web service could not be parsed to the type '" + webServiceAnswerType + "'.");
+            throw new Exception("The response of the web service could not be parsed to the type '"
+                    + webServiceAnswerType + "'.");
         }
 
         return webServiceAnswer;
     }
 
-    public static <T> T convertWebServiceAnswer(String webServiceAnswer, Type webServiceAnswerType) {
+    public static <T> T convertWebServiceAnswer(String webServiceAnswer,
+            Type webServiceAnswerType) {
         Gson gson = new Gson();
 
         return gson.fromJson(webServiceAnswer, webServiceAnswerType);

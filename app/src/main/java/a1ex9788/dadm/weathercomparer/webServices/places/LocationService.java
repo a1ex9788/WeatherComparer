@@ -11,7 +11,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 public class LocationService {
 
-    private FusedLocationProviderClient fusedLocationClient;
+    private final FusedLocationProviderClient fusedLocationClient;
 
     public LocationService(Context context) {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
@@ -25,4 +25,5 @@ public class LocationService {
         }
 
     }
+
 }

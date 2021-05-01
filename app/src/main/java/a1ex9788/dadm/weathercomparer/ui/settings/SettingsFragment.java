@@ -1,14 +1,8 @@
 package a1ex9788.dadm.weathercomparer.ui.settings;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceFragmentCompat;
 
 import a1ex9788.dadm.weathercomparer.MainActivity;
@@ -25,12 +19,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void setNavigationDrawerCheckedItem() {
         for (int i = 0; i < 4; i++) {
-            MenuItem item = ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
-            if (i == 3) {
-                item.setChecked(true);
-            } else {
-                item.setChecked(false);
-            }
+            MenuItem item =
+                    ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
+            item.setChecked(i == 3);
         }
     }
 

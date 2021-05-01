@@ -29,7 +29,8 @@ public class AccuWeatherForecast extends WeatherForecast {
 
     @Override
     public List<HourForecast> getHourlyForecast() throws Exception {
-        AccuWeatherHourlyForecast.AccuWeatherHourForecast[] accuWeatherHourForecasts = getAccuWeatherHourForecasts();
+        AccuWeatherHourlyForecast.AccuWeatherHourForecast[] accuWeatherHourForecasts =
+                getAccuWeatherHourForecasts();
 
         return convertToStandard(accuWeatherHourForecasts);
     }
@@ -44,14 +45,16 @@ public class AccuWeatherForecast extends WeatherForecast {
         return WebServicesHelper.getWebServiceAnswer(uriBuilder, AccuWeatherDailyForecast.class);
     }
 
-    protected AccuWeatherHourlyForecast.AccuWeatherHourForecast[] getAccuWeatherHourForecasts() throws Exception {
+    protected AccuWeatherHourlyForecast.AccuWeatherHourForecast[] getAccuWeatherHourForecasts()
+            throws Exception {
         if (locationKey == null) {
             locationKey = getLocationKey();
         }
 
         Uri.Builder uriBuilder = prepareForecastUriBuilder("hourly", "12hour");
 
-        return WebServicesHelper.getWebServiceAnswer(uriBuilder, AccuWeatherHourlyForecast.AccuWeatherHourForecast[].class);
+        return WebServicesHelper.getWebServiceAnswer(uriBuilder,
+                AccuWeatherHourlyForecast.AccuWeatherHourForecast[].class);
     }
 
     private String getLocationKey() throws Exception {
@@ -66,7 +69,8 @@ public class AccuWeatherForecast extends WeatherForecast {
         uriBuilder.appendQueryParameter("q", latitude + "," + longitude);
         uriBuilder.appendQueryParameter("apikey", ApiKeys.getAccuWeatherApiKey());
 
-        AccuWeatherLocation accuWeatherLocation = WebServicesHelper.getWebServiceAnswer(uriBuilder, AccuWeatherLocation.class);
+        AccuWeatherLocation accuWeatherLocation = WebServicesHelper.getWebServiceAnswer(uriBuilder,
+                AccuWeatherLocation.class);
 
         return accuWeatherLocation.Key;
     }
@@ -91,60 +95,80 @@ public class AccuWeatherForecast extends WeatherForecast {
         List<DayForecast> dailyForecast = new ArrayList();
 
         // The first element is today's forecast so it has to be skipped.
-        for (AccuWeatherDailyForecast.AccuWeatherDayForecast accuWeatherDayForecast : accuWeatherDailyForecast.DailyForecasts.subList(1, accuWeatherDailyForecast.DailyForecasts.size())) {
-            dailyForecast.add(new DayForecast(
-                    accuWeatherDayForecast.Date,
+        for (AccuWeatherDailyForecast.AccuWeatherDayForecast accuWeatherDayForecast :
+                accuWeatherDailyForecast.DailyForecasts.subList(
+                1, accuWeatherDailyForecast.DailyForecasts.size())) {
+            dailyForecast.add(new DayForecast(accuWeatherDayForecast.Date,
                     accuWeatherDayForecast.Day == null || accuWeatherDayForecast.Day.Icon == null
-                            ? null : UnitsConverter.accuWeatherConditionToStandard(accuWeatherDayForecast.Day.Icon),
+                            ? null : UnitsConverter.accuWeatherConditionToStandard(
+                            accuWeatherDayForecast.Day.Icon),
                     accuWeatherDayForecast.Temperature == null
-                            || accuWeatherDayForecast.Temperature.Maximum == null || accuWeatherDayForecast.Temperature.Maximum.Value == null
-                            || accuWeatherDayForecast.Temperature.Minimum == null || accuWeatherDayForecast.Temperature.Minimum.Value == null
-                            ? null : (accuWeatherDayForecast.Temperature.Maximum.Value + accuWeatherDayForecast.Temperature.Minimum.Value) / 2.0,
-                    accuWeatherDayForecast.Temperature == null || accuWeatherDayForecast.Temperature.Maximum == null
-                            ? null : accuWeatherDayForecast.Temperature.Maximum.Value,
-                    accuWeatherDayForecast.Temperature == null || accuWeatherDayForecast.Temperature.Minimum == null
-                            ? null : accuWeatherDayForecast.Temperature.Minimum.Value,
+                            || accuWeatherDayForecast.Temperature.Maximum == null
+                            || accuWeatherDayForecast.Temperature.Maximum.Value == null
+                            || accuWeatherDayForecast.Temperature.Minimum == null
+                            || accuWeatherDayForecast.Temperature.Minimum.Value == null ? null
+                            : (accuWeatherDayForecast.Temperature.Maximum.Value
+                                    + accuWeatherDayForecast.Temperature.Minimum.Value) / 2.0,
+                    accuWeatherDayForecast.Temperature == null
+                            || accuWeatherDayForecast.Temperature.Maximum == null ? null
+                            : accuWeatherDayForecast.Temperature.Maximum.Value,
+                    accuWeatherDayForecast.Temperature == null
+                            || accuWeatherDayForecast.Temperature.Minimum == null ? null
+                            : accuWeatherDayForecast.Temperature.Minimum.Value,
                     accuWeatherDayForecast.RealFeelTemperature == null
-                            || accuWeatherDayForecast.RealFeelTemperature.Maximum == null || accuWeatherDayForecast.RealFeelTemperature.Maximum.Value == null
-                            || accuWeatherDayForecast.RealFeelTemperature.Minimum == null || accuWeatherDayForecast.RealFeelTemperature.Minimum.Value == null
-                            ? null : (accuWeatherDayForecast.RealFeelTemperature.Maximum.Value + accuWeatherDayForecast.RealFeelTemperature.Minimum.Value) / 2.0,
+                            || accuWeatherDayForecast.RealFeelTemperature.Maximum == null
+                            || accuWeatherDayForecast.RealFeelTemperature.Maximum.Value == null
+                            || accuWeatherDayForecast.RealFeelTemperature.Minimum == null
+                            || accuWeatherDayForecast.RealFeelTemperature.Minimum.Value == null
+                            ? null : (accuWeatherDayForecast.RealFeelTemperature.Maximum.Value
+                            + accuWeatherDayForecast.RealFeelTemperature.Minimum.Value) / 2.0,
                     accuWeatherDayForecast.Day == null
-                            || accuWeatherDayForecast.Day.PrecipitationProbability == null || accuWeatherDayForecast.Night.PrecipitationProbability == null
-                            ? null : (accuWeatherDayForecast.Day.PrecipitationProbability + accuWeatherDayForecast.Night.PrecipitationProbability) / 2.0,
-                    null,
-                    accuWeatherDayForecast.Day == null
-                            || accuWeatherDayForecast.Day.CloudCover == null || accuWeatherDayForecast.Night.CloudCover == null
-                            ? null : (accuWeatherDayForecast.Day.CloudCover + accuWeatherDayForecast.Night.CloudCover) / 2.0,
-                    accuWeatherDayForecast.Day == null || accuWeatherDayForecast.Day.Wind == null || accuWeatherDayForecast.Day.Wind.Speed == null
-                            || accuWeatherDayForecast.Night == null || accuWeatherDayForecast.Night.Wind == null || accuWeatherDayForecast.Night.Wind.Speed == null
-                            || accuWeatherDayForecast.Day.Wind.Speed.Value == null || accuWeatherDayForecast.Night.Wind.Speed.Value == null
-                            ? null : (accuWeatherDayForecast.Day.Wind.Speed.Value + accuWeatherDayForecast.Night.Wind.Speed.Value) / 2.0,
-                    null,
+                            || accuWeatherDayForecast.Day.PrecipitationProbability == null
+                            || accuWeatherDayForecast.Night.PrecipitationProbability == null ? null
+                            : (accuWeatherDayForecast.Day.PrecipitationProbability
+                                    + accuWeatherDayForecast.Night.PrecipitationProbability) / 2.0,
+                    null, accuWeatherDayForecast.Day == null
+                    || accuWeatherDayForecast.Day.CloudCover == null
+                    || accuWeatherDayForecast.Night.CloudCover == null ? null
+                    : (accuWeatherDayForecast.Day.CloudCover
+                            + accuWeatherDayForecast.Night.CloudCover) / 2.0,
+                    accuWeatherDayForecast.Day == null || accuWeatherDayForecast.Day.Wind == null
+                            || accuWeatherDayForecast.Day.Wind.Speed == null
+                            || accuWeatherDayForecast.Night == null
+                            || accuWeatherDayForecast.Night.Wind == null
+                            || accuWeatherDayForecast.Night.Wind.Speed == null
+                            || accuWeatherDayForecast.Day.Wind.Speed.Value == null
+                            || accuWeatherDayForecast.Night.Wind.Speed.Value == null ? null
+                            : (accuWeatherDayForecast.Day.Wind.Speed.Value
+                                    + accuWeatherDayForecast.Night.Wind.Speed.Value) / 2.0, null,
                     null,
                     accuWeatherDayForecast.Sun == null ? null : accuWeatherDayForecast.Sun.Rise,
-                    accuWeatherDayForecast.Sun == null ? null : accuWeatherDayForecast.Sun.Set
-            ));
+                    accuWeatherDayForecast.Sun == null ? null : accuWeatherDayForecast.Sun.Set));
         }
 
         return dailyForecast;
     }
 
-    private List<HourForecast> convertToStandard(AccuWeatherHourlyForecast.AccuWeatherHourForecast[] accuWeatherHourForecasts) {
+    private List<HourForecast> convertToStandard(
+            AccuWeatherHourlyForecast.AccuWeatherHourForecast[] accuWeatherHourForecasts) {
         List<HourForecast> hourlyForecast = new ArrayList();
 
-        for (AccuWeatherHourlyForecast.AccuWeatherHourForecast accuWeatherHourForecast : accuWeatherHourForecasts) {
-            hourlyForecast.add(new HourForecast(
-                    accuWeatherHourForecast.DateTime,
-                    accuWeatherHourForecast.WeatherIcon == null ? null : UnitsConverter.accuWeatherConditionToStandard(accuWeatherHourForecast.WeatherIcon),
-                    accuWeatherHourForecast.Temperature == null ? null : accuWeatherHourForecast.Temperature.Value,
-                    accuWeatherHourForecast.RealFeelTemperature == null ? null : accuWeatherHourForecast.RealFeelTemperature.Value,
+        for (AccuWeatherHourlyForecast.AccuWeatherHourForecast accuWeatherHourForecast :
+                accuWeatherHourForecasts) {
+            hourlyForecast.add(new HourForecast(accuWeatherHourForecast.DateTime,
+                    accuWeatherHourForecast.WeatherIcon == null ? null
+                            : UnitsConverter.accuWeatherConditionToStandard(
+                                    accuWeatherHourForecast.WeatherIcon),
+                    accuWeatherHourForecast.Temperature == null ? null
+                            : accuWeatherHourForecast.Temperature.Value,
+                    accuWeatherHourForecast.RealFeelTemperature == null ? null
+                            : accuWeatherHourForecast.RealFeelTemperature.Value,
                     accuWeatherHourForecast.PrecipitationProbability,
-                    accuWeatherHourForecast.RelativeHumidity,
-                    accuWeatherHourForecast.CloudCover,
-                    accuWeatherHourForecast.Wind == null || accuWeatherHourForecast.Wind.Speed == null ? null : accuWeatherHourForecast.Wind.Speed.Value,
-                    null,
-                    accuWeatherHourForecast.UVIndex
-            ));
+                    accuWeatherHourForecast.RelativeHumidity, accuWeatherHourForecast.CloudCover,
+                    accuWeatherHourForecast.Wind == null
+                            || accuWeatherHourForecast.Wind.Speed == null ? null
+                            : accuWeatherHourForecast.Wind.Speed.Value, null,
+                    accuWeatherHourForecast.UVIndex));
         }
 
         return hourlyForecast;

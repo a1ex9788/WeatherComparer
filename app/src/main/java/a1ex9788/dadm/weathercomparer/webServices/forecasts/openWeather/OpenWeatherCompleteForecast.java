@@ -3,8 +3,10 @@ package a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather;
 import java.util.ArrayList;
 import java.util.List;
 
-// Attributes should be private and be accessed via getters but they are not in order to simplify the class and its access.
-// 'Integer', 'Double' and 'Long' classes are used instead of primitive types 'int', 'double' and 'long' in order to allow null values.
+// Attributes should be private and be accessed via getters but they are not in order to simplify
+// the class and its access.
+// 'Integer', 'Double' and 'Long' classes are used instead of primitive types 'int', 'double' and
+// 'long' in order to allow null values.
 public class OpenWeatherCompleteForecast {
 
     public List<OpenWeatherDayForecast> daily = new ArrayList();

@@ -16,7 +16,8 @@ import a1ex9788.dadm.weathercomparer.webServices.places.GooglePlaces;
 public class MapViewModel extends ViewModel {
 
     public HourForecast getCurrentForecast(double latitude, double longitude) {
-        AverageWeatherForecast averageWeatherForecast = WeatherForecastCreator.getAverageWeatherForecast(latitude, longitude);
+        AverageWeatherForecast averageWeatherForecast =
+                WeatherForecastCreator.getAverageWeatherForecast(latitude, longitude);
 
         return averageWeatherForecast.getHourlyForecast().get(0);
     }
@@ -33,7 +34,8 @@ public class MapViewModel extends ViewModel {
         return Room.getInstance(context).room().searchPlace(id) != null;
     }
 
-    public void getPlace(Context context, double latitude, double longitude, OnSuccessListener onPlaceFounded) throws Exception {
+    public void getPlace(Context context, double latitude, double longitude,
+            OnSuccessListener onPlaceFounded) throws Exception {
         GooglePlaces googlePlaces = new GooglePlaces(context);
         String id = googlePlaces.searchLocalityByNearby(latitude, longitude);
         googlePlaces.getDetails(id, onPlaceFounded);

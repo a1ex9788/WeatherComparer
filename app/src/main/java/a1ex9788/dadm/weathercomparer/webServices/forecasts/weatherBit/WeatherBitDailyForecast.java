@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-// Attributes should be private and be accessed via getters but they are not in order to simplify the class and its access.
+// Attributes should be private and be accessed via getters but they are not in order to simplify
+// the class and its access.
 public class WeatherBitDailyForecast {
 
     public List<WeatherBitDayForecast> data = new ArrayList();
 
-    // 'Integer', 'Double' and 'Long' classes are used instead of primitive types 'int', 'double' and 'long' in order to allow null values.
+    // 'Integer', 'Double' and 'Long' classes are used instead of primitive types 'int', 'double'
+    // and 'long' in order to allow null values.
     public class WeatherBitDayForecast {
 
         public Date datetime;

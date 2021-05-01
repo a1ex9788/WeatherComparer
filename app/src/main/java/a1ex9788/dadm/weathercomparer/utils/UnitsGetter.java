@@ -1,7 +1,5 @@
 package a1ex9788.dadm.weathercomparer.utils;
 
-import a1ex9788.dadm.weathercomparer.R;
-
 public class UnitsGetter {
 
     public static String getSpeedUnits(String valueUnit) {

@@ -1,32 +1,25 @@
 package a1ex9788.dadm.weathercomparer.webServices.places;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.util.Log;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.util.Arrays;
 import java.util.List;
 
-import a1ex9788.dadm.weathercomparer.model.MapPlace;
 import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 import a1ex9788.dadm.weathercomparer.webServices.WebServicesHelper;
 
 public class GooglePlaces {
 
     PlacesClient placesClient;
-    private List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.LAT_LNG, Place.Field.UTC_OFFSET);
+    private final List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME,
+            Place.Field.PHOTO_METADATAS, Place.Field.LAT_LNG, Place.Field.UTC_OFFSET);
 
     public GooglePlaces(Context context) {
         this.placesClient = Places.createClient(context);
@@ -46,9 +39,11 @@ public class GooglePlaces {
         uriBuilder.appendQueryParameter("radius", "4000");
         uriBuilder.appendQueryParameter("key", ApiKeys.getGoogleApiKey());
 
-        GooglePlace googlePlace = WebServicesHelper.getWebServiceAnswer(uriBuilder, GooglePlace.class);
+        GooglePlace googlePlace = WebServicesHelper.getWebServiceAnswer(uriBuilder,
+                GooglePlace.class);
 
-        if (googlePlace == null || googlePlace.results == null || googlePlace.results.get(0) == null) {
+        if (googlePlace == null || googlePlace.results == null || googlePlace.results.get(0)
+                == null) {
             return null;
         }
 

@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-// Attributes should be private and be accessed via getters but they are not in order to simplify the class and its access.
-// The name of the attributes begin with upper case because in the answer of the web service they do too.
+// Attributes should be private and be accessed via getters but they are not in order to simplify
+// the class and its access.
+// The name of the attributes begin with upper case because in the answer of the web service they
+// do too.
 public class AccuWeatherDailyForecast {
 
     public List<AccuWeatherDayForecast> DailyForecasts = new ArrayList();
 
-    // 'Integer' and 'Double' classes are used instead of primitive types 'int' and 'double' in order to allow null values.
+    // 'Integer' and 'Double' classes are used instead of primitive types 'int' and 'double' in
+    // order to allow null values.
     public class AccuWeatherDayForecast {
 
         public Date Date;

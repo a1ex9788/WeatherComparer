@@ -10,7 +10,9 @@ public class CurrentWeather {
     private String rainProbability;
     private String rainProbabilityUnits;
 
-    public CurrentWeather(String weatherConditionText, String windSpeed, String windSpeedUnits, String averageTemperature, String averageTemperatureUnits, String rainProbability, String rainProbabilityUnits) {
+    public CurrentWeather(String weatherConditionText, String windSpeed, String windSpeedUnits,
+            String averageTemperature, String averageTemperatureUnits, String rainProbability,
+            String rainProbabilityUnits) {
         this.weatherConditionText = weatherConditionText;
         this.windSpeed = windSpeed;
         this.windSpeedUnits = windSpeedUnits;

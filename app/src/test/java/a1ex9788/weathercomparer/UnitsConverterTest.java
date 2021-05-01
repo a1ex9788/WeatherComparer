@@ -1,5 +1,7 @@
 package a1ex9788.weathercomparer;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,11 +14,9 @@ import java.util.Map;
 import a1ex9788.dadm.weathercomparer.model.UvIndex;
 import a1ex9788.dadm.weathercomparer.utils.UnitsConverter;
 
-import static org.junit.Assert.assertEquals;
-
 public class UnitsConverterTest {
 
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Test
     public void unixUtcToDate() throws ParseException {
@@ -50,7 +50,8 @@ public class UnitsConverterTest {
         parameters.put(38.9, 102.02);
 
         for (Map.Entry<Double, Double> pair : parameters.entrySet()) {
-            assertEquals(pair.getValue(), UnitsConverter.roundToTwoDecimals(UnitsConverter.celsiusToFahrenheit(pair.getKey())), 0);
+            assertEquals(pair.getValue(), UnitsConverter.roundToTwoDecimals(
+                    UnitsConverter.celsiusToFahrenheit(pair.getKey())), 0);
         }
     }
 
@@ -62,7 +63,8 @@ public class UnitsConverterTest {
         parameters.put(38.9, 312.05);
 
         for (Map.Entry<Double, Double> pair : parameters.entrySet()) {
-            assertEquals(pair.getValue(), UnitsConverter.roundToTwoDecimals(UnitsConverter.celsiusToKelvin(pair.getKey())), 0);
+            assertEquals(pair.getValue(), UnitsConverter.roundToTwoDecimals(
+                    UnitsConverter.celsiusToKelvin(pair.getKey())), 0);
         }
     }
 
@@ -74,7 +76,8 @@ public class UnitsConverterTest {
         parameters.put(38.9, 24.17);
 
         for (Map.Entry<Double, Double> pair : parameters.entrySet()) {
-            assertEquals(pair.getValue(), UnitsConverter.roundToTwoDecimals(UnitsConverter.kilometersPerHourToMilesPerHour(pair.getKey())), 0);
+            assertEquals(pair.getValue(), UnitsConverter.roundToTwoDecimals(
+                    UnitsConverter.kilometersPerHourToMilesPerHour(pair.getKey())), 0);
         }
     }
 
@@ -86,7 +89,8 @@ public class UnitsConverterTest {
         parameters.put(38.92, 10.81);
 
         for (Map.Entry<Double, Double> pair : parameters.entrySet()) {
-            assertEquals(pair.getValue(), UnitsConverter.roundToTwoDecimals(UnitsConverter.kilometersPerHourToMetersPerSecond(pair.getKey())), 0);
+            assertEquals(pair.getValue(), UnitsConverter.roundToTwoDecimals(
+                    UnitsConverter.kilometersPerHourToMetersPerSecond(pair.getKey())), 0);
         }
     }
 
@@ -98,7 +102,8 @@ public class UnitsConverterTest {
         parameters.put(10.81, 38.92);
 
         for (Map.Entry<Double, Double> pair : parameters.entrySet()) {
-            assertEquals(pair.getValue(), UnitsConverter.roundToTwoDecimals(UnitsConverter.metersPerSecondToKilometersPerHour(pair.getKey())), 0);
+            assertEquals(pair.getValue(), UnitsConverter.roundToTwoDecimals(
+                    UnitsConverter.metersPerSecondToKilometersPerHour(pair.getKey())), 0);
         }
     }
 

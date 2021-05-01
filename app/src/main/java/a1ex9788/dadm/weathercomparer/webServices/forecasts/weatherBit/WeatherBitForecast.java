@@ -55,7 +55,8 @@ public class WeatherBitForecast extends WeatherForecast {
     }
 
     protected WeatherBitHourlyForecast getWeatherBitHourlyForecast() throws Exception {
-        throw new Exception("The pricing categories changed and we do not have more access to this feature.");
+        throw new Exception(
+                "The pricing categories changed and we do not have more access to this feature.");
 
         /*Uri.Builder uriBuilder = prepareUriBuilder("hourly");
 
@@ -66,47 +67,50 @@ public class WeatherBitForecast extends WeatherForecast {
         List<DayForecast> dailyForecast = new ArrayList();
 
         // The first element is today's forecast so it has to be skipped.
-        for (WeatherBitDailyForecast.WeatherBitDayForecast weatherBitDayForecast : weatherBitDailyForecast.data.subList(1, weatherBitDailyForecast.data.size())) {
-            dailyForecast.add(new DayForecast(
-                    weatherBitDayForecast.datetime,
-                    weatherBitDayForecast.weather == null || weatherBitDayForecast.weather.code == null
-                            ? null : UnitsConverter.weatherBitConditionToStandard(weatherBitDayForecast.weather.code),
-                    weatherBitDayForecast.temp,
-                    weatherBitDayForecast.max_temp,
-                    weatherBitDayForecast.min_temp,
-                    weatherBitDayForecast.app_max_temp == null || weatherBitDayForecast.app_min_temp == null
-                            ? null : (weatherBitDayForecast.app_max_temp + weatherBitDayForecast.app_min_temp) / 2.0,
-                    weatherBitDayForecast.pop,
-                    weatherBitDayForecast.rh,
-                    weatherBitDayForecast.clouds,
-                    weatherBitDayForecast.wind_spd == null ? null : UnitsConverter.metersPerSecondToKilometersPerHour(weatherBitDayForecast.wind_spd),
-                    weatherBitDayForecast.pres,
-                    weatherBitDayForecast.uv,
-                    weatherBitDayForecast.sunrise_ts == null ? null : UnitsConverter.unixUtcToDate(weatherBitDayForecast.sunrise_ts),
-                    weatherBitDayForecast.sunset_ts == null ? null : UnitsConverter.unixUtcToDate(weatherBitDayForecast.sunset_ts)
-            ));
+        for (WeatherBitDailyForecast.WeatherBitDayForecast weatherBitDayForecast :
+                weatherBitDailyForecast.data.subList(
+                1, weatherBitDailyForecast.data.size())) {
+            dailyForecast.add(new DayForecast(weatherBitDayForecast.datetime,
+                    weatherBitDayForecast.weather == null
+                            || weatherBitDayForecast.weather.code == null ? null
+                            : UnitsConverter.weatherBitConditionToStandard(
+                                    weatherBitDayForecast.weather.code), weatherBitDayForecast.temp,
+                    weatherBitDayForecast.max_temp, weatherBitDayForecast.min_temp,
+                    weatherBitDayForecast.app_max_temp == null
+                            || weatherBitDayForecast.app_min_temp == null ? null
+                            : (weatherBitDayForecast.app_max_temp
+                                    + weatherBitDayForecast.app_min_temp) / 2.0,
+                    weatherBitDayForecast.pop, weatherBitDayForecast.rh,
+                    weatherBitDayForecast.clouds, weatherBitDayForecast.wind_spd == null ? null
+                    : UnitsConverter.metersPerSecondToKilometersPerHour(
+                            weatherBitDayForecast.wind_spd), weatherBitDayForecast.pres,
+                    weatherBitDayForecast.uv, weatherBitDayForecast.sunrise_ts == null ? null
+                    : UnitsConverter.unixUtcToDate(weatherBitDayForecast.sunrise_ts),
+                    weatherBitDayForecast.sunset_ts == null ? null
+                            : UnitsConverter.unixUtcToDate(weatherBitDayForecast.sunset_ts)));
         }
 
         return dailyForecast;
     }
 
-    private List<HourForecast> convertToStandard(WeatherBitHourlyForecast weatherBitHourlyForecast) throws ParseException {
+    private List<HourForecast> convertToStandard(WeatherBitHourlyForecast weatherBitHourlyForecast)
+            throws ParseException {
         List<HourForecast> hourlyForecast = new ArrayList();
 
-        for (WeatherBitHourlyForecast.WeatherBitHourForecast weatherBitHourForecast : weatherBitHourlyForecast.data) {
-            hourlyForecast.add(new HourForecast(
-                    weatherBitHourForecast.datetime == null ? null : new SimpleDateFormat("yyyy-MM-dd:HH").parse(weatherBitHourForecast.datetime),
-                    weatherBitHourForecast.weather == null || weatherBitHourForecast.weather.code == null
-                            ? null : UnitsConverter.weatherBitConditionToStandard(weatherBitHourForecast.weather.code),
-                    weatherBitHourForecast.temp,
-                    weatherBitHourForecast.app_temp,
-                    weatherBitHourForecast.pop,
-                    weatherBitHourForecast.rh,
-                    weatherBitHourForecast.clouds,
-                    weatherBitHourForecast.wind_spd == null ? null : UnitsConverter.metersPerSecondToKilometersPerHour(weatherBitHourForecast.wind_spd),
-                    weatherBitHourForecast.pres,
-                    weatherBitHourForecast.uv
-            ));
+        for (WeatherBitHourlyForecast.WeatherBitHourForecast weatherBitHourForecast :
+                weatherBitHourlyForecast.data) {
+            hourlyForecast.add(new HourForecast(weatherBitHourForecast.datetime == null ? null
+                    : new SimpleDateFormat("yyyy-MM-dd:HH").parse(weatherBitHourForecast.datetime),
+                    weatherBitHourForecast.weather == null
+                            || weatherBitHourForecast.weather.code == null ? null
+                            : UnitsConverter.weatherBitConditionToStandard(
+                                    weatherBitHourForecast.weather.code),
+                    weatherBitHourForecast.temp, weatherBitHourForecast.app_temp,
+                    weatherBitHourForecast.pop, weatherBitHourForecast.rh,
+                    weatherBitHourForecast.clouds, weatherBitHourForecast.wind_spd == null ? null
+                    : UnitsConverter.metersPerSecondToKilometersPerHour(
+                            weatherBitHourForecast.wind_spd), weatherBitHourForecast.pres,
+                    weatherBitHourForecast.uv));
         }
 
         return hourlyForecast;

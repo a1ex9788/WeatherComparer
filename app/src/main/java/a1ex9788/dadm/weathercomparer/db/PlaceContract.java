@@ -4,7 +4,8 @@ import android.provider.BaseColumns;
 
 public class PlaceContract {
 
-    public PlaceContract(){}
+    public PlaceContract() {
+    }
 
     static class MyTableEntry implements BaseColumns {
 
@@ -15,5 +16,7 @@ public class PlaceContract {
         static final String LNG = "lng";
         static final String PHOTOS = "photos";
         static final String TIME_ZONE = "time_zone";
+
     }
+
 }

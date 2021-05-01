@@ -1,14 +1,11 @@
 package a1ex9788.dadm.weathercomparer;
 
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -22,11 +19,12 @@ import a1ex9788.dadm.weathercomparer.ui.places.PlacesFragment;
 import a1ex9788.dadm.weathercomparer.ui.settings.SettingsFragment;
 import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar tbNavigationDrawer;
     private DrawerLayout dlNavigationDrawer;
-    private MenuItem lastItem = null;
+    private final MenuItem lastItem = null;
     private NavigationView nvNavigationDrawer;
 
     @Override
@@ -34,11 +32,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.tbNavigationDrawer = findViewById(R.id.tb_navigation_drawer);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.fcv_navigation_drawer, ForecastFragment.class, null)
-                .commit();
+        getSupportFragmentManager().beginTransaction().setReorderingAllowed(true).replace(
+                R.id.fcv_navigation_drawer, ForecastFragment.class, null).commit();
         setSupportActionBar(this.tbNavigationDrawer);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
@@ -90,11 +85,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         if (fragmentClass != null && !item.isChecked()) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .setReorderingAllowed(true)
-                    .replace(R.id.fcv_navigation_drawer, fragmentClass, null)
-                    .commit();
+            getSupportFragmentManager().beginTransaction().setReorderingAllowed(true).replace(
+                    R.id.fcv_navigation_drawer, fragmentClass, null).commit();
             return true;
         }
         return false;
@@ -104,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.dlNavigationDrawer.openDrawer(GravityCompat.START);
     }
 
-    public NavigationView getNavigationDrawer() { return this.nvNavigationDrawer; }
+    public NavigationView getNavigationDrawer() {
+        return this.nvNavigationDrawer;
+    }
 
 }

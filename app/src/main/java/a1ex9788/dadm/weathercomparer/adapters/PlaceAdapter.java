@@ -22,7 +22,7 @@ import a1ex9788.dadm.weathercomparer.webServices.forecasts.average.AverageWeathe
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
 
     private List<MapPlace> places = new ArrayList<>();
-    private String metric;
+    private final String metric;
 
     public PlaceAdapter(String metric) {
         this.metric = metric;
@@ -32,7 +32,8 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
     @Override
     public PlaceAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        PlaceViewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.place_view, parent, false);
+        PlaceViewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.place_view, parent, false);
 
         return new ViewHolder(binding);
     }
@@ -43,27 +44,25 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         holder.binding.setPlace(place);
         holder.binding.setMetric(metric);
         if (place.getPhoto() != null) {
-            Picasso.get()
-                    .load(place.getPhoto())
-                    .into(holder.binding.ivPlace);
+            Picasso.get().load(place.getPhoto()).into(holder.binding.ivPlace);
         }
 
-        AverageWeatherForecast average = WeatherForecastCreator.getAverageWeatherForecast(place.getLat(), place.getLng());
+        AverageWeatherForecast average = WeatherForecastCreator.getAverageWeatherForecast(
+                place.getLat(), place.getLng());
 
-        new Thread(
-                () -> {
-                    try {
-                        HourForecast currentForecast = average.getHourlyForecast().get(0);
+        new Thread(() -> {
+            try {
+                HourForecast currentForecast = average.getHourlyForecast().get(0);
 
-                        holder.binding.setForecast(currentForecast);
+                holder.binding.setForecast(currentForecast);
 
-                        holder.binding.animationViewWeather.setAnimationFromUrl(currentForecast.getWeatherCondition().getIconAddress());
-                        holder.binding.animationViewWeather.playAnimation();
-                    } catch (Exception error) {
+                holder.binding.animationViewWeather.setAnimationFromUrl(
+                        currentForecast.getWeatherCondition().getIconAddress());
+                holder.binding.animationViewWeather.playAnimation();
+            } catch (Exception error) {
 
-                    }
-                }
-        ).start();
+            }
+        }).start();
     }
 
     @Override
@@ -93,7 +92,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private PlaceViewBinding binding;
+        private final PlaceViewBinding binding;
 
         public ViewHolder(@NonNull PlaceViewBinding binding) {
             super(binding.getRoot());

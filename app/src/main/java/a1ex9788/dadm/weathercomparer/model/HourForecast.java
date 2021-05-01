@@ -5,7 +5,7 @@ import java.util.Date;
 import a1ex9788.dadm.weathercomparer.utils.UnitsConverter;
 
 // 'Double' class is used instead of primitive type 'double' in order to allow null values.
-public class HourForecast  {
+public class HourForecast {
 
     protected Date date;
     protected WeatherCondition weatherCondition;
@@ -18,7 +18,10 @@ public class HourForecast  {
     protected Double pressure_millibars;
     protected Double uvIndex;
 
-    public HourForecast(Date date, WeatherCondition weatherCondition, Double avgTemperature_celsius, Double realFeel_celsius, Double precipitationProbability, Double humidityProbability, Double cloudinessProbability, Double windSpeed_kilometersPerHour, Double pressure_millibars, Double uvIndex) {
+    public HourForecast(Date date, WeatherCondition weatherCondition, Double avgTemperature_celsius,
+            Double realFeel_celsius, Double precipitationProbability, Double humidityProbability,
+            Double cloudinessProbability, Double windSpeed_kilometersPerHour,
+            Double pressure_millibars, Double uvIndex) {
         this.date = date;
         this.weatherCondition = weatherCondition;
         this.avgTemperature_celsius = avgTemperature_celsius;
@@ -50,6 +53,7 @@ public class HourForecast  {
     private Double getAvgTemperature_kelvin() {
         return UnitsConverter.celsiusToKelvin(avgTemperature_celsius);
     }
+
     public Double getAvgTemperature(String valueUnit) {
         switch (valueUnit) {
             case "1":
@@ -61,6 +65,7 @@ public class HourForecast  {
                 return getAvgTemperature_celsius();
         }
     }
+
     public Double getRealFeel_celsius() {
         return realFeel_celsius;
     }
@@ -96,6 +101,7 @@ public class HourForecast  {
     public Double getWindSpeed_metersPerSecond() {
         return UnitsConverter.kilometersPerHourToMetersPerSecond(windSpeed_kilometersPerHour);
     }
+
     public Double getWindSpeed(String valueUnit) {
         switch (valueUnit) {
             case "1":

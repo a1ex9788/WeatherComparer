@@ -2,11 +2,14 @@ package a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather;
 
 import java.util.Date;
 
-// Attributes should be private and be accessed via getters but they are not in order to simplify the class and its access.
-// The name of the attributes begin with upper case because in the answer of the web service they do too.
+// Attributes should be private and be accessed via getters but they are not in order to simplify
+// the class and its access.
+// The name of the attributes begin with upper case because in the answer of the web service they
+// do too.
 public class AccuWeatherHourlyForecast {
 
-    // 'Integer' and 'Double' classes are used instead of primitive types 'int' and 'double' in order to allow null values.
+    // 'Integer' and 'Double' classes are used instead of primitive types 'int' and 'double' in
+    // order to allow null values.
     public class AccuWeatherHourForecast {
 
         public Date DateTime;

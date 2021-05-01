@@ -19,7 +19,9 @@ import a1ex9788.dadm.weathercomparer.webServices.ApiKeys;
 @Entity(tableName = "places")
 public class MapPlace {
 
-    private static final String googlePhotosPrefix = "https://maps.googleapis.com/maps/api/place/photo?key=" + ApiKeys.getGoogleApiKey() + "&maxheight=200&photoreference=";
+    private static final String googlePhotosPrefix =
+            "https://maps.googleapis.com/maps/api/place/photo?key=" + ApiKeys.getGoogleApiKey()
+                    + "&maxheight=200&photoreference=";
 
     @NonNull
     @PrimaryKey
@@ -53,13 +55,19 @@ public class MapPlace {
         Random rand = new Random();
         List<PhotoMetadata> photos = googlePlace.getPhotoMetadatas();
         if (photos != null && !photos.isEmpty()) {
-            photo = "https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAiKQz6mYGVdAYfIWDxkTiOIa0x86e2ntA&maxheight=200&photoreference=" + photos.get(rand.nextInt(photos.size())).zza();
+            photo =
+                    "https://maps.googleapis"
+                            + ".com/maps/api/place/photo?key"
+                            + "=AIzaSyAiKQz6mYGVdAYfIWDxkTiOIa0x86e2ntA&maxheight=200"
+                            + "&photoreference="
+                            + photos.get(rand.nextInt(photos.size())).zza();
         }
         timeZone = getTimeZone(googlePlace).getDisplayName();
         timeZoneId = getTimeZone(googlePlace).getID();
     }
 
-    public MapPlace(String identifier, String name, double latitude, double longitude, String photo) {
+    public MapPlace(String identifier, String name, double latitude, double longitude,
+            String photo) {
         id = identifier;
         name = name;
         lat = latitude;

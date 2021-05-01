@@ -33,11 +33,11 @@ public class PlacesFragment extends Fragment {
     private PlacesViewModel placesViewModel;
     private PlaceAdapter adapter;
     private FragmentPlacesBinding binding;
-    private SharedPreferences prefs ;
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        placesViewModel =
-                new ViewModelProvider(this).get(PlacesViewModel.class);
+    private SharedPreferences prefs;
+
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        placesViewModel = new ViewModelProvider(this).get(PlacesViewModel.class);
 
         binding = FragmentPlacesBinding.inflate(inflater, container, false);
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -48,19 +48,24 @@ public class PlacesFragment extends Fragment {
 
         RecyclerView recyclerView = root.findViewById(R.id.rv_places);
 
-        SwipeController swipeController = new SwipeController(getContext(), new SwipeControllerActions() {
-            @Override
-            public void onLeftClicked(int position) {
-                MapPlace place = adapter.removePlaceAt(position);
-                new Thread(() -> {
-                    placesViewModel.deletePlace(getContext(), place);
-                    getActivity().runOnUiThread(() -> {
-                        binding.tvEmpty.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
-                        Toast.makeText(getContext(), place.getName() + " " + getString(R.string.tDelete), Toast.LENGTH_SHORT).show();
-                    });
-                }).start();
-            }
-        });
+        SwipeController swipeController = new SwipeController(getContext(),
+                new SwipeControllerActions() {
+                    @Override
+                    public void onLeftClicked(int position) {
+                        MapPlace place = adapter.removePlaceAt(position);
+                        new Thread(() -> {
+                            placesViewModel.deletePlace(getContext(), place);
+                            getActivity().runOnUiThread(() -> {
+                                binding.tvEmpty.setVisibility(
+                                        adapter.getItemCount() == 0 ? View.VISIBLE
+                                                : View.INVISIBLE);
+                                Toast.makeText(getContext(),
+                                        place.getName() + " " + getString(R.string.tDelete),
+                                        Toast.LENGTH_SHORT).show();
+                            });
+                        }).start();
+                    }
+                });
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
         itemTouchhelper.attachToRecyclerView(recyclerView);
 
@@ -74,7 +79,7 @@ public class PlacesFragment extends Fragment {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
 
-        adapter = new PlaceAdapter(prefs.getString("units",getString(R.string.valueUnits0)));
+        adapter = new PlaceAdapter(prefs.getString("units", getString(R.string.valueUnits0)));
         recyclerView.setAdapter(adapter);
 
         new Thread(() -> {
@@ -89,11 +94,8 @@ public class PlacesFragment extends Fragment {
         binding.floatingActionButton.setOnClickListener(view -> {
             Bundle params = new Bundle();
             params.putBoolean("search", true);
-            getParentFragmentManager()
-                    .beginTransaction()
-                    .setReorderingAllowed(true)
-                    .replace(R.id.fcv_navigation_drawer, MapFragment.class, params)
-                    .commit();
+            getParentFragmentManager().beginTransaction().setReorderingAllowed(true).replace(
+                    R.id.fcv_navigation_drawer, MapFragment.class, params).commit();
         });
 
         return root;
@@ -101,12 +103,9 @@ public class PlacesFragment extends Fragment {
 
     private void setNavigationDrawerCheckedItem() {
         for (int i = 0; i < 4; i++) {
-            MenuItem item = ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
-            if (i == 1) {
-                item.setChecked(true);
-            } else {
-                item.setChecked(false);
-            }
+            MenuItem item =
+                    ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
+            item.setChecked(i == 1);
         }
     }
 

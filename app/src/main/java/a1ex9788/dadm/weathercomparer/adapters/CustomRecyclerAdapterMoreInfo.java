@@ -13,18 +13,20 @@ import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.R;
 
-public class CustomRecyclerAdapterMoreInfo extends RecyclerView.Adapter<CustomRecyclerAdapterMoreInfo.ViewHolder> {
+public class CustomRecyclerAdapterMoreInfo extends
+        RecyclerView.Adapter<CustomRecyclerAdapterMoreInfo.ViewHolder> {
 
-    private List<MoreInfo> list;
+    private final List<MoreInfo> list;
 
-    public CustomRecyclerAdapterMoreInfo(List<MoreInfo> list){
+    public CustomRecyclerAdapterMoreInfo(List<MoreInfo> list) {
         this.list = list;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bottom_sheet_more_info, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(
+                R.layout.bottom_sheet_more_info, parent, false);
         CustomRecyclerAdapterMoreInfo.ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -41,15 +43,18 @@ public class CustomRecyclerAdapterMoreInfo extends RecyclerView.Adapter<CustomRe
         return this.list.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
         public TextView tvInfoTitle, tvInfoValue;
         public ImageView image;
 
-        public ViewHolder(View view){
+        public ViewHolder(View view) {
             super(view);
             this.tvInfoTitle = (TextView) view.findViewById(R.id.tvInfoTitle);
             this.tvInfoValue = (TextView) view.findViewById(R.id.tvInfoValue);
             this.image = (ImageView) view.findViewById(R.id.ivImage);
         }
+
     }
+
 }

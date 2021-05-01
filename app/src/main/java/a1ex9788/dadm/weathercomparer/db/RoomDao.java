@@ -21,9 +21,11 @@ public interface RoomDao {
     @Query("SELECT * FROM " + PlaceContract.MyTableEntry.PLACE_TABLE)
     List<MapPlace> getPlaces();
 
-    @Query("SELECT * FROM " + PlaceContract.MyTableEntry.PLACE_TABLE +" WHERE " + PlaceContract.MyTableEntry.ID + " = :id")
+    @Query("SELECT * FROM " + PlaceContract.MyTableEntry.PLACE_TABLE + " WHERE "
+            + PlaceContract.MyTableEntry.ID + " = :id")
     MapPlace searchPlace(String id);
 
     @Query("DELETE FROM " + PlaceContract.MyTableEntry.PLACE_TABLE)
     void clear();
+
 }
