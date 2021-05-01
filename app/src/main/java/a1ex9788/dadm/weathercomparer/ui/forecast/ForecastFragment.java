@@ -70,17 +70,22 @@ import lecho.lib.hellocharts.view.LineChartView;
 
 public class ForecastFragment extends Fragment {
 
-	FloatingActionButton mAverageOption, mOpenWeather, mAccuWeather, mWeatherBit;
-	ExtendedFloatingActionButton mSupplierButton;
-	TextView averageOptionText, openWeatherText, accuWeatherText, weatherBitText;
-	Boolean isAllFabsVisible;
 	private ForecastViewModel forecastViewModel;
+
+	private FloatingActionButton mAverageOption, mOpenWeather, mAccuWeather, mWeatherBit;
+	private ExtendedFloatingActionButton mSupplierButton;
+	private TextView averageOptionText, openWeatherText, accuWeatherText, weatherBitText;
+	private Boolean isAllFabsVisible;
+
 	private FragmentForecastBinding binding;
 	private boolean chartConfigured;
 	private SharedPreferences prefs;
 	private String metric;
 	private LottieAnimationView animationView;
 	private MapPlace currentPlace;
+	private Location location;
+
+	private WeatherProvider weatherProvider = WeatherProvider.Average;
 
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		binding = FragmentForecastBinding.inflate(inflater, container, false);
@@ -121,65 +126,59 @@ public class ForecastFragment extends Fragment {
 
 		mSupplierButton.shrink();
 
-		mSupplierButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				if (!isAllFabsVisible) {
+		mSupplierButton.setOnClickListener(view -> {
+			if (!isAllFabsVisible) {
+				mAverageOption.show();
+				mOpenWeather.show();
+				mAccuWeather.show();
+				mWeatherBit.show();
+				averageOptionText.setVisibility(View.VISIBLE);
+				openWeatherText.setVisibility(View.VISIBLE);
+				accuWeatherText.setVisibility(View.VISIBLE);
+				weatherBitText.setVisibility(View.VISIBLE);
 
-					mAverageOption.show();
-					mOpenWeather.show();
-					mAccuWeather.show();
-					mWeatherBit.show();
-					averageOptionText.setVisibility(View.VISIBLE);
-					openWeatherText.setVisibility(View.VISIBLE);
-					accuWeatherText.setVisibility(View.VISIBLE);
-					weatherBitText.setVisibility(View.VISIBLE);
+				mSupplierButton.extend();
 
-					mSupplierButton.extend();
+				isAllFabsVisible = true;
+			} else {
+				mAverageOption.hide();
+				mOpenWeather.hide();
+				mAccuWeather.hide();
+				mWeatherBit.hide();
+				averageOptionText.setVisibility(View.GONE);
+				openWeatherText.setVisibility(View.GONE);
+				accuWeatherText.setVisibility(View.GONE);
+				weatherBitText.setVisibility(View.GONE);
 
-					isAllFabsVisible = true;
-				} else {
+				mSupplierButton.shrink();
 
-					mAverageOption.hide();
-					mOpenWeather.hide();
-					mAccuWeather.hide();
-					mWeatherBit.hide();
-					averageOptionText.setVisibility(View.GONE);
-					openWeatherText.setVisibility(View.GONE);
-					accuWeatherText.setVisibility(View.GONE);
-					weatherBitText.setVisibility(View.GONE);
-
-					mSupplierButton.shrink();
-
-					isAllFabsVisible = false;
-				}
+				isAllFabsVisible = false;
 			}
 		});
 
-		//AQUI PARA TI ALEJANDRO
-		mAverageOption.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
+		mAverageOption.setOnClickListener(view -> {
+			weatherProvider = WeatherProvider.Average;
 
-			}
+			setCurrentForecastData(location.getLatitude(), location.getLongitude());
+			configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
 		});
-		mOpenWeather.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
+		mOpenWeather.setOnClickListener(view -> {
+			weatherProvider = WeatherProvider.OpenWeather;
 
-			}
+			setCurrentForecastData(location.getLatitude(), location.getLongitude());
+			configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
 		});
-		mAccuWeather.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
+		mAccuWeather.setOnClickListener(view -> {
+			weatherProvider = WeatherProvider.AccuWeather;
 
-			}
+			setCurrentForecastData(location.getLatitude(), location.getLongitude());
+			configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
 		});
-		mWeatherBit.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
+		mWeatherBit.setOnClickListener(view -> {
+			weatherProvider = WeatherProvider.WeatherBit;
 
-			}
+			setCurrentForecastData(location.getLatitude(), location.getLongitude());
+			configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
 		});
 
 		return root;
@@ -227,11 +226,11 @@ public class ForecastFragment extends Fragment {
 
 				new Thread(() -> {
 					locationService.getLocation(getContext(), locationResponse -> {
-						Location location = (Location) locationResponse;
+						location = (Location) locationResponse;
 
 						setCurrentForecastData(location.getLatitude(), location.getLongitude());
 
-						configureBottomSheet(location.getLatitude(), location.getLongitude());
+						configureBottomSheet(location.getLatitude(), location.getLongitude(), true);
 
 						new Thread(() -> {
 							try {
@@ -253,19 +252,12 @@ public class ForecastFragment extends Fragment {
 											});
 										});
 							} catch (Exception e) {
-
 							}
 						}).start();
 					});
 				}).start();
 			}
 		}
-        /* To provide parameters to the ForecastFragment the following code is needed:
-            Bundle result = new Bundle();
-            result.putString(String.valueOf(R.string.nameFragmentParameter_key), "Valencia");
-            getParentFragmentManager().setFragmentResult(String.valueOf(R.string
-            .listenerRequest_key), result);
-         */
 	}
 
 	private void setCurrentForecastData(double latitude, double longitude) {
@@ -275,7 +267,17 @@ public class ForecastFragment extends Fragment {
 				Looper.prepare();
 
 				try {
-					HourForecast hourForecast = forecastViewModel.getCurrentWeather(latitude, longitude);
+					HourForecast hourForecast;
+
+					if (weatherProvider == WeatherProvider.Average) {
+						hourForecast = forecastViewModel.getCurrentAverageWeather(latitude, longitude);
+					} else if (weatherProvider == WeatherProvider.AccuWeather) {
+						hourForecast = forecastViewModel.getCurrentAccuWeather(latitude, longitude);
+					} else if (weatherProvider == WeatherProvider.OpenWeather) {
+						hourForecast = forecastViewModel.getCurrentOpenWeather(latitude, longitude);
+					} else {
+						hourForecast = forecastViewModel.getCurrentWeatherBit(latitude, longitude);
+					}
 
 					CurrentWeather currentWeather = new CurrentWeather(getString(hourForecast.getWeatherCondition()
 							.getTextResourceIdentifier()),
@@ -296,7 +298,7 @@ public class ForecastFragment extends Fragment {
 		}.start();
 	}
 
-	private void configureBottomSheet(double latitude, double longitude) {
+	private void configureBottomSheet(double latitude, double longitude, boolean firstTime) {
 		new Thread() {
 			@Override
 			public void run() {
@@ -313,12 +315,10 @@ public class ForecastFragment extends Fragment {
 
 					RecyclerView rvMoreInfo = getActivity().findViewById(R.id.rvMoreInfo);
 					RecyclerView rvHourDayPrediction = getActivity().findViewById(R.id.rvHourDayPrediction);
-					RecyclerView.LayoutManager managerMoreInfo = new LinearLayoutManager(
-							getContext(),
+					RecyclerView.LayoutManager managerMoreInfo = new LinearLayoutManager(getContext(),
 							RecyclerView.HORIZONTAL,
 							false);
-					RecyclerView.LayoutManager managerHourDay = new LinearLayoutManager(
-							getContext(),
+					RecyclerView.LayoutManager managerHourDay = new LinearLayoutManager(getContext(),
 							RecyclerView.HORIZONTAL,
 							false);
 					SnapHelper snapHelper = new LinearSnapHelper();
@@ -327,12 +327,28 @@ public class ForecastFragment extends Fragment {
 							/*, hourForecastsWeatherBit*/;
 					List<DayForecast> dayForecastsList;
 					try {
-						hourForecastsList = forecastViewModel.getAverageHourlyForecast(latitude, longitude);
+						if (weatherProvider == WeatherProvider.Average) {
+							hourForecastsList = forecastViewModel.getAverageHourlyForecast(latitude, longitude);
+						} else if (weatherProvider == WeatherProvider.AccuWeather) {
+							hourForecastsList = forecastViewModel.getAccuWeatherHourlyForecast(latitude, longitude);
+						} else if (weatherProvider == WeatherProvider.OpenWeather) {
+							hourForecastsList = forecastViewModel.getOpenWeatherHourlyForecast(latitude, longitude);
+						} else {
+							hourForecastsList = forecastViewModel.getWeatherBitHourlyForecast(latitude, longitude);
+						}
 					} catch (Exception e) {
 						hourForecastsList = new ArrayList<>();
 					}
 					try {
-						dayForecastsList = forecastViewModel.getAverageDailyForecast(latitude, longitude);
+						if (weatherProvider == WeatherProvider.Average) {
+							dayForecastsList = forecastViewModel.getAverageDailyForecast(latitude, longitude);
+						} else if (weatherProvider == WeatherProvider.AccuWeather) {
+							dayForecastsList = forecastViewModel.getAccuWeatherDailyForecast(latitude, longitude);
+						} else if (weatherProvider == WeatherProvider.OpenWeather) {
+							dayForecastsList = forecastViewModel.getOpenWeatherDailyForecast(latitude, longitude);
+						} else {
+							dayForecastsList = forecastViewModel.getWeatherBitDailyForecast(latitude, longitude);
+						}
 					} catch (Exception e) {
 						dayForecastsList = new ArrayList<>();
 					}
@@ -360,49 +376,40 @@ public class ForecastFragment extends Fragment {
 							bottomSheetBehavior.setPeekHeight(484);
 							clBottomSheet.setMaxHeight(1784);
 							clBottomSheet.getLayoutParams().height = (3 * height) / 4;
-							snapHelper.attachToRecyclerView(rvMoreInfo);
+							if (firstTime) {
+								snapHelper.attachToRecyclerView(rvMoreInfo);
+							}
 							rvMoreInfo.setLayoutManager(managerMoreInfo);
 							rvHourDayPrediction.setLayoutManager(managerHourDay);
+
 							List<HourDayForecast> hoursList = new ArrayList<>();
-							HourDayForecast hourForecast1 = new HourDayForecast(finalHourForecastsList.get(2)
-									.getDate()
-									.toString()
-									.substring(11, 16),
+							HourDayForecast hourForecast1 = new HourDayForecast(
+									finalHourForecastsList.get(2).getDate().toString().substring(11, 16),
 									finalHourForecastsList.get(2).getAvgTemperature_celsius().toString().
 											substring(0, 4) + getString(R.string.temperature_metricUnits),
 									finalHourForecastsList.get(2).getWeatherCondition().getIconAddress());
-							HourDayForecast hourForecast2 = new HourDayForecast(finalHourForecastsList.get(3)
-									.getDate()
-									.toString()
-									.substring(11, 16),
+							HourDayForecast hourForecast2 = new HourDayForecast(
+									finalHourForecastsList.get(3).getDate().toString().substring(11, 16),
 									finalHourForecastsList.get(3).getAvgTemperature_celsius().toString().
 											substring(0, 4) + getString(R.string.temperature_metricUnits),
 									finalHourForecastsList.get(3).getWeatherCondition().getIconAddress());
-							HourDayForecast hourForecast3 = new HourDayForecast(finalHourForecastsList.get(4)
-									.getDate()
-									.toString()
-									.substring(11, 16),
+							HourDayForecast hourForecast3 = new HourDayForecast(
+									finalHourForecastsList.get(4).getDate().toString().substring(11, 16),
 									finalHourForecastsList.get(4).getAvgTemperature_celsius().toString().
 											substring(0, 4) + getString(R.string.temperature_metricUnits),
 									finalHourForecastsList.get(4).getWeatherCondition().getIconAddress());
-							HourDayForecast hourForecast4 = new HourDayForecast(finalHourForecastsList.get(5)
-									.getDate()
-									.toString()
-									.substring(11, 16),
+							HourDayForecast hourForecast4 = new HourDayForecast(
+									finalHourForecastsList.get(5).getDate().toString().substring(11, 16),
 									finalHourForecastsList.get(5).getAvgTemperature_celsius().toString().
 											substring(0, 4) + getString(R.string.temperature_metricUnits),
 									finalHourForecastsList.get(5).getWeatherCondition().getIconAddress());
-							HourDayForecast hourForecast5 = new HourDayForecast(finalHourForecastsList.get(6)
-									.getDate()
-									.toString()
-									.substring(11, 16),
+							HourDayForecast hourForecast5 = new HourDayForecast(
+									finalHourForecastsList.get(6).getDate().toString().substring(11, 16),
 									finalHourForecastsList.get(6).getAvgTemperature_celsius().toString().
 											substring(0, 4) + getString(R.string.temperature_metricUnits),
 									finalHourForecastsList.get(6).getWeatherCondition().getIconAddress());
-							HourDayForecast hourForecast6 = new HourDayForecast(finalHourForecastsList.get(7)
-									.getDate()
-									.toString()
-									.substring(11, 16),
+							HourDayForecast hourForecast6 = new HourDayForecast(
+									finalHourForecastsList.get(7).getDate().toString().substring(11, 16),
 									finalHourForecastsList.get(7).getAvgTemperature_celsius().toString().
 											substring(0, 4) + getString(R.string.temperature_metricUnits),
 									finalHourForecastsList.get(7).getWeatherCondition().getIconAddress());
@@ -723,6 +730,13 @@ public class ForecastFragment extends Fragment {
 		} else {
 			ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 		}
+	}
+
+	private enum WeatherProvider {
+		Average,
+		AccuWeather,
+		OpenWeather,
+		WeatherBit
 	}
 
 }

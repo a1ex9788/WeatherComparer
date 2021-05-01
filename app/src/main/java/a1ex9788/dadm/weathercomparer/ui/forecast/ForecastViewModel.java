@@ -19,24 +19,26 @@ import a1ex9788.dadm.weathercomparer.webServices.places.GooglePlaces;
 
 public class ForecastViewModel extends ViewModel {
 
-	public HourForecast getCurrentWeather(double latitude, double longitude) {
+	public HourForecast getCurrentAverageWeather(double latitude, double longitude) {
 		return getAverageHourlyForecast(latitude, longitude).get(0);
 	}
 
 	public List<DayForecast> getAverageDailyForecast(double latitude, double longitude) {
-		AverageWeatherForecast averageWeatherForecast = WeatherForecastCreator.getAverageWeatherForecast(
-				latitude,
+		AverageWeatherForecast averageWeatherForecast = WeatherForecastCreator.getAverageWeatherForecast(latitude,
 				longitude);
 
 		return averageWeatherForecast.getDailyForecast();
 	}
 
 	public List<HourForecast> getAverageHourlyForecast(double latitude, double longitude) {
-		AverageWeatherForecast averageWeatherForecast = WeatherForecastCreator.getAverageWeatherForecast(
-				latitude,
+		AverageWeatherForecast averageWeatherForecast = WeatherForecastCreator.getAverageWeatherForecast(latitude,
 				longitude);
 
 		return averageWeatherForecast.getHourlyForecast();
+	}
+
+	public HourForecast getCurrentAccuWeather(double latitude, double longitude) throws Exception {
+		return getAccuWeatherHourlyForecast(latitude, longitude).get(0);
 	}
 
 	public List<DayForecast> getAccuWeatherDailyForecast(double latitude, double longitude) throws Exception {
@@ -51,6 +53,10 @@ public class ForecastViewModel extends ViewModel {
 		return accuWeatherForecast.getHourlyForecast();
 	}
 
+	public HourForecast getCurrentOpenWeather(double latitude, double longitude) throws Exception {
+		return getOpenWeatherHourlyForecast(latitude, longitude).get(0);
+	}
+
 	public List<DayForecast> getOpenWeatherDailyForecast(double latitude, double longitude) throws Exception {
 		OpenWeatherForecast openWeatherForecast = WeatherForecastCreator.getOpenWeatherForecast(latitude, longitude);
 
@@ -61,6 +67,10 @@ public class ForecastViewModel extends ViewModel {
 		OpenWeatherForecast openWeatherForecast = WeatherForecastCreator.getOpenWeatherForecast(latitude, longitude);
 
 		return openWeatherForecast.getHourlyForecast();
+	}
+
+	public HourForecast getCurrentWeatherBit(double latitude, double longitude) throws Exception {
+		return getWeatherBitHourlyForecast(latitude, longitude).get(0);
 	}
 
 	public List<DayForecast> getWeatherBitDailyForecast(double latitude, double longitude) throws Exception {
