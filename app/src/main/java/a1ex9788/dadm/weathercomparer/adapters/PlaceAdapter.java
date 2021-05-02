@@ -1,6 +1,7 @@
 package a1ex9788.dadm.weathercomparer.adapters;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -23,8 +24,10 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
 
 	private final String metric;
 	private List<MapPlace> places = new ArrayList<>();
+	private OnPlaceClickListener onPlaceClickListener;
 
-	public PlaceAdapter(String metric) {
+	public PlaceAdapter(OnPlaceClickListener onPlaceClickListener, String metric) {
+		this.onPlaceClickListener = onPlaceClickListener;
 		this.metric = metric;
 	}
 
@@ -66,6 +69,13 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
 
 			}
 		}).start();
+
+		holder.binding.cvPlace.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onPlaceClickListener.onClick(position);
+			}
+		});
 	}
 
 	@Override

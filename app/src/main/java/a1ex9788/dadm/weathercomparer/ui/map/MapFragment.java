@@ -45,6 +45,7 @@ import a1ex9788.dadm.weathercomparer.databinding.FragmentMapBinding;
 import a1ex9788.dadm.weathercomparer.databinding.PlaceViewBinding;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.model.MapPlace;
+import a1ex9788.dadm.weathercomparer.ui.forecast.ForecastFragment;
 
 public class MapFragment extends Fragment {
 
@@ -83,7 +84,19 @@ public class MapFragment extends Fragment {
 		});
 
 		binding.fabForecast.setOnClickListener(view -> {
-			//TODO
+			MapPlace place = placeBinding.getPlace();
+			Bundle params = new Bundle();
+
+			params.putString("id", place.getId());
+			params.putDouble("latitude", place.getLat());
+			params.putDouble("longitude", place.getLng());
+
+			Log.d("params", params.toString());
+
+			getParentFragmentManager().beginTransaction()
+					.setReorderingAllowed(true)
+					.replace(R.id.fcv_navigation_drawer, ForecastFragment.class, params)
+					.commit();
 		});
 
 		ConstraintLayout constraintLayout = root.findViewById(R.id.clMapLayout);

@@ -59,6 +59,7 @@ import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.model.MapPlace;
 import a1ex9788.dadm.weathercomparer.model.WeatherCondition;
 import a1ex9788.dadm.weathercomparer.utils.UnitsGetter;
+import a1ex9788.dadm.weathercomparer.webServices.places.GooglePlaces;
 import a1ex9788.dadm.weathercomparer.webServices.places.LocationService;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
@@ -90,7 +91,7 @@ public class ForecastFragment extends Fragment {
 
 	private WeatherProvider weatherProvider = WeatherProvider.Average;
 
-	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		binding = FragmentForecastBinding.inflate(inflater, container, false);
 		View root = binding.getRoot();
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -102,7 +103,7 @@ public class ForecastFragment extends Fragment {
 
 		setNavigationDrawerCheckedItem();
 
-		recoverMapPlace(bundle);
+		recoverMapPlace();
 
 		mSupplierButton = root.findViewById(R.id.supplierButton);
 
@@ -218,9 +219,38 @@ public class ForecastFragment extends Fragment {
 		binding.setCurrentWeather(currentWeather);
 	}
 
-	private void recoverMapPlace(Bundle bundle) {
-		if (bundle != null) {
+	private void recoverMapPlace() {
 
+		Bundle params = getArguments();
+
+		if (getArguments() != null) {
+			Log.d("params", params.toString());
+			String id = params.getString("id");
+			double latitude = params.getDouble("latitude");
+			double longitude = params.getDouble("longitude");
+
+			setCurrentForecastData(latitude, longitude);
+
+			//configureBottomSheet(latitude, longitude, true);
+
+			new Thread(() -> {
+				new GooglePlaces(getContext()).getDetails(id, detailsResponse -> {
+					Place placeFounded = ((FetchPlaceResponse) detailsResponse).getPlace();
+					currentPlace = new MapPlace(placeFounded);
+
+					Log.d("place" , currentPlace.toString());
+
+					getActivity().runOnUiThread(() -> {
+						binding.setPlace(currentPlace);
+
+						if (currentPlace.getPhoto() != null) {
+							Picasso.get()
+									.load(currentPlace.getPhoto())
+									.into(binding.ivForecastPlace);
+						}
+					});
+				});
+			}).start();
 		} else {
 			getLocationPermission();
 

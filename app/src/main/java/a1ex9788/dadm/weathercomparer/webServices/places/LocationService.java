@@ -31,17 +31,8 @@ public class LocationService {
 				android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 			LocationRequest request = new LocationRequest();
 			request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-			request.setInterval(1000);
 
-			fusedLocationClient.requestLocationUpdates(request, onFounded, Looper.getMainLooper()).addOnSuccessListener(command -> {
-				new Timer().schedule(new TimerTask() {
-					@Override
-					public void run() {
-						fusedLocationClient.removeLocationUpdates(onFounded);
-					}
-				}, 5000);
-
-			});
+			fusedLocationClient.requestLocationUpdates(request, onFounded, Looper.getMainLooper());
 		}
 
 	}

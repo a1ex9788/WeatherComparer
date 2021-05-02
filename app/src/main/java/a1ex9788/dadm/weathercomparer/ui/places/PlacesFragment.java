@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,11 +22,13 @@ import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.MainActivity;
 import a1ex9788.dadm.weathercomparer.R;
+import a1ex9788.dadm.weathercomparer.adapters.OnPlaceClickListener;
 import a1ex9788.dadm.weathercomparer.adapters.PlaceAdapter;
 import a1ex9788.dadm.weathercomparer.adapters.SwipeController;
 import a1ex9788.dadm.weathercomparer.adapters.SwipeControllerActions;
 import a1ex9788.dadm.weathercomparer.databinding.FragmentPlacesBinding;
 import a1ex9788.dadm.weathercomparer.model.MapPlace;
+import a1ex9788.dadm.weathercomparer.ui.forecast.ForecastFragment;
 import a1ex9788.dadm.weathercomparer.ui.map.MapFragment;
 
 public class PlacesFragment extends Fragment {
@@ -76,7 +79,24 @@ public class PlacesFragment extends Fragment {
 		RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
 		recyclerView.setLayoutManager(manager);
 
-		adapter = new PlaceAdapter(prefs.getString("units", getString(R.string.valueUnits0)));
+		adapter = new PlaceAdapter(new OnPlaceClickListener() {
+			@Override
+			public void onClick(int position) {
+				MapPlace place = adapter.getPlaceAt(position);
+				Bundle params = new Bundle();
+
+				params.putString("id", place.getId());
+				params.putDouble("latitude", place.getLat());
+				params.putDouble("longitude", place.getLng());
+
+				((MainActivity) getActivity()).getSupportActionBar().hide();
+
+				getParentFragmentManager().beginTransaction()
+						.setReorderingAllowed(true)
+						.replace(R.id.fcv_navigation_drawer, ForecastFragment.class, params)
+						.commit();
+			}
+		}, prefs.getString("units", getString(R.string.valueUnits0)));
 		recyclerView.setAdapter(adapter);
 
 		new Thread(() -> {
