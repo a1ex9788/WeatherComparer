@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -225,35 +228,39 @@ public class ForecastFragment extends Fragment {
 				LocationService locationService = new LocationService(getContext());
 
 				new Thread(() -> {
-					locationService.getLocation(getContext(), locationResponse -> {
-						location = (Location) locationResponse;
+					locationService.getLocation(getContext(), new LocationCallback() {
+						@Override
+						public void onLocationResult(@NonNull LocationResult locationResult) {
+							location = locationResult.getLastLocation();
+							Log.d("location", location.toString());
+							setCurrentForecastData(location.getLatitude(), location.getLongitude());
 
-						setCurrentForecastData(location.getLatitude(), location.getLongitude());
+							configureBottomSheet(location.getLatitude(), location.getLongitude(), true);
 
-						configureBottomSheet(location.getLatitude(), location.getLongitude(), true);
+							new Thread(() -> {
+								try {
+									forecastViewModel.getPlace(getContext(),
+											location.getLatitude(),
+											location.getLongitude(),
+											detailsResponse -> {
+												Place placeFounded = ((FetchPlaceResponse) detailsResponse).getPlace();
+												currentPlace = new MapPlace(placeFounded);
 
-						new Thread(() -> {
-							try {
-								forecastViewModel.getPlace(getContext(),
-										location.getLatitude(),
-										location.getLongitude(),
-										detailsResponse -> {
-											Place placeFounded = ((FetchPlaceResponse) detailsResponse).getPlace();
-											currentPlace = new MapPlace(placeFounded);
+												getActivity().runOnUiThread(() -> {
+													binding.setPlace(currentPlace);
 
-											getActivity().runOnUiThread(() -> {
-												binding.setPlace(currentPlace);
-
-												if (currentPlace.getPhoto() != null) {
-													Picasso.get()
-															.load(currentPlace.getPhoto())
-															.into(binding.ivForecastPlace);
-												}
+													if (currentPlace.getPhoto() != null) {
+														Picasso.get()
+																.load(currentPlace.getPhoto())
+																.into(binding.ivForecastPlace);
+													}
+												});
 											});
-										});
-							} catch (Exception e) {
-							}
-						}).start();
+								} catch (Exception e) {
+								}
+							}).start();
+							super.onLocationResult(locationResult);
+						}
 					});
 				}).start();
 			}
