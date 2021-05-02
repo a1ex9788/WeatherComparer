@@ -36,7 +36,6 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
@@ -76,11 +75,6 @@ public class ForecastFragment extends Fragment {
 
 	private ForecastViewModel forecastViewModel;
 
-	private FloatingActionButton mAverageOption, mOpenWeather, mAccuWeather, mWeatherBit;
-	private ExtendedFloatingActionButton mSupplierButton;
-	private TextView averageOptionText, openWeatherText, accuWeatherText, weatherBitText;
-	private Boolean isAllFabsVisible;
-
 	private FragmentForecastBinding binding;
 	private boolean chartConfigured;
 	private SharedPreferences prefs;
@@ -105,84 +99,41 @@ public class ForecastFragment extends Fragment {
 
 		recoverMapPlace();
 
-		mSupplierButton = root.findViewById(R.id.supplierButton);
-
-		mAverageOption = root.findViewById(R.id.averageOption);
-		mOpenWeather = root.findViewById(R.id.openWeather);
-		mAccuWeather = root.findViewById(R.id.accuWeather);
-		mWeatherBit = root.findViewById(R.id.weatherBit);
-
-		averageOptionText = root.findViewById(R.id.averageOptionText);
-		openWeatherText = root.findViewById(R.id.openWeatherText);
-		accuWeatherText = root.findViewById(R.id.accuWeatherText);
-		weatherBitText = root.findViewById(R.id.weatherBitText);
-
-		mAverageOption.setVisibility(View.GONE);
-		mOpenWeather.setVisibility(View.GONE);
-		mAccuWeather.setVisibility(View.GONE);
-		mWeatherBit.setVisibility(View.GONE);
-		averageOptionText.setVisibility(View.GONE);
-		openWeatherText.setVisibility(View.GONE);
-		accuWeatherText.setVisibility(View.GONE);
-		weatherBitText.setVisibility(View.GONE);
-
-		isAllFabsVisible = false;
-
-		mSupplierButton.shrink();
-
-		mSupplierButton.setOnClickListener(view -> {
-			if (!isAllFabsVisible) {
-				mAverageOption.show();
-				mOpenWeather.show();
-				mAccuWeather.show();
-				mWeatherBit.show();
-				averageOptionText.setVisibility(View.VISIBLE);
-				openWeatherText.setVisibility(View.VISIBLE);
-				accuWeatherText.setVisibility(View.VISIBLE);
-				weatherBitText.setVisibility(View.VISIBLE);
-
-				mSupplierButton.extend();
-
-				isAllFabsVisible = true;
-			} else {
-				mAverageOption.hide();
-				mOpenWeather.hide();
-				mAccuWeather.hide();
-				mWeatherBit.hide();
-				averageOptionText.setVisibility(View.GONE);
-				openWeatherText.setVisibility(View.GONE);
-				accuWeatherText.setVisibility(View.GONE);
-				weatherBitText.setVisibility(View.GONE);
-
-				mSupplierButton.shrink();
-
-				isAllFabsVisible = false;
-			}
+		binding.supplierButton.setOnClickListener(view -> {
+			binding.setWeatherOptions(!binding.getWeatherOptions());
 		});
 
-		mAverageOption.setOnClickListener(view -> {
+		binding.averageOption.setOnClickListener(view -> {
 			weatherProvider = WeatherProvider.Average;
 
 			setCurrentForecastData(location.getLatitude(), location.getLongitude());
 			configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
+
+			binding.setWeatherOptions(false);
 		});
-		mOpenWeather.setOnClickListener(view -> {
+		binding.openWeather.setOnClickListener(view -> {
 			weatherProvider = WeatherProvider.OpenWeather;
 
 			setCurrentForecastData(location.getLatitude(), location.getLongitude());
 			configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
+
+			binding.setWeatherOptions(false);
 		});
-		mAccuWeather.setOnClickListener(view -> {
+		binding.accuWeather.setOnClickListener(view -> {
 			weatherProvider = WeatherProvider.AccuWeather;
 
 			setCurrentForecastData(location.getLatitude(), location.getLongitude());
 			configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
+
+			binding.setWeatherOptions(false);
 		});
-		mWeatherBit.setOnClickListener(view -> {
+		binding.weatherBit.setOnClickListener(view -> {
 			weatherProvider = WeatherProvider.WeatherBit;
 
 			setCurrentForecastData(location.getLatitude(), location.getLongitude());
 			configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
+
+			binding.setWeatherOptions(false);
 		});
 
 		return root;

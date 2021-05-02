@@ -21,6 +21,10 @@
         <variable
             name="locationPermissionGranted"
             type="boolean" />
+
+        <variable
+            name="weatherOptions"
+            type="boolean" />
     </data>
 
     <FrameLayout
@@ -105,6 +109,130 @@
                 map:lottie_autoPlay="true"
                 map:lottie_loop="true"
                 map:lottie_speed="1.1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="60dp"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/supplierButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    app:fabSize="normal"
+                    app:maxImageSize="60dp"
+                    app:srcCompat="@drawable/ic_launcher_foreground"
+                    map:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="@{ weatherOptions ? View.VISIBLE : View.INVISIBLE }">
+
+                    <LinearLayout
+                        android:id="@+id/averageOption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            app:fabSize="mini"
+                            app:maxImageSize="40dp"
+                            app:srcCompat="@drawable/ic_launcher_foreground" />
+
+                        <TextView
+                            android:id="@+id/averageOptionText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="@string/averageOption"
+                            map:layout_constraintStart_toEndOf="@+id/averageOption" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/weatherBit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            app:fabSize="mini"
+                            app:srcCompat="@drawable/ic_weatherbit" />
+
+                        <TextView
+                            android:id="@+id/weatherBitText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="@string/weatherBitOption"
+                            map:layout_constraintStart_toEndOf="@+id/weatherBit" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/accuWeather"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            app:fabSize="mini"
+                            app:srcCompat="@drawable/ic_accuweather" />
+
+                        <TextView
+                            android:id="@+id/accuWeatherText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="@string/accuWeatherOption"
+                            map:layout_constraintStart_toEndOf="@+id/accuWeather" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/openWeather"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            app:fabSize="mini"
+                            app:srcCompat="@drawable/ic_openweather" />
+
+                        <TextView
+                            android:id="@+id/openWeatherText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="@string/openWeatherOption"
+                            map:layout_constraintStart_toEndOf="@+id/openWeather" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/weatherTextView"
@@ -241,113 +369,6 @@
                     tools:visibility="gone" />
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:id="@+id/supplierButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:theme="@style/floatingButtonTheme"
-                app:backgroundTint="@color/grey"
-                app:icon="@drawable/ic_weatherproviders"
-                app:layout_constraintStart_toStartOf="parent"
-                map:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/averageOption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="24dp"
-                android:backgroundTint="@color/grey"
-                android:clickable="true"
-                app:fabSize="normal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/supplierButton"
-                app:srcCompat="@drawable/ic_weatherproviders" />
-
-            <TextView
-                android:id="@+id/averageOptionText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="@string/averageOption"
-                app:layout_constraintBottom_toBottomOf="@+id/averageOption"
-                app:layout_constraintTop_toTopOf="@+id/averageOption"
-                map:layout_constraintStart_toEndOf="@+id/averageOption" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/openWeather"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="24dp"
-                android:backgroundTint="@color/grey"
-                android:clickable="true"
-                app:fabSize="normal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/averageOption"
-                app:srcCompat="@drawable/ic_openweather" />
-
-            <TextView
-                android:id="@+id/openWeatherText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="@string/openWeatherOption"
-                app:layout_constraintBottom_toBottomOf="@+id/openWeather"
-                app:layout_constraintTop_toTopOf="@+id/openWeather"
-                map:layout_constraintStart_toEndOf="@+id/openWeather" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/accuWeather"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="24dp"
-                android:backgroundTint="@color/grey"
-                android:clickable="true"
-                app:fabSize="normal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/openWeather"
-                app:srcCompat="@drawable/ic_accuweather" />
-
-            <TextView
-                android:id="@+id/accuWeatherText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="@string/accuWeatherOption"
-                app:layout_constraintBottom_toBottomOf="@+id/accuWeather"
-                app:layout_constraintTop_toTopOf="@+id/accuWeather"
-                map:layout_constraintStart_toEndOf="@+id/accuWeather" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/weatherBit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="24dp"
-                android:backgroundTint="@color/grey"
-                android:clickable="true"
-                app:fabSize="normal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/accuWeather"
-                app:srcCompat="@drawable/ic_weatherbit" />
-
-            <TextView
-                android:id="@+id/weatherBitText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="@string/weatherBitOption"
-                app:layout_constraintBottom_toBottomOf="@+id/weatherBit"
-                app:layout_constraintTop_toTopOf="@+id/weatherBit"
-                map:layout_constraintStart_toEndOf="@+id/weatherBit" />
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -371,7 +392,7 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:visibility="@{ locationPermissionGranted ? View.INVISIBLE : View.VISIBLE }"
-                    tools:layout_editor_absoluteX="16dp"
+                    tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="0dp">
 
                     <ImageView
