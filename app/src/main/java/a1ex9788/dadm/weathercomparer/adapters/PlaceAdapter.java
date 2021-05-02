@@ -1,6 +1,5 @@
 package a1ex9788.dadm.weathercomparer.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -17,88 +16,92 @@ import a1ex9788.dadm.weathercomparer.R;
 import a1ex9788.dadm.weathercomparer.databinding.PlaceViewBinding;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
 import a1ex9788.dadm.weathercomparer.model.MapPlace;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecastCreator;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.average.AverageWeatherForecast;
 
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
 
-    private List<MapPlace> places = new ArrayList<>();
-    private String metric;
-    public PlaceAdapter(String metric) {
-        this.metric = metric;
-    }
+	private final String metric;
+	private List<MapPlace> places = new ArrayList<>();
 
-    @NonNull
-    @Override
-    public PlaceAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+	public PlaceAdapter(String metric) {
+		this.metric = metric;
+	}
 
-        PlaceViewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.place_view, parent, false);
+	@NonNull
+	@Override
+	public PlaceAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        return new ViewHolder(binding);
-    }
+		PlaceViewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+				R.layout.place_view,
+				parent,
+				false);
 
-    @Override
-    public void onBindViewHolder(@NonNull PlaceAdapter.ViewHolder holder, int position) {
-        MapPlace place = places.get(position);
-        holder.binding.setPlace(place);
-        holder.binding.setMetric(metric);
-        if (place.getPhoto() != null) {
-            Picasso.get()
-                    .load(place.getPhoto())
-                    .into(holder.binding.ivPlace);
-        }
+		return new ViewHolder(binding);
+	}
 
-        AverageWeatherForecast average = new AverageWeatherForecast(place.getLat(), place.getLng());
+	@Override
+	public void onBindViewHolder(@NonNull PlaceAdapter.ViewHolder holder, int position) {
+		MapPlace place = places.get(position);
+		holder.binding.setPlace(place);
+		holder.binding.setMetric(metric);
+		if (place.getPhoto() != null) {
+			Picasso.get().load(place.getPhoto()).into(holder.binding.ivPlace);
+		}
 
-        new Thread(
-                () -> {
-                    try {
-                        HourForecast currentForecast = average.getHourlyForecast().get(0);
+		AverageWeatherForecast average = WeatherForecastCreator.getAverageWeatherForecast(
+				place.getLat(),
+				place.getLng());
 
-                        holder.binding.setForecast(currentForecast);
+		new Thread(() -> {
+			try {
+				HourForecast currentForecast = average.getHourlyForecast().get(0);
 
-                        holder.binding.animationViewWeather.setAnimationFromUrl(currentForecast.getWeatherCondition().getIconAddress());
-                        holder.binding.animationViewWeather.playAnimation();
-                    } catch (Exception error) {
+				holder.binding.setForecast(currentForecast);
 
-                    }
-                }
-        ).start();
-    }
+				holder.binding.animationViewWeather.setAnimationFromUrl(currentForecast.getWeatherCondition()
+						.getIconAddress());
+				holder.binding.animationViewWeather.playAnimation();
+			} catch (Exception error) {
 
-    @Override
-    public int getItemCount() {
-        return places.size();
-    }
+			}
+		}).start();
+	}
 
-    public MapPlace getPlaceAt(int position) {
-        return places.get(position);
-    }
+	@Override
+	public int getItemCount() {
+		return places.size();
+	}
 
-    public MapPlace removePlaceAt(int position) {
-        MapPlace place = places.remove(position);
-        notifyItemRemoved(position);
-        return place;
-    }
+	public MapPlace getPlaceAt(int position) {
+		return places.get(position);
+	}
 
-    public void clearAll() {
-        places.clear();
-        notifyDataSetChanged();
-    }
+	public MapPlace removePlaceAt(int position) {
+		MapPlace place = places.remove(position);
+		notifyItemRemoved(position);
+		return place;
+	}
 
-    public void setPlaces(List<MapPlace> places) {
-        this.places = places;
-        notifyDataSetChanged();
-    }
+	public void clearAll() {
+		places.clear();
+		notifyDataSetChanged();
+	}
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+	public void setPlaces(List<MapPlace> places) {
+		this.places = places;
+		notifyDataSetChanged();
+	}
 
-        private PlaceViewBinding binding;
+	static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ViewHolder(@NonNull PlaceViewBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
+		private final PlaceViewBinding binding;
 
-    }
+		public ViewHolder(@NonNull PlaceViewBinding binding) {
+			super(binding.getRoot());
+			this.binding = binding;
+		}
+
+	}
 
 }

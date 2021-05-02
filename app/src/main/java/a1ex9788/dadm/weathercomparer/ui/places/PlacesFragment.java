@@ -30,84 +30,81 @@ import a1ex9788.dadm.weathercomparer.ui.map.MapFragment;
 
 public class PlacesFragment extends Fragment {
 
-    private PlacesViewModel placesViewModel;
-    private PlaceAdapter adapter;
-    private FragmentPlacesBinding binding;
-    private SharedPreferences prefs ;
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        placesViewModel =
-                new ViewModelProvider(this).get(PlacesViewModel.class);
+	private PlacesViewModel placesViewModel;
+	private PlaceAdapter adapter;
+	private FragmentPlacesBinding binding;
+	private SharedPreferences prefs;
 
-        binding = FragmentPlacesBinding.inflate(inflater, container, false);
-        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		placesViewModel = new ViewModelProvider(this).get(PlacesViewModel.class);
 
-        View root = binding.getRoot();
+		binding = FragmentPlacesBinding.inflate(inflater, container, false);
+		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        setNavigationDrawerCheckedItem();
+		View root = binding.getRoot();
 
-        RecyclerView recyclerView = root.findViewById(R.id.rv_places);
+		setNavigationDrawerCheckedItem();
 
-        SwipeController swipeController = new SwipeController(getContext(), new SwipeControllerActions() {
-            @Override
-            public void onLeftClicked(int position) {
-                MapPlace place = adapter.removePlaceAt(position);
-                new Thread(() -> {
-                    placesViewModel.deletePlace(getContext(), place);
-                    getActivity().runOnUiThread(() -> {
-                        binding.tvEmpty.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
-                        Toast.makeText(getContext(), place.getName() + " " + getString(R.string.tDelete), Toast.LENGTH_SHORT).show();
-                    });
-                }).start();
-            }
-        });
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-        itemTouchhelper.attachToRecyclerView(recyclerView);
+		RecyclerView recyclerView = root.findViewById(R.id.rv_places);
 
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                swipeController.onDraw(c);
-            }
-        });
+		SwipeController swipeController = new SwipeController(getContext(), new SwipeControllerActions() {
+			@Override
+			public void onLeftClicked(int position) {
+				MapPlace place = adapter.removePlaceAt(position);
+				new Thread(() -> {
+					placesViewModel.deletePlace(getContext(), place);
+					getActivity().runOnUiThread(() -> {
+						binding.tvEmpty.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
+						Toast.makeText(getContext(),
+								place.getName() + " " + getString(R.string.tDelete),
+								Toast.LENGTH_SHORT)
+								.show();
+					});
+				}).start();
+			}
+		});
+		ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+		itemTouchhelper.attachToRecyclerView(recyclerView);
 
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(manager);
+		recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+			@Override
+			public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+				swipeController.onDraw(c);
+			}
+		});
 
-        adapter = new PlaceAdapter(prefs.getString("units",getString(R.string.valueUnits0)));
-        recyclerView.setAdapter(adapter);
+		RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
+		recyclerView.setLayoutManager(manager);
 
-        new Thread(() -> {
-            List<MapPlace> places = placesViewModel.getPlaces(getContext());
+		adapter = new PlaceAdapter(prefs.getString("units", getString(R.string.valueUnits0)));
+		recyclerView.setAdapter(adapter);
 
-            getActivity().runOnUiThread(() -> {
-                binding.tvEmpty.setVisibility(places.isEmpty() ? View.VISIBLE : View.INVISIBLE);
-                adapter.setPlaces(places);
-            });
-        }).start();
+		new Thread(() -> {
+			List<MapPlace> places = placesViewModel.getPlaces(getContext());
 
-        binding.floatingActionButton.setOnClickListener(view -> {
-            Bundle params = new Bundle();
-            params.putBoolean("search", true);
-            getParentFragmentManager()
-                    .beginTransaction()
-                    .setReorderingAllowed(true)
-                    .replace(R.id.fcv_navigation_drawer, MapFragment.class, params)
-                    .commit();
-        });
+			getActivity().runOnUiThread(() -> {
+				binding.tvEmpty.setVisibility(places.isEmpty() ? View.VISIBLE : View.INVISIBLE);
+				adapter.setPlaces(places);
+			});
+		}).start();
 
-        return root;
-    }
+		binding.floatingActionButton.setOnClickListener(view -> {
+			Bundle params = new Bundle();
+			params.putBoolean("search", true);
+			getParentFragmentManager().beginTransaction()
+					.setReorderingAllowed(true)
+					.replace(R.id.fcv_navigation_drawer, MapFragment.class, params)
+					.commit();
+		});
 
-    private void setNavigationDrawerCheckedItem() {
-        for (int i = 0; i < 4; i++) {
-            MenuItem item = ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
-            if (i == 1) {
-                item.setChecked(true);
-            } else {
-                item.setChecked(false);
-            }
-        }
-    }
+		return root;
+	}
+
+	private void setNavigationDrawerCheckedItem() {
+		for (int i = 0; i < 4; i++) {
+			MenuItem item = ((MainActivity) requireActivity()).getNavigationDrawer().getMenu().getItem(i);
+			item.setChecked(i == 1);
+		}
+	}
 
 }

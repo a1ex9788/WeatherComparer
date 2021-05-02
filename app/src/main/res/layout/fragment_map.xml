@@ -1,96 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout android:id="@+id/f_map"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:map="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/f_map">
 
-    <data>
-        <import type="android.view.View"></import>
-        <variable
-            name="alreadyAdded"
-            type="boolean" />
-    </data>
+	<data>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        map:mapType="normal"
-        map:uiZoomControls="true"
-        map:uiZoomGestures="true"
-        tools:context=".MainActivity">
+		<import type="android.view.View"></import>
 
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".MapsActivity">
+		<variable
+			name="alreadyAdded"
+			type="boolean" />
+	</data>
 
-        </fragment>
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		map:mapType="normal"
+		map:uiZoomControls="true"
+		map:uiZoomGestures="true"
+		tools:context=".MainActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clMapLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+		<fragment
+			android:id="@+id/map"
+			android:name="com.google.android.gms.maps.SupportMapFragment"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			tools:context=".MapsActivity"></fragment>
 
-            <LinearLayout
-                android:id="@+id/ll_tools"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="300px"
-                android:orientation="horizontal"
-                android:visibility="invisible"
-                map:layout_constraintBottom_toBottomOf="@+id/cvPlace"
-                map:layout_constraintEnd_toEndOf="parent"
-                map:layout_constraintStart_toStartOf="parent">
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/clMapLayout"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fabAdd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:src="@{ alreadyAdded ? @drawable/ic_baseline_delete_24 : @drawable/ic_baseline_add_24 }"
-                    android:tint="@color/white"
-                    map:fabCustomSize="100px"
-                    map:rippleColor="@color/blueVioletCrayola" />
+			<LinearLayout
+				android:id="@+id/ll_tools"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="300px"
+				android:orientation="horizontal"
+				android:visibility="invisible"
+				map:layout_constraintBottom_toBottomOf="@+id/cvPlace"
+				map:layout_constraintEnd_toEndOf="parent"
+				map:layout_constraintStart_toStartOf="parent">
 
-                <Space
-                    android:layout_width="20dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+				<com.google.android.material.floatingactionbutton.FloatingActionButton
+					android:id="@+id/fabAdd"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:clickable="true"
+					android:src="@{ alreadyAdded ? @drawable/ic_baseline_delete_24 : @drawable/ic_baseline_add_24 }"
+					android:tint="@color/white"
+					map:fabCustomSize="100px"
+					map:rippleColor="@color/blueVioletCrayola" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fabForecast"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:clickable="true"
-                    android:src="@drawable/ic_baseline_cloud_24"
-                    map:fabCustomSize="100px"
-                    map:rippleColor="@color/blueVioletCrayola" />
-            </LinearLayout>
+				<Space
+					android:layout_width="20dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1" />
 
-            <androidx.cardview.widget.CardView
+				<com.google.android.material.floatingactionbutton.FloatingActionButton
+					android:id="@+id/fabForecast"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="10dp"
+					android:clickable="true"
+					android:src="@drawable/ic_baseline_cloud_24"
+					map:fabCustomSize="100px"
+					map:rippleColor="@color/blueVioletCrayola" />
+			</LinearLayout>
 
-                android:id="@+id/cv_autocomplete_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="top"
-                android:layout_margin="15dp"
-                map:cardCornerRadius="20dp"
-                map:layout_constraintEnd_toEndOf="parent"
-                map:layout_constraintStart_toStartOf="parent"
-                map:layout_constraintTop_toTopOf="parent">
+			<androidx.cardview.widget.CardView
+				android:id="@+id/cv_autocomplete_fragment"
+				android:layout_width="match_parent"
+				android:layout_height="40dp"
+				android:layout_gravity="top"
+				android:layout_margin="15dp"
+				map:cardCornerRadius="20dp"
+				map:layout_constraintEnd_toEndOf="parent"
+				map:layout_constraintStart_toStartOf="parent"
+				map:layout_constraintTop_toTopOf="parent">
 
-                <fragment
-                    android:id="@+id/f_autocomplete"
-                    android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></fragment>
-
-            </androidx.cardview.widget.CardView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </FrameLayout>
+				<fragment
+					android:id="@+id/f_autocomplete"
+					android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"></fragment>
+			</androidx.cardview.widget.CardView>
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</FrameLayout>
 </layout>

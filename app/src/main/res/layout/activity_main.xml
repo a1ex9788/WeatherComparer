@@ -1,38 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nd_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/nd_layout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:fitsSystemWindows="true">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tb_navigation_drawer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/blueVioletCrayola"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+		<androidx.appcompat.widget.Toolbar
+			android:id="@+id/tb_navigation_drawer"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@color/blueVioletCrayola"
+			android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+			app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fcv_navigation_drawer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+		<androidx.fragment.app.FragmentContainerView
+			android:id="@+id/fcv_navigation_drawer"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"></androidx.fragment.app.FragmentContainerView>
+	</LinearLayout>
 
-        </androidx.fragment.app.FragmentContainerView>
-    </LinearLayout>
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nv_navigation_drawer"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/header_navigation_drawer"
-        app:menu="@menu/navigation_drawer_menu" />
-
+	<com.google.android.material.navigation.NavigationView
+		android:id="@+id/nv_navigation_drawer"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:layout_gravity="start"
+		app:headerLayout="@layout/header_navigation_drawer"
+		app:menu="@menu/navigation_drawer_menu" />
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -10,7 +10,7 @@ import java.util.List;
 
 import a1ex9788.dadm.weathercomparer.model.DayForecast;
 import a1ex9788.dadm.weathercomparer.model.HourForecast;
-import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecast;
+import a1ex9788.dadm.weathercomparer.webServices.forecasts.WeatherForecastCreator;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.accuWeather.AccuWeatherForecast;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.average.AverageWeatherForecast;
 import a1ex9788.dadm.weathercomparer.webServices.forecasts.openWeather.OpenWeatherForecast;
@@ -19,62 +19,76 @@ import a1ex9788.dadm.weathercomparer.webServices.places.GooglePlaces;
 
 public class ForecastViewModel extends ViewModel {
 
-    public HourForecast getCurrentWeather(double latitude, double longitude) {
-        return getAverageHourlyForecast(latitude, longitude).get(0);
-    }
+	public HourForecast getCurrentAverageWeather(double latitude, double longitude) {
+		return getAverageHourlyForecast(latitude, longitude).get(0);
+	}
 
-    public List<DayForecast> getAverageDailyForecast(double latitude, double longitude) {
-        AverageWeatherForecast averageWeatherForecast = new AverageWeatherForecast(latitude, longitude);
+	public List<DayForecast> getAverageDailyForecast(double latitude, double longitude) {
+		AverageWeatherForecast averageWeatherForecast = WeatherForecastCreator.getAverageWeatherForecast(latitude,
+				longitude);
 
-        return averageWeatherForecast.getDailyForecast();
-    }
+		return averageWeatherForecast.getDailyForecast();
+	}
 
-    public List<HourForecast> getAverageHourlyForecast(double latitude, double longitude) {
-        AverageWeatherForecast averageWeatherForecast = new AverageWeatherForecast(latitude, longitude);
+	public List<HourForecast> getAverageHourlyForecast(double latitude, double longitude) {
+		AverageWeatherForecast averageWeatherForecast = WeatherForecastCreator.getAverageWeatherForecast(latitude,
+				longitude);
 
-        return averageWeatherForecast.getHourlyForecast();
-    }
+		return averageWeatherForecast.getHourlyForecast();
+	}
 
-    public List<DayForecast> getAccuWeatherDailyForecast(double latitude, double longitude) throws Exception {
-        WeatherForecast accuWeatherForecast = new AccuWeatherForecast(latitude, longitude);
+	public HourForecast getCurrentAccuWeather(double latitude, double longitude) throws Exception {
+		return getAccuWeatherHourlyForecast(latitude, longitude).get(0);
+	}
 
-        return accuWeatherForecast.getDailyForecast();
-    }
+	public List<DayForecast> getAccuWeatherDailyForecast(double latitude, double longitude) throws Exception {
+		AccuWeatherForecast accuWeatherForecast = WeatherForecastCreator.getAccuWeatherForecast(latitude, longitude);
 
-    public List<HourForecast> getAccuWeatherHourlyForecast(double latitude, double longitude) throws Exception {
-        WeatherForecast accuWeatherForecast = new AccuWeatherForecast(latitude, longitude);
+		return accuWeatherForecast.getDailyForecast();
+	}
 
-        return accuWeatherForecast.getHourlyForecast();
-    }
+	public List<HourForecast> getAccuWeatherHourlyForecast(double latitude, double longitude) throws Exception {
+		AccuWeatherForecast accuWeatherForecast = WeatherForecastCreator.getAccuWeatherForecast(latitude, longitude);
 
-    public List<DayForecast> getOpenWeatherDailyForecast(double latitude, double longitude) throws Exception {
-        WeatherForecast openWeatherForecast = new OpenWeatherForecast(latitude, longitude);
+		return accuWeatherForecast.getHourlyForecast();
+	}
 
-        return openWeatherForecast.getDailyForecast();
-    }
+	public HourForecast getCurrentOpenWeather(double latitude, double longitude) throws Exception {
+		return getOpenWeatherHourlyForecast(latitude, longitude).get(0);
+	}
 
-    public List<HourForecast> getOpenWeatherHourlyForecast(double latitude, double longitude) throws Exception {
-        WeatherForecast openWeatherForecast = new OpenWeatherForecast(latitude, longitude);
+	public List<DayForecast> getOpenWeatherDailyForecast(double latitude, double longitude) throws Exception {
+		OpenWeatherForecast openWeatherForecast = WeatherForecastCreator.getOpenWeatherForecast(latitude, longitude);
 
-        return openWeatherForecast.getHourlyForecast();
-    }
+		return openWeatherForecast.getDailyForecast();
+	}
 
-    public List<DayForecast> getWeatherBitDailyForecast(double latitude, double longitude) throws Exception {
-        WeatherForecast weatherBitForecast = new WeatherBitForecast(latitude, longitude);
+	public List<HourForecast> getOpenWeatherHourlyForecast(double latitude, double longitude) throws Exception {
+		OpenWeatherForecast openWeatherForecast = WeatherForecastCreator.getOpenWeatherForecast(latitude, longitude);
 
-        return weatherBitForecast.getDailyForecast();
-    }
+		return openWeatherForecast.getHourlyForecast();
+	}
 
-    public List<HourForecast> getWeatherBitHourlyForecast(double latitude, double longitude) throws Exception {
-        WeatherForecast weatherBitForecast = new WeatherBitForecast(latitude, longitude);
+	public HourForecast getCurrentWeatherBit(double latitude, double longitude) throws Exception {
+		return getWeatherBitHourlyForecast(latitude, longitude).get(0);
+	}
 
-        return weatherBitForecast.getHourlyForecast();
-    }
+	public List<DayForecast> getWeatherBitDailyForecast(double latitude, double longitude) throws Exception {
+		WeatherBitForecast weatherBitForecast = WeatherForecastCreator.getWeatherBitForecast(latitude, longitude);
 
-    public void getPlace(Context context, double latitude, double longitude, OnSuccessListener onPlaceFounded) throws Exception {
-        GooglePlaces googlePlaces = new GooglePlaces(context);
-        String id = googlePlaces.searchLocalityByNearby(latitude, longitude);
-        googlePlaces.getDetails(id, onPlaceFounded);
-    }
+		return weatherBitForecast.getDailyForecast();
+	}
+
+	public List<HourForecast> getWeatherBitHourlyForecast(double latitude, double longitude) throws Exception {
+		WeatherBitForecast weatherBitForecast = WeatherForecastCreator.getWeatherBitForecast(latitude, longitude);
+
+		return weatherBitForecast.getHourlyForecast();
+	}
+
+	public void getPlace(Context context, double latitude, double longitude, OnSuccessListener onPlaceFounded) throws Exception {
+		GooglePlaces googlePlaces = new GooglePlaces(context);
+		String id = googlePlaces.searchLocalityByNearby(latitude, longitude);
+		googlePlaces.getDetails(id, onPlaceFounded);
+	}
 
 }

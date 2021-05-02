@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="android.view.View" />
-        <import type="a1ex9788.dadm.weathercomparer.utils.DoubleFormats"/>
+
+        <import type="a1ex9788.dadm.weathercomparer.utils.DoubleFormats" />
 
         <variable
             name="place"
@@ -19,30 +21,34 @@
         <variable
             name="locationPermissionGranted"
             type="boolean" />
-
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/background_gradient"
+        android:orientation="vertical"
+        map:mapType="normal"
+        map:uiZoomControls="true"
+        map:uiZoomGestures="true"
+        tools:context=".MainActivity">
 
-        <LinearLayout
-            android:id="@+id/llForecast"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/fcvForecast"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/background_gradient"
-            android:orientation="vertical"
-            android:visibility="@{ locationPermissionGranted &amp;&amp; place != null &amp;&amp; currentWeather != null ? View.VISIBLE : View.INVISIBLE}"
-            map:layout_constraintStart_toStartOf="parent"
-            map:layout_constraintTop_toTopOf="parent">
+            android:visibility="@{ !locationPermissionGranted || place == null || currentWeather == null  ? View.INVISIBLE : View.VISIBLE }">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/linearLayout3"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:gravity="center|right"
-                android:orientation="horizontal">
+                android:gravity="center"
+                android:orientation="horizontal"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -66,17 +72,17 @@
                         android:layout_height="wrap_content"
                         android:maxWidth="300dp"
                         android:text="@{ place.getName() }" />
-
                 </LinearLayout>
 
                 <Space
-                    android:layout_width="14dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvForecastPlace"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     map:cardCornerRadius="50dp">
 
                     <ImageView
@@ -85,14 +91,17 @@
                         android:layout_height="wrap_content"
                         android:scaleType="centerCrop" />
                 </androidx.cardview.widget.CardView>
-
             </LinearLayout>
 
             <com.airbnb.lottie.LottieAnimationView
-
                 android:id="@+id/animationViewWeather"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="180dp"
+                android:layout_marginTop="100dp"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintHorizontal_bias="0.5"
+                map:layout_constraintStart_toStartOf="parent"
+                map:layout_constraintTop_toTopOf="parent"
                 map:lottie_autoPlay="true"
                 map:lottie_loop="true"
                 map:lottie_speed="1.1" />
@@ -100,222 +109,297 @@
             <TextView
                 android:id="@+id/weatherTextView"
                 style="@style/GraySubtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@{currentWeather.getWeatherConditionText()}"
-                android:textAlignment="center"
-                android:textSize="30dp" />
-
-            <LinearLayout
-                android:id="@+id/llItems"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/windIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        map:srcCompat="@drawable/ic_wind" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp"
-                        android:gravity="right"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/windTextView"
-                            style="@style/SemiBlackTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{ currentWeather.getWindSpeed()}" />
-
-                        <TextView
-                            android:id="@+id/windUnitsTextView"
-                            style="@style/GraySubtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{currentWeather.getWindSpeedUnits()}"
-                            android:textAlignment="viewStart"
-                            android:textSize="14dp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/firstVerticalLine"
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/grey" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/temperatureIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:paddingTop="20px"
-                        android:paddingBottom="20px"
-                        map:srcCompat="@drawable/ic_thermometer" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp"
-                        android:gravity="right"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/temperatureTextView"
-                            style="@style/SemiBlackTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{currentWeather.getAverageTemperature()}" />
-
-                        <TextView
-                            android:id="@+id/temperatureUnitsTextView"
-                            style="@style/GraySubtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{currentWeather.getAverageTemperatureUnits()}"
-                            android:textAlignment="viewEnd" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/secondVerticalLine"
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/grey" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/rainIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        map:srcCompat="@drawable/ic_rain" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp"
-                        android:gravity="right"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/rainTextView"
-                            style="@style/SemiBlackTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{currentWeather.getRainProbability()}" />
-
-                        <TextView
-                            android:id="@+id/rainUnitsTextView"
-                            style="@style/GraySubtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{currentWeather.getRainProbabilityUnits()}" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <Space
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/ibNavigationDrawer"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@color/clear"
-            map:layout_constraintStart_toStartOf="parent"
-            map:layout_constraintTop_toTopOf="parent"
-            map:srcCompat="@drawable/ic_menu" />
-
-        <LinearLayout
-            android:id="@+id/llNoLocationPermission"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="@{ locationPermissionGranted ? View.INVISIBLE : View.VISIBLE }">
+                android:layout_height="wrap_content"
+                android:text="@{currentWeather.getWeatherConditionText()}"
+                android:textSize="30dp"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintStart_toStartOf="parent"
+                map:layout_constraintTop_toBottomOf="@+id/animationViewWeather" />
 
             <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:tint="@color/blueVioletCrayola"
-                map:srcCompat="@drawable/ic_baseline_location_on" />
+                android:id="@+id/windIcon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/wind"
+                map:layout_constraintBottom_toBottomOf="@+id/temperatureIcon"
+                map:layout_constraintEnd_toStartOf="@+id/temperatureIcon"
+                map:layout_constraintStart_toStartOf="parent"
+                map:layout_constraintTop_toTopOf="@+id/temperatureIcon" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="5dp" />
+            <ImageView
+                android:id="@+id/temperatureIcon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:src="@drawable/temperature"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintStart_toStartOf="parent"
+                map:layout_constraintTop_toBottomOf="@+id/weatherTextView" />
+
+            <ImageView
+                android:id="@+id/rainIcon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/rain"
+                map:layout_constraintBottom_toBottomOf="@+id/temperatureIcon"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintStart_toEndOf="@+id/temperatureIcon"
+                map:layout_constraintTop_toTopOf="@+id/temperatureIcon" />
 
             <TextView
+                android:id="@+id/windTextView"
+                style="@style/SemiBlackTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{ currentWeather.getWindSpeed()}"
+                map:layout_constraintEnd_toEndOf="@+id/windIcon"
+                map:layout_constraintStart_toStartOf="@+id/windIcon"
+                map:layout_constraintTop_toBottomOf="@+id/windIcon" />
+
+            <TextView
+                android:id="@+id/windUnitsTextView"
                 style="@style/GraySubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tvNoLocation"
-                android:textSize="18dp" />
+                android:text="@{currentWeather.getWindSpeedUnits()}"
+                android:textSize="14dp"
+                map:layout_constraintBottom_toBottomOf="@+id/temperatureUnitsTextView"
+                map:layout_constraintEnd_toEndOf="@+id/windTextView"
+                map:layout_constraintTop_toBottomOf="@+id/windTextView" />
 
+            <View
+                android:id="@+id/firstVerticalLine"
+                android:layout_width="1dp"
+                android:layout_height="60dp"
+                android:background="@color/grey"
+                map:layout_constraintBottom_toBottomOf="@+id/temperatureUnitsTextView"
+                map:layout_constraintEnd_toStartOf="@+id/temperatureIcon"
+                map:layout_constraintStart_toEndOf="@+id/windIcon"
+                map:layout_constraintTop_toTopOf="@+id/temperatureIcon" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/temperatureTextView"
+                style="@style/SemiBlackTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{currentWeather.getAverageTemperature()}"
+                map:layout_constraintEnd_toEndOf="@+id/temperatureIcon"
+                map:layout_constraintStart_toStartOf="@+id/temperatureIcon"
+                map:layout_constraintTop_toBottomOf="@+id/temperatureIcon" />
 
-        <ProgressBar
-            android:id="@+id/pbLoading"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:visibility="@{ locationPermissionGranted &amp;&amp; place == null || currentWeather == null ? View.VISIBLE : View.INVISIBLE}"
-            map:layout_constraintBottom_toBottomOf="parent"
-            map:layout_constraintEnd_toEndOf="parent"
-            map:layout_constraintStart_toStartOf="parent"
-            map:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/temperatureUnitsTextView"
+                style="@style/GraySubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{currentWeather.getAverageTemperatureUnits()}"
+                map:layout_constraintEnd_toEndOf="@+id/temperatureTextView"
+                map:layout_constraintTop_toBottomOf="@+id/temperatureTextView" />
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/coordinatorLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            map:layout_constraintBottom_toBottomOf="parent"
-            map:layout_constraintEnd_toEndOf="parent"
-            map:layout_constraintStart_toStartOf="parent">
+            <View
+                android:id="@+id/secondVerticalLine"
+                android:layout_width="1dp"
+                android:layout_height="60dp"
+                android:background="@color/grey"
+                map:layout_constraintBottom_toBottomOf="@+id/firstVerticalLine"
+                map:layout_constraintEnd_toStartOf="@+id/rainIcon"
+                map:layout_constraintStart_toEndOf="@+id/temperatureIcon"
+                map:layout_constraintTop_toTopOf="@+id/firstVerticalLine" />
 
-            <include
-                layout="@layout/bottom_sheet_layout"
-                tools:visibility="gone" />
+            <TextView
+                android:id="@+id/rainTextView"
+                style="@style/SemiBlackTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{currentWeather.getRainProbability()}"
+                map:layout_constraintEnd_toEndOf="@+id/rainIcon"
+                map:layout_constraintStart_toStartOf="@+id/rainIcon"
+                map:layout_constraintTop_toBottomOf="@+id/rainIcon" />
 
+            <TextView
+                android:id="@+id/rainUnitsTextView"
+                style="@style/GraySubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{currentWeather.getRainProbabilityUnits()}"
+                map:layout_constraintBottom_toBottomOf="@+id/temperatureUnitsTextView"
+                map:layout_constraintEnd_toEndOf="@+id/rainTextView"
+                map:layout_constraintTop_toBottomOf="@+id/rainTextView" />
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/coordinatorLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                map:layout_constraintBottom_toBottomOf="parent"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintStart_toStartOf="parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <include
+                    layout="@layout/bottom_sheet_layout"
+                    tools:visibility="gone" />
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/supplierButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:theme="@style/floatingButtonTheme"
+                app:backgroundTint="@color/grey"
+                app:icon="@drawable/ic_weatherproviders"
+                app:layout_constraintStart_toStartOf="parent"
+                map:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/averageOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="@color/grey"
+                android:clickable="true"
+                app:fabSize="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/supplierButton"
+                app:srcCompat="@drawable/ic_weatherproviders" />
+
+            <TextView
+                android:id="@+id/averageOptionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/averageOption"
+                app:layout_constraintBottom_toBottomOf="@+id/averageOption"
+                app:layout_constraintTop_toTopOf="@+id/averageOption"
+                map:layout_constraintStart_toEndOf="@+id/averageOption" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/openWeather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="@color/grey"
+                android:clickable="true"
+                app:fabSize="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/averageOption"
+                app:srcCompat="@drawable/ic_openweather" />
+
+            <TextView
+                android:id="@+id/openWeatherText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/openWeatherOption"
+                app:layout_constraintBottom_toBottomOf="@+id/openWeather"
+                app:layout_constraintTop_toTopOf="@+id/openWeather"
+                map:layout_constraintStart_toEndOf="@+id/openWeather" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/accuWeather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="@color/grey"
+                android:clickable="true"
+                app:fabSize="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/openWeather"
+                app:srcCompat="@drawable/ic_accuweather" />
+
+            <TextView
+                android:id="@+id/accuWeatherText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/accuWeatherOption"
+                app:layout_constraintBottom_toBottomOf="@+id/accuWeather"
+                app:layout_constraintTop_toTopOf="@+id/accuWeather"
+                map:layout_constraintStart_toEndOf="@+id/accuWeather" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/weatherBit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="@color/grey"
+                android:clickable="true"
+                app:fabSize="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/accuWeather"
+                app:srcCompat="@drawable/ic_weatherbit" />
+
+            <TextView
+                android:id="@+id/weatherBitText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/weatherBitOption"
+                app:layout_constraintBottom_toBottomOf="@+id/weatherBit"
+                app:layout_constraintTop_toTopOf="@+id/weatherBit"
+                map:layout_constraintStart_toEndOf="@+id/weatherBit" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{ locationPermissionGranted &amp;&amp; place == null || currentWeather == null  ? View.VISIBLE : View.INVISIBLE }"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="3dp">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    map:layout_constraintBottom_toBottomOf="parent"
+                    map:layout_constraintEnd_toEndOf="parent"
+                    map:layout_constraintStart_toStartOf="parent"
+                    map:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="@{ locationPermissionGranted ? View.INVISIBLE : View.VISIBLE }"
+                    tools:layout_editor_absoluteX="16dp"
+                    tools:layout_editor_absoluteY="0dp">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        map:srcCompat="@drawable/ic_baseline_location_on"
+                        map:tint="@color/blueVioletCrayola" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+                    <TextView
+                        style="@style/GraySubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tvNoLocation"
+                        android:textSize="18dp" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageButton
+            android:id="@+id/ibNavigationDrawer"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@color/clear"
+            map:srcCompat="@drawable/ic_menu" />
+    </FrameLayout>
 </layout>
