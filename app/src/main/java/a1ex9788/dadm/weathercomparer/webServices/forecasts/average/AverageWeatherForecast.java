@@ -22,7 +22,7 @@ public class AverageWeatherForecast extends WeatherForecast {
 	public AverageWeatherForecast(double latitude, double longitude) {
 		super(latitude, longitude);
 
-		averageWeatherForecastCalculator = new AverageWeatherForecastCalculator(weatherForecasts,
+		averageWeatherForecastCalculator = new AverageWeatherForecastCalculator(getWeatherForecasts(),
 				DAYS_IN_DAILY_FORECAST,
 				HOURS_IN_HOURLY_FORECAST);
 	}
@@ -35,6 +35,10 @@ public class AverageWeatherForecast extends WeatherForecast {
 	@Override
 	public List<HourForecast> getHourlyForecast() {
 		return averageWeatherForecastCalculator.getAverageHourlyForecast();
+	}
+
+	protected List<WeatherForecast> getWeatherForecasts() {
+		return weatherForecasts;
 	}
 
 }

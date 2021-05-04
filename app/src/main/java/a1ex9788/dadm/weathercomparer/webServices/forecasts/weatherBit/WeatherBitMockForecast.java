@@ -20,7 +20,8 @@ public class WeatherBitMockForecast extends WeatherBitForecast {
 	protected WeatherBitHourlyForecast getWeatherBitHourlyForecast() throws Exception {
 		// The web service answer could not be obtained because the pricing categories changed
 		// and we do not have more access.
-		return new WeatherBitHourlyForecast();
+		throw  new Exception("The web service answer could not be obtained because the pricing categories changed and " +
+			"we do not have more access.");
 	}
 
 }
