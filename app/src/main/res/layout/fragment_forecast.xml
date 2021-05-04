@@ -38,6 +38,50 @@
         tools:context=".MainActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/pbLoading"
+                style="@style/ProgressBar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:visibility="@{ locationPermissionGranted &amp;&amp; (place == null || currentWeather == null) ? View.VISIBLE : View.INVISIBLE}"
+                map:layout_constraintBottom_toBottomOf="parent"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintStart_toStartOf="parent"
+                map:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="@{ locationPermissionGranted ? View.INVISIBLE : View.VISIBLE }"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    map:srcCompat="@drawable/ic_baseline_location_on"
+                    map:tint="@color/blueVioletCrayola" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <TextView
+                    style="@style/GraySubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tvNoLocation"
+                    android:textSize="18dp" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/fcvForecast"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -368,52 +412,6 @@
                     layout="@layout/bottom_sheet_layout"
                     tools:visibility="gone" />
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="@{ locationPermissionGranted &amp;&amp; place == null || currentWeather == null  ? View.VISIBLE : View.INVISIBLE }"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="3dp">
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    map:layout_constraintBottom_toBottomOf="parent"
-                    map:layout_constraintEnd_toEndOf="parent"
-                    map:layout_constraintStart_toStartOf="parent"
-                    map:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:visibility="@{ locationPermissionGranted ? View.INVISIBLE : View.VISIBLE }"
-                    tools:layout_editor_absoluteX="0dp"
-                    tools:layout_editor_absoluteY="0dp">
-
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        map:srcCompat="@drawable/ic_baseline_location_on"
-                        map:tint="@color/blueVioletCrayola" />
-
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="5dp" />
-
-                    <TextView
-                        style="@style/GraySubtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tvNoLocation"
-                        android:textSize="18dp" />
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageButton
