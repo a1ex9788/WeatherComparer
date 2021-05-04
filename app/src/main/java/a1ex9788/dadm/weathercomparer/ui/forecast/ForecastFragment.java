@@ -104,48 +104,42 @@ public class ForecastFragment extends Fragment {
 		});
 
 		binding.averageOption.setOnClickListener(view -> {
-			weatherProvider = WeatherProvider.Average;
-
-			setCurrentForecastData(location.getLatitude(), location.getLongitude());
-			configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
-
-			binding.setWeatherOptions(false);
-
-			floatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_foreground));
+			providersFloatingButtonsListenter(floatingActionButton,
+					WeatherProvider.Average,
+					R.drawable.ic_launcher_foreground);
 		});
 		binding.openWeather.setOnClickListener(view -> {
-			weatherProvider = WeatherProvider.OpenWeather;
-
-			setCurrentForecastData(location.getLatitude(), location.getLongitude());
-			configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
-
-			binding.setWeatherOptions(false);
-
-            floatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_openweather));
+			providersFloatingButtonsListenter(
+					floatingActionButton,
+					WeatherProvider.OpenWeather,
+					R.drawable.ic_openweather);
 		});
 		binding.accuWeather.setOnClickListener(view -> {
-			weatherProvider = WeatherProvider.AccuWeather;
-
-			setCurrentForecastData(location.getLatitude(), location.getLongitude());
-			configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
-
-			binding.setWeatherOptions(false);
-
-            floatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_accuweather));
+			providersFloatingButtonsListenter(
+					floatingActionButton,
+					WeatherProvider.AccuWeather,
+					R.drawable.ic_accuweather);
 		});
 		binding.weatherBit.setOnClickListener(view -> {
 			// Weather bit has change its prices an we do not have access to this feature any more.
-            /*weatherProvider = WeatherProvider.WeatherBit;
-
-            setCurrentForecastData(location.getLatitude(), location.getLongitude());
-            configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
-
-            binding.setWeatherOptions(false);
-
-            floatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_weatherbit));*/
+			// providersFloatingButtonsListenter(floatingActionButton, WeatherProvider.WeatherBit, R.drawable
+			// .ic_weatherbit);
 		});
 
 		return root;
+	}
+
+	private void providersFloatingButtonsListenter(FloatingActionButton floatingActionButton, WeatherProvider weatherProvider, int imageResourceId) {
+		if (this.weatherProvider != weatherProvider) {
+			this.weatherProvider = weatherProvider;
+
+			setCurrentForecastData(location.getLatitude(), location.getLongitude());
+			configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
+
+			binding.setWeatherOptions(false);
+
+			floatingActionButton.setImageDrawable(getResources().getDrawable(imageResourceId));
+		}
 	}
 
 	private void setNavigationDrawerButtonOnClickListener(View root) {
@@ -295,10 +289,10 @@ public class ForecastFragment extends Fragment {
 					});
 				} catch (Exception e) {
 					getActivity().runOnUiThread(() -> {
-						Toast.makeText(
-								requireActivity().getBaseContext(),
+						Toast.makeText(requireActivity().getBaseContext(),
 								R.string.toast_forecastError,
-								Toast.LENGTH_LONG).show();
+								Toast.LENGTH_LONG)
+								.show();
 					});
 				}
 			}
@@ -471,15 +465,13 @@ public class ForecastFragment extends Fragment {
 											.toString()
 											.substring(0, 1) + ", " + getString(R.string.extreme);
 								}
-								MoreInfo moreInfoUVIndex = new MoreInfo(
-										getString(R.string.UVIndex),
+								MoreInfo moreInfoUVIndex = new MoreInfo(getString(R.string.UVIndex),
 										uvIndexText,
 										R.drawable.ic_uv_index);
 								ZoneId zoneId = ZoneId.of(currentPlace.getTimeZoneId());
 								Date sunrise = finalDayForecastsList.get(0).getSunrise();
 								Date sunset = finalDayForecastsList.get(0).getSunset();
-								LocalDateTime localDateTimeSunrise = LocalDateTime.ofInstant(
-										sunrise.toInstant(),
+								LocalDateTime localDateTimeSunrise = LocalDateTime.ofInstant(sunrise.toInstant(),
 										zoneId);
 								LocalDateTime localDateTimeSunset = LocalDateTime.ofInstant(sunset.toInstant(), zoneId);
 								MoreInfo moreInfoSunrise = new MoreInfo(getString(R.string.sunrise),
