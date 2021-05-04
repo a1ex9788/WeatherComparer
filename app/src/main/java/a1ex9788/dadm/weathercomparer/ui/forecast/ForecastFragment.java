@@ -175,7 +175,6 @@ public class ForecastFragment extends Fragment {
 		Bundle params = getArguments();
 
 		if (getArguments() != null) {
-			Log.d("params", params.toString());
 			String id = params.getString("id");
 			double latitude = params.getDouble("latitude");
 			double longitude = params.getDouble("longitude");
@@ -725,9 +724,8 @@ public class ForecastFragment extends Fragment {
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-		Log.d("code", String.valueOf(requestCode));
-
-		if (requestCode == 1 && grantResults.length > 0) {
+		if (grantResults.length > 0 &&
+				grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 			onLocationPermissionGranted();
 		}
 	}
