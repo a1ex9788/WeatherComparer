@@ -125,12 +125,13 @@ public class ForecastFragment extends Fragment {
             binding.setWeatherOptions(false);
         });
         binding.weatherBit.setOnClickListener(view -> {
-            weatherProvider = WeatherProvider.WeatherBit;
+            // Weather bit has change its prices an we do not have access to this feature any more.
+            /*weatherProvider = WeatherProvider.WeatherBit;
 
             setCurrentForecastData(location.getLatitude(), location.getLongitude());
             configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
 
-            binding.setWeatherOptions(false);
+            binding.setWeatherOptions(false);*/
         });
 
         return root;
