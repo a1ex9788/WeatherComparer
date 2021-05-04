@@ -24,16 +24,16 @@ public class CustomRecyclerAdapterMoreInfo extends RecyclerView.Adapter<CustomRe
 	@NonNull
 	@Override
 	public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bottom_sheet_layout, parent, false);
+		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bottom_sheet_more_info, parent, false);
 		CustomRecyclerAdapterMoreInfo.ViewHolder holder = new ViewHolder(view);
 		return holder;
 	}
 
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-		//holder.tvInfoTitle.setText(list.get(position).getMoreInfoTitle());
-		//holder.tvInfoValue.setText(list.get(position).getMoreInfoValue());
-		//holder.image.setImageResource(list.get(position).getImage());
+		holder.tvInfoTitle.setText(list.get(position).getMoreInfoTitle());
+		holder.tvInfoValue.setText(list.get(position).getMoreInfoValue());
+		holder.image.setImageResource(list.get(position).getImage());
 	}
 
 	@Override
