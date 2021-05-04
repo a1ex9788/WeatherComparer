@@ -383,33 +383,33 @@ public class ForecastFragment extends Fragment {
 							List<HourDayForecast> hoursList = new ArrayList<>();
 							HourDayForecast hourForecast1 = new HourDayForecast(
 									finalHourForecastsList.get(2).getDate().toString().substring(11, 16),
-									finalHourForecastsList.get(2).getAvgTemperature_celsius().toString().
-											substring(0, 4) + getString(R.string.temperature_metricUnits),
+									finalHourForecastsList.get(2).getAvgTemperature(metric).toString().
+											substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
 									finalHourForecastsList.get(2).getWeatherCondition().getIconAddress());
 							HourDayForecast hourForecast2 = new HourDayForecast(
 									finalHourForecastsList.get(3).getDate().toString().substring(11, 16),
-									finalHourForecastsList.get(3).getAvgTemperature_celsius().toString().
-											substring(0, 4) + getString(R.string.temperature_metricUnits),
+									finalHourForecastsList.get(3).getAvgTemperature(metric).toString().
+											substring(0, 4) +UnitsGetter.getTemperatureUnits(metric),
 									finalHourForecastsList.get(3).getWeatherCondition().getIconAddress());
 							HourDayForecast hourForecast3 = new HourDayForecast(
 									finalHourForecastsList.get(4).getDate().toString().substring(11, 16),
-									finalHourForecastsList.get(4).getAvgTemperature_celsius().toString().
-											substring(0, 4) + getString(R.string.temperature_metricUnits),
+									finalHourForecastsList.get(4).getAvgTemperature(metric).toString().
+											substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
 									finalHourForecastsList.get(4).getWeatherCondition().getIconAddress());
 							HourDayForecast hourForecast4 = new HourDayForecast(
 									finalHourForecastsList.get(5).getDate().toString().substring(11, 16),
-									finalHourForecastsList.get(5).getAvgTemperature_celsius().toString().
-											substring(0, 4) + getString(R.string.temperature_metricUnits),
+									finalHourForecastsList.get(5).getAvgTemperature(metric).toString().
+											substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
 									finalHourForecastsList.get(5).getWeatherCondition().getIconAddress());
 							HourDayForecast hourForecast5 = new HourDayForecast(
 									finalHourForecastsList.get(6).getDate().toString().substring(11, 16),
-									finalHourForecastsList.get(6).getAvgTemperature_celsius().toString().
-											substring(0, 4) + getString(R.string.temperature_metricUnits),
+									finalHourForecastsList.get(6).getAvgTemperature(metric).toString().
+											substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
 									finalHourForecastsList.get(6).getWeatherCondition().getIconAddress());
 							HourDayForecast hourForecast6 = new HourDayForecast(
 									finalHourForecastsList.get(7).getDate().toString().substring(11, 16),
-									finalHourForecastsList.get(7).getAvgTemperature_celsius().toString().
-											substring(0, 4) + getString(R.string.temperature_metricUnits),
+									finalHourForecastsList.get(7).getAvgTemperature(metric).toString().
+											substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
 									finalHourForecastsList.get(7).getWeatherCondition().getIconAddress());
 							hoursList.add(hourForecast1);
 							hoursList.add(hourForecast2);
@@ -421,25 +421,11 @@ public class ForecastFragment extends Fragment {
 									hoursList);
 							rvHourDayPrediction.setAdapter(adapterHourDay);
 							List<MoreInfo> list = new ArrayList<>();
-							MoreInfo moreInfoFeelsLike = null;
-							if(metric.equals("0")){
-								moreInfoFeelsLike = new MoreInfo(
-										getString(R.string.feels_like),
-										finalHourForecastsList.get(1).getRealFeel_celsius().toString().
-												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-										R.drawable.temperature);
-							} else if(metric.equals("1")) {
-								moreInfoFeelsLike = new MoreInfo(getString(R.string.feels_like),
-										finalHourForecastsList.get(1).getRealFee_fahrenheit().toString().
-												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-										R.drawable.temperature);
-							} else{
-								moreInfoFeelsLike = new MoreInfo(
-										getString(R.string.feels_like),
-										finalHourForecastsList.get(1).getRealFee_kelvin().toString().
-												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-										R.drawable.temperature);
-							}
+							MoreInfo moreInfoFeelsLike = new MoreInfo(
+									getString(R.string.feels_like),
+									finalHourForecastsList.get(1).getRealFeel(metric).toString().
+											substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
+									R.drawable.temperature);
 							MoreInfo moreInfoPressure = new MoreInfo(getString(R.string.pressure),
 									finalHourForecastsList.get(1).getPressure_millibars().toString().
 											substring(0, 4) + getString(R.string.milibar_pressureUnit),
@@ -506,33 +492,33 @@ public class ForecastFragment extends Fragment {
 								List<HourDayForecast> hoursList = new ArrayList<>();
 								HourDayForecast hourForecast1 = new HourDayForecast(
 										finalHourForecastsList.get(2).getDate().toString().substring(11, 16),
-										finalHourForecastsList.get(2).getAvgTemperature_celsius().toString().
-												substring(0, 4) + getString(R.string.temperature_metricUnits),
+										finalHourForecastsList.get(2).getAvgTemperature(metric).toString().
+												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
 										finalHourForecastsList.get(2).getWeatherCondition().getIconAddress());
 								HourDayForecast hourForecast2 = new HourDayForecast(
 										finalHourForecastsList.get(3).getDate().toString().substring(11, 16),
-										finalHourForecastsList.get(3).getAvgTemperature_celsius().toString().
-												substring(0, 4) + getString(R.string.temperature_metricUnits),
+										finalHourForecastsList.get(3).getAvgTemperature(metric).toString().
+												substring(0, 4) +UnitsGetter.getTemperatureUnits(metric),
 										finalHourForecastsList.get(3).getWeatherCondition().getIconAddress());
 								HourDayForecast hourForecast3 = new HourDayForecast(
 										finalHourForecastsList.get(4).getDate().toString().substring(11, 16),
-										finalHourForecastsList.get(4).getAvgTemperature_celsius().toString().
-												substring(0, 4) + getString(R.string.temperature_metricUnits),
+										finalHourForecastsList.get(4).getAvgTemperature(metric).toString().
+												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
 										finalHourForecastsList.get(4).getWeatherCondition().getIconAddress());
 								HourDayForecast hourForecast4 = new HourDayForecast(
 										finalHourForecastsList.get(5).getDate().toString().substring(11, 16),
-										finalHourForecastsList.get(5).getAvgTemperature_celsius().toString().
-												substring(0, 4) + getString(R.string.temperature_metricUnits),
+										finalHourForecastsList.get(5).getAvgTemperature(metric).toString().
+												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
 										finalHourForecastsList.get(5).getWeatherCondition().getIconAddress());
 								HourDayForecast hourForecast5 = new HourDayForecast(
 										finalHourForecastsList.get(6).getDate().toString().substring(11, 16),
-										finalHourForecastsList.get(6).getAvgTemperature_celsius().toString().
-												substring(0, 4) + getString(R.string.temperature_metricUnits),
+										finalHourForecastsList.get(6).getAvgTemperature(metric).toString().
+												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
 										finalHourForecastsList.get(6).getWeatherCondition().getIconAddress());
 								HourDayForecast hourForecast6 = new HourDayForecast(
 										finalHourForecastsList.get(7).getDate().toString().substring(11, 16),
-										finalHourForecastsList.get(7).getAvgTemperature_celsius().toString().
-												substring(0, 4) + getString(R.string.temperature_metricUnits),
+										finalHourForecastsList.get(7).getAvgTemperature(metric).toString().
+												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
 										finalHourForecastsList.get(7).getWeatherCondition().getIconAddress());
 								hoursList.add(hourForecast1);
 								hoursList.add(hourForecast2);

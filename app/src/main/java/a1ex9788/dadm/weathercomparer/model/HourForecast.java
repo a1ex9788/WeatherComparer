@@ -67,12 +67,24 @@ public class HourForecast {
 		return realFeel_celsius;
 	}
 
-	public Double getRealFee_fahrenheit() {
+	public Double getRealFeel_fahrenheit() {
 		return UnitsConverter.celsiusToFahrenheit(realFeel_celsius);
 	}
 
-	public Double getRealFee_kelvin() {
+	public Double getRealFeel_kelvin() {
 		return UnitsConverter.celsiusToKelvin(realFeel_celsius);
+	}
+
+	public Double getRealFeel(String valueUnit){
+		switch (valueUnit) {
+			case "1":
+				return getRealFeel_fahrenheit();
+			case "2":
+				return getRealFeel_kelvin();
+			case "0":
+			default:
+				return getRealFeel_celsius();
+		}
 	}
 
 	public Double getPrecipitationProbability() {
