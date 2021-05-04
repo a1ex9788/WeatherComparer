@@ -234,6 +234,11 @@ public class ForecastFragment extends Fragment {
 								Place placeFounded = ((FetchPlaceResponse) detailsResponse).getPlace();
 								currentPlace = new MapPlace(placeFounded);
 
+								if (getActivity() == null)
+								{
+									return;
+								}
+
 								getActivity().runOnUiThread(() -> {
 									binding.setPlace(currentPlace);
 
@@ -277,11 +282,21 @@ public class ForecastFragment extends Fragment {
 							roundToOneDecimal(hourForecast.getPrecipitationProbability()) + "",
 							"%");
 
+					if (getActivity() == null)
+					{
+						return;
+					}
+
 					getActivity().runOnUiThread(() -> {
 						binding.setCurrentWeather(currentWeather);
 						setWeatherConditionAnimation(hourForecast.getWeatherCondition());
 					});
 				} catch (Exception e) {
+					if (getActivity() == null)
+					{
+						return;
+					}
+
 					getActivity().runOnUiThread(() -> {
 						Toast.makeText(requireActivity().getBaseContext(),
 								R.string.toast_forecastError,
@@ -299,6 +314,11 @@ public class ForecastFragment extends Fragment {
 			public void run() {
 
 				try {
+					if (getActivity() == null)
+					{
+						return;
+					}
+
 					ConstraintLayout clBottomSheet = getActivity().findViewById(R.id.clBottomSheet);
 					BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(clBottomSheet);
 					DisplayMetrics metrics = new DisplayMetrics();
@@ -365,6 +385,12 @@ public class ForecastFragment extends Fragment {
 					List<DayForecast> finalDayForecastsList = dayForecastsList;
 					List<HourForecast> finalHourForecastsAccuWeather = hourForecastsAccuWeather;
 					List<HourForecast> finalHourForecastsListOpenWeather = hourForecastsOpenWeather;
+
+					if (getActivity() == null)
+					{
+						return;
+					}
+
 					getActivity().runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
@@ -486,6 +512,11 @@ public class ForecastFragment extends Fragment {
 							rvMoreInfo.setAdapter(adapter);
 						}
 					});
+
+					if (getActivity() == null)
+					{
+						return;
+					}
 
 					LineChartView chartView = getActivity().findViewById(R.id.chart);
 					bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
