@@ -79,7 +79,7 @@ public class ForecastFragment extends Fragment {
 	private String metric;
 	private LottieAnimationView animationView;
 	private MapPlace currentPlace;
-	private Location location;
+	private double latitude, longitude;
 
 	private WeatherProvider weatherProvider = WeatherProvider.Average;
 
@@ -109,14 +109,12 @@ public class ForecastFragment extends Fragment {
 					R.drawable.ic_launcher_foreground);
 		});
 		binding.openWeather.setOnClickListener(view -> {
-			providersFloatingButtonsListenter(
-					floatingActionButton,
+			providersFloatingButtonsListenter(floatingActionButton,
 					WeatherProvider.OpenWeather,
 					R.drawable.ic_openweather);
 		});
 		binding.accuWeather.setOnClickListener(view -> {
-			providersFloatingButtonsListenter(
-					floatingActionButton,
+			providersFloatingButtonsListenter(floatingActionButton,
 					WeatherProvider.AccuWeather,
 					R.drawable.ic_accuweather);
 		});
@@ -133,8 +131,8 @@ public class ForecastFragment extends Fragment {
 		if (this.weatherProvider != weatherProvider) {
 			this.weatherProvider = weatherProvider;
 
-			setCurrentForecastData(location.getLatitude(), location.getLongitude());
-			configureBottomSheet(location.getLatitude(), location.getLongitude(), false);
+			setCurrentForecastData();
+			configureBottomSheet(false);
 
 			binding.setWeatherOptions(false);
 
@@ -179,14 +177,14 @@ public class ForecastFragment extends Fragment {
 
 		if (getArguments() != null) {
 			String id = params.getString("id");
-			double latitude = params.getDouble("latitude");
-			double longitude = params.getDouble("longitude");
+			this.latitude = params.getDouble("latitude");
+			this.longitude = params.getDouble("longitude");
 
-			setCurrentForecastData(latitude, longitude);
+			setCurrentForecastData();
 
 			binding.setLocationPermissionGranted(true);
 
-			configureBottomSheet(latitude, longitude, true);
+			configureBottomSheet(true);
 
 			new Thread(() -> {
 				new GooglePlaces(getContext()).getDetails(id, detailsResponse -> {
@@ -223,31 +221,27 @@ public class ForecastFragment extends Fragment {
 			locationService.getLocation(getContext(), new LocationCallback() {
 				@Override
 				public void onLocationResult(@NonNull LocationResult locationResult) {
-					location = locationResult.getLastLocation();
-					Log.d("location", location.toString());
-					setCurrentForecastData(location.getLatitude(), location.getLongitude());
+					Location location = locationResult.getLastLocation();
+					latitude = location.getLatitude();
+					longitude = location.getLongitude();
+					setCurrentForecastData();
 
-					configureBottomSheet(location.getLatitude(), location.getLongitude(), true);
+					configureBottomSheet(true);
 
 					new Thread(() -> {
 						try {
-							forecastViewModel.getPlace(getContext(),
-									location.getLatitude(),
-									location.getLongitude(),
-									detailsResponse -> {
-										Place placeFounded = ((FetchPlaceResponse) detailsResponse).getPlace();
-										currentPlace = new MapPlace(placeFounded);
+							forecastViewModel.getPlace(getContext(), latitude, longitude, detailsResponse -> {
+								Place placeFounded = ((FetchPlaceResponse) detailsResponse).getPlace();
+								currentPlace = new MapPlace(placeFounded);
 
-										getActivity().runOnUiThread(() -> {
-											binding.setPlace(currentPlace);
+								getActivity().runOnUiThread(() -> {
+									binding.setPlace(currentPlace);
 
-											if (currentPlace.getPhoto() != null) {
-												Picasso.get()
-														.load(currentPlace.getPhoto())
-														.into(binding.ivForecastPlace);
-											}
-										});
-									});
+									if (currentPlace.getPhoto() != null) {
+										Picasso.get().load(currentPlace.getPhoto()).into(binding.ivForecastPlace);
+									}
+								});
+							});
 						} catch (Exception e) {
 						}
 					}).start();
@@ -257,7 +251,7 @@ public class ForecastFragment extends Fragment {
 		}).start();
 	}
 
-	private void setCurrentForecastData(double latitude, double longitude) {
+	private void setCurrentForecastData() {
 		new Thread() {
 			@Override
 			public void run() {
@@ -299,7 +293,7 @@ public class ForecastFragment extends Fragment {
 		}.start();
 	}
 
-	private void configureBottomSheet(double latitude, double longitude, boolean firstTime) {
+	private void configureBottomSheet(boolean firstTime) {
 		new Thread() {
 			@Override
 			public void run() {
