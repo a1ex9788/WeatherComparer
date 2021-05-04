@@ -103,6 +103,7 @@ public class ForecastFragment extends Fragment {
 			this.weatherProvider = weatherProvider;
 
 			setCurrentForecastData();
+
 			bottomSheetConfigurer.configureBottomSheet(getActivity(),
 					currentPlace,
 					weatherProvider,
@@ -175,15 +176,17 @@ public class ForecastFragment extends Fragment {
 				setCurrentForecastData();
 
 				binding.setLocationPermissionGranted(true);
-			}).start();
 
-			bottomSheetConfigurer.configureBottomSheet(
-					getActivity(),
-					currentPlace,
-					weatherProvider,
-					latitude,
-					longitude,
-					true);
+				while (currentPlace == null) {
+				}
+
+				bottomSheetConfigurer.configureBottomSheet(getActivity(),
+						currentPlace,
+						weatherProvider,
+						latitude,
+						longitude,
+						true);
+			}).start();
 		} else {
 			if (ContextCompat.checkSelfPermission(getContext(),
 					android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -227,6 +230,9 @@ public class ForecastFragment extends Fragment {
 							});
 
 							setCurrentForecastData();
+
+							while (currentPlace == null) {
+							}
 
 							bottomSheetConfigurer.configureBottomSheet(getActivity(),
 									currentPlace,

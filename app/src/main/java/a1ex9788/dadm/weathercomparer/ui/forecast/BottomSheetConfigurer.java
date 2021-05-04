@@ -149,8 +149,7 @@ public class BottomSheetConfigurer {
 		chartView.setCurrentViewport(v);
 	}
 
-	public void configureBottomSheet(Activity activity, MapPlace currentPlace,
-								ForecastFragment.WeatherProvider weatherProvider, double latitude, double longitude, boolean firstTime) {
+	public void configureBottomSheet(Activity activity, MapPlace currentPlace, ForecastFragment.WeatherProvider weatherProvider, double latitude, double longitude, boolean firstTime) {
 		try {
 			if (activity == null) {
 				return;
@@ -231,9 +230,6 @@ public class BottomSheetConfigurer {
 
 			if (activity == null) {
 				return;
-			}
-
-			while (currentPlace == null) {
 			}
 
 			activity.runOnUiThread(new Runnable() {
