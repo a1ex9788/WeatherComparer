@@ -169,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     app:fabSize="normal"
-                    app:maxImageSize="60dp"
+                    app:maxImageSize="40dp"
                     app:srcCompat="@drawable/ic_launcher_foreground"
                     map:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
@@ -192,7 +192,7 @@
                             android:layout_height="wrap_content"
                             android:clickable="false"
                             app:fabSize="mini"
-                            app:maxImageSize="40dp"
+                            app:maxImageSize="25dp"
                             app:srcCompat="@drawable/ic_launcher_foreground" />
 
                         <TextView
