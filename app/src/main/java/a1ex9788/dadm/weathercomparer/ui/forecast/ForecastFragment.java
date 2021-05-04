@@ -178,6 +178,7 @@ public class ForecastFragment extends Fragment {
 				binding.setLocationPermissionGranted(true);
 
 				while (currentPlace == null) {
+					Log.d("while", "while");
 				}
 
 				bottomSheetConfigurer.configureBottomSheet(getActivity(),
@@ -232,6 +233,7 @@ public class ForecastFragment extends Fragment {
 							setCurrentForecastData();
 
 							while (currentPlace == null) {
+								Log.d("while", "while");
 							}
 
 							bottomSheetConfigurer.configureBottomSheet(getActivity(),
