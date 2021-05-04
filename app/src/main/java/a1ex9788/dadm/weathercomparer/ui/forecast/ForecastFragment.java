@@ -205,49 +205,57 @@ public class ForecastFragment extends Fragment {
 				});
 			}).start();
 		} else {
-			getLocationPermission();
-
-			if (binding.getLocationPermissionGranted()) {
-				LocationService locationService = new LocationService(getContext());
-
-				new Thread(() -> {
-					locationService.getLocation(getContext(), new LocationCallback() {
-						@Override
-						public void onLocationResult(@NonNull LocationResult locationResult) {
-							location = locationResult.getLastLocation();
-							Log.d("location", location.toString());
-							setCurrentForecastData(location.getLatitude(), location.getLongitude());
-
-							configureBottomSheet(location.getLatitude(), location.getLongitude(), true);
-
-							new Thread(() -> {
-								try {
-									forecastViewModel.getPlace(getContext(),
-											location.getLatitude(),
-											location.getLongitude(),
-											detailsResponse -> {
-												Place placeFounded = ((FetchPlaceResponse) detailsResponse).getPlace();
-												currentPlace = new MapPlace(placeFounded);
-
-												getActivity().runOnUiThread(() -> {
-													binding.setPlace(currentPlace);
-
-													if (currentPlace.getPhoto() != null) {
-														Picasso.get()
-																.load(currentPlace.getPhoto())
-																.into(binding.ivForecastPlace);
-													}
-												});
-											});
-								} catch (Exception e) {
-								}
-							}).start();
-							super.onLocationResult(locationResult);
-						}
-					});
-				}).start();
+			if (ContextCompat.checkSelfPermission(getContext(),
+					android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+				onLocationPermissionGranted();
+			} else {
+				requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 			}
+
 		}
+	}
+
+	private void onLocationPermissionGranted() {
+		binding.setLocationPermissionGranted(true);
+
+		LocationService locationService = new LocationService(getContext());
+
+		new Thread(() -> {
+			locationService.getLocation(getContext(), new LocationCallback() {
+				@Override
+				public void onLocationResult(@NonNull LocationResult locationResult) {
+					location = locationResult.getLastLocation();
+					Log.d("location", location.toString());
+					setCurrentForecastData(location.getLatitude(), location.getLongitude());
+
+					configureBottomSheet(location.getLatitude(), location.getLongitude(), true);
+
+					new Thread(() -> {
+						try {
+							forecastViewModel.getPlace(getContext(),
+									location.getLatitude(),
+									location.getLongitude(),
+									detailsResponse -> {
+										Place placeFounded = ((FetchPlaceResponse) detailsResponse).getPlace();
+										currentPlace = new MapPlace(placeFounded);
+
+										getActivity().runOnUiThread(() -> {
+											binding.setPlace(currentPlace);
+
+											if (currentPlace.getPhoto() != null) {
+												Picasso.get()
+														.load(currentPlace.getPhoto())
+														.into(binding.ivForecastPlace);
+											}
+										});
+									});
+						} catch (Exception e) {
+						}
+					}).start();
+					super.onLocationResult(locationResult);
+				}
+			});
+		}).start();
 	}
 
 	private void setCurrentForecastData(double latitude, double longitude) {
@@ -712,21 +720,22 @@ public class ForecastFragment extends Fragment {
 		chartView.setCurrentViewport(v);
 	}
 
-	private void getLocationPermission() {
-
-		if (ContextCompat.checkSelfPermission(getContext(),
-				android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-			binding.setLocationPermissionGranted(true);
-		} else {
-			ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-		}
-	}
-
 	private enum WeatherProvider {
 		Average,
 		AccuWeather,
 		OpenWeather,
 		WeatherBit
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+		Log.d("code", String.valueOf(requestCode));
+
+		if (requestCode == 1 && grantResults.length > 0) {
+			onLocationPermissionGranted();
+		}
 	}
 
 }
