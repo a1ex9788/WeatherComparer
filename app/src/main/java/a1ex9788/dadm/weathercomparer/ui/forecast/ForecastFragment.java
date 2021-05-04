@@ -97,7 +97,7 @@ public class ForecastFragment extends Fragment {
 
 		recoverMapPlace();
 
-		FloatingActionButton floatingActionButton = (FloatingActionButton) root.findViewById(R.id.supplierButton);
+		FloatingActionButton floatingActionButton = root.findViewById(R.id.supplierButton);
 
 		binding.supplierButton.setOnClickListener(view -> {
 			binding.setWeatherOptions(!binding.getWeatherOptions());
@@ -180,12 +180,6 @@ public class ForecastFragment extends Fragment {
 			this.latitude = params.getDouble("latitude");
 			this.longitude = params.getDouble("longitude");
 
-			setCurrentForecastData();
-
-			binding.setLocationPermissionGranted(true);
-
-			configureBottomSheet(true);
-
 			new Thread(() -> {
 				new GooglePlaces(getContext()).getDetails(id, detailsResponse -> {
 					Place placeFounded = ((FetchPlaceResponse) detailsResponse).getPlace();
@@ -201,7 +195,13 @@ public class ForecastFragment extends Fragment {
 						}
 					});
 				});
+
+				setCurrentForecastData();
+
+				binding.setLocationPermissionGranted(true);
 			}).start();
+
+			configureBottomSheet(true);
 		} else {
 			if (ContextCompat.checkSelfPermission(getContext(),
 					android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -224,9 +224,6 @@ public class ForecastFragment extends Fragment {
 					Location location = locationResult.getLastLocation();
 					latitude = location.getLatitude();
 					longitude = location.getLongitude();
-					setCurrentForecastData();
-
-					configureBottomSheet(true);
 
 					new Thread(() -> {
 						try {
@@ -246,10 +243,15 @@ public class ForecastFragment extends Fragment {
 									}
 								});
 							});
+
+							setCurrentForecastData();
+
+							configureBottomSheet(true);
 						} catch (Exception e) {
 							Log.e("", e.toString());
 						}
 					}).start();
+
 					super.onLocationResult(locationResult);
 				}
 			});
@@ -307,348 +309,347 @@ public class ForecastFragment extends Fragment {
 	}
 
 	private void configureBottomSheet(boolean firstTime) {
-		new Thread() {
-			@Override
-			public void run() {
+		try {
+			if (getActivity() == null) {
+				return;
+			}
 
-				try {
-					if (getActivity() == null) {
-						return;
-					}
+			ConstraintLayout clBottomSheetFake = getActivity().findViewById(R.id.clBottomSheet);
+			while (clBottomSheetFake == null) {
+				clBottomSheetFake = getActivity().findViewById(R.id.clBottomSheet);
+			}
 
-					ConstraintLayout clBottomSheetFake = getActivity().findViewById(R.id.clBottomSheet);
-					while (clBottomSheetFake == null) {
-						clBottomSheetFake = getActivity().findViewById(R.id.clBottomSheet);
-					}
+			ConstraintLayout clBottomSheet = clBottomSheetFake;
 
-					ConstraintLayout clBottomSheet = clBottomSheetFake;
+			BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(clBottomSheet);
+			DisplayMetrics metrics = new DisplayMetrics();
 
-					BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(clBottomSheet);
-					DisplayMetrics metrics = new DisplayMetrics();
+			getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+			int height = metrics.heightPixels;
 
-					getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-					int height = metrics.heightPixels;
+			TextView tvToday = getActivity().findViewById(R.id.tvToday);
 
-					TextView tvToday = getActivity().findViewById(R.id.tvToday);
+			RecyclerView rvMoreInfo = getActivity().findViewById(R.id.rvMoreInfo);
+			RecyclerView rvHourDayPrediction = getActivity().findViewById(R.id.rvHourDayPrediction);
+			RecyclerView.LayoutManager managerMoreInfo = new LinearLayoutManager(getContext(),
+					RecyclerView.HORIZONTAL,
+					false);
+			RecyclerView.LayoutManager managerHourDay = new LinearLayoutManager(getContext(),
+					RecyclerView.HORIZONTAL,
+					false);
+			SnapHelper snapHelper = new LinearSnapHelper();
 
-					RecyclerView rvMoreInfo = getActivity().findViewById(R.id.rvMoreInfo);
-					RecyclerView rvHourDayPrediction = getActivity().findViewById(R.id.rvHourDayPrediction);
-					RecyclerView.LayoutManager managerMoreInfo = new LinearLayoutManager(getContext(),
-							RecyclerView.HORIZONTAL,
-							false);
-					RecyclerView.LayoutManager managerHourDay = new LinearLayoutManager(getContext(),
-							RecyclerView.HORIZONTAL,
-							false);
-					SnapHelper snapHelper = new LinearSnapHelper();
-
-					List<HourForecast> hourForecastsList, hourForecastsAccuWeather, hourForecastsOpenWeather
-							/*, hourForecastsWeatherBit*/;
-					List<DayForecast> dayForecastsList;
-					try {
-						if (weatherProvider == WeatherProvider.Average) {
-							hourForecastsList = forecastViewModel.getAverageHourlyForecast(latitude, longitude);
-						} else if (weatherProvider == WeatherProvider.AccuWeather) {
-							hourForecastsList = forecastViewModel.getAccuWeatherHourlyForecast(latitude, longitude);
-						} else if (weatherProvider == WeatherProvider.OpenWeather) {
-							hourForecastsList = forecastViewModel.getOpenWeatherHourlyForecast(latitude, longitude);
-						} else {
-							hourForecastsList = forecastViewModel.getWeatherBitHourlyForecast(latitude, longitude);
-						}
-					} catch (Exception e) {
-						hourForecastsList = new ArrayList<>();
-					}
-					try {
-						if (weatherProvider == WeatherProvider.Average) {
-							dayForecastsList = forecastViewModel.getAverageDailyForecast(latitude, longitude);
-						} else if (weatherProvider == WeatherProvider.AccuWeather) {
-							dayForecastsList = forecastViewModel.getAccuWeatherDailyForecast(latitude, longitude);
-						} else if (weatherProvider == WeatherProvider.OpenWeather) {
-							dayForecastsList = forecastViewModel.getOpenWeatherDailyForecast(latitude, longitude);
-						} else {
-							dayForecastsList = forecastViewModel.getWeatherBitDailyForecast(latitude, longitude);
-						}
-					} catch (Exception e) {
-						dayForecastsList = new ArrayList<>();
-					}
-					try {
-						hourForecastsAccuWeather = forecastViewModel.getAccuWeatherHourlyForecast(latitude, longitude);
-					} catch (Exception e) {
-						hourForecastsAccuWeather = new ArrayList<>();
-					}
-					try {
-						hourForecastsOpenWeather = forecastViewModel.getOpenWeatherHourlyForecast(latitude, longitude);
-					} catch (Exception e) {
-						hourForecastsOpenWeather = new ArrayList<>();
-					}
+			List<HourForecast> hourForecastsList, hourForecastsAccuWeather, hourForecastsOpenWeather
+					/*, hourForecastsWeatherBit*/;
+			List<DayForecast> dayForecastsList;
+			try {
+				if (weatherProvider == WeatherProvider.Average) {
+					hourForecastsList = forecastViewModel.getAverageHourlyForecast(latitude, longitude);
+				} else if (weatherProvider == WeatherProvider.AccuWeather) {
+					hourForecastsList = forecastViewModel.getAccuWeatherHourlyForecast(latitude, longitude);
+				} else if (weatherProvider == WeatherProvider.OpenWeather) {
+					hourForecastsList = forecastViewModel.getOpenWeatherHourlyForecast(latitude, longitude);
+				} else {
+					hourForecastsList = forecastViewModel.getWeatherBitHourlyForecast(latitude, longitude);
+				}
+			} catch (Exception e) {
+				hourForecastsList = new ArrayList<>();
+			}
+			try {
+				if (weatherProvider == WeatherProvider.Average) {
+					dayForecastsList = forecastViewModel.getAverageDailyForecast(latitude, longitude);
+				} else if (weatherProvider == WeatherProvider.AccuWeather) {
+					dayForecastsList = forecastViewModel.getAccuWeatherDailyForecast(latitude, longitude);
+				} else if (weatherProvider == WeatherProvider.OpenWeather) {
+					dayForecastsList = forecastViewModel.getOpenWeatherDailyForecast(latitude, longitude);
+				} else {
+					dayForecastsList = forecastViewModel.getWeatherBitDailyForecast(latitude, longitude);
+				}
+			} catch (Exception e) {
+				dayForecastsList = new ArrayList<>();
+			}
+			try {
+				hourForecastsAccuWeather = forecastViewModel.getAccuWeatherHourlyForecast(latitude, longitude);
+			} catch (Exception e) {
+				hourForecastsAccuWeather = new ArrayList<>();
+			}
+			try {
+				hourForecastsOpenWeather = forecastViewModel.getOpenWeatherHourlyForecast(latitude, longitude);
+			} catch (Exception e) {
+				hourForecastsOpenWeather = new ArrayList<>();
+			}
                     /* La función se ha convertido de pago, por lo que ya no funciona
                     List<HourForecast> hourForecastsWeatherBit = forecastViewModel
                     .getWeatherBitHourlyForecast(latitude, longitude);
                     */
-					List<HourForecast> finalHourForecastsList = hourForecastsList;
-					List<DayForecast> finalDayForecastsList = dayForecastsList;
-					List<HourForecast> finalHourForecastsAccuWeather = hourForecastsAccuWeather;
-					List<HourForecast> finalHourForecastsListOpenWeather = hourForecastsOpenWeather;
+			List<HourForecast> finalHourForecastsList = hourForecastsList;
+			List<DayForecast> finalDayForecastsList = dayForecastsList;
+			List<HourForecast> finalHourForecastsAccuWeather = hourForecastsAccuWeather;
+			List<HourForecast> finalHourForecastsListOpenWeather = hourForecastsOpenWeather;
 
-					if (getActivity() == null) {
-						return;
+			if (getActivity() == null) {
+				return;
+			}
+
+			while (currentPlace == null)
+			{
+			}
+
+			getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					bottomSheetBehavior.setPeekHeight(484);
+					clBottomSheet.setMaxHeight(1784);
+					clBottomSheet.getLayoutParams().height = (3 * height) / 4;
+					if (firstTime) {
+						snapHelper.attachToRecyclerView(rvMoreInfo);
 					}
+					rvMoreInfo.setLayoutManager(managerMoreInfo);
+					rvHourDayPrediction.setLayoutManager(managerHourDay);
 
-					getActivity().runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							bottomSheetBehavior.setPeekHeight(484);
-							clBottomSheet.setMaxHeight(1784);
-							clBottomSheet.getLayoutParams().height = (3 * height) / 4;
-							if (firstTime) {
-								snapHelper.attachToRecyclerView(rvMoreInfo);
-							}
-							rvMoreInfo.setLayoutManager(managerMoreInfo);
-							rvHourDayPrediction.setLayoutManager(managerHourDay);
+					List<HourDayForecast> hoursList = new ArrayList<>();
+					List<MoreInfo> list = new ArrayList<>();
+					if (finalHourForecastsList.size() > 0) {
+						HourDayForecast hourForecast1 = new HourDayForecast(
+								finalHourForecastsList.get(2).getDate().toString().substring(11, 16),
+								finalHourForecastsList.get(2).getAvgTemperature(metric).toString().
+										substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
+								finalHourForecastsList.get(2).getWeatherCondition().getIconAddress());
+						HourDayForecast hourForecast2 = new HourDayForecast(
+								finalHourForecastsList.get(3).getDate().toString().substring(11, 16),
+								finalHourForecastsList.get(3).getAvgTemperature(metric).toString().
+										substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
+								finalHourForecastsList.get(3).getWeatherCondition().getIconAddress());
+						HourDayForecast hourForecast3 = new HourDayForecast(
+								finalHourForecastsList.get(4).getDate().toString().substring(11, 16),
+								finalHourForecastsList.get(4).getAvgTemperature(metric).toString().
+										substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
+								finalHourForecastsList.get(4).getWeatherCondition().getIconAddress());
+						HourDayForecast hourForecast4 = new HourDayForecast(
+								finalHourForecastsList.get(5).getDate().toString().substring(11, 16),
+								finalHourForecastsList.get(5).getAvgTemperature(metric).toString().
+										substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
+								finalHourForecastsList.get(5).getWeatherCondition().getIconAddress());
+						HourDayForecast hourForecast5 = new HourDayForecast(
+								finalHourForecastsList.get(6).getDate().toString().substring(11, 16),
+								finalHourForecastsList.get(6).getAvgTemperature(metric).toString().
+										substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
+								finalHourForecastsList.get(6).getWeatherCondition().getIconAddress());
+						HourDayForecast hourForecast6 = new HourDayForecast(
+								finalHourForecastsList.get(7).getDate().toString().substring(11, 16),
+								finalHourForecastsList.get(7).getAvgTemperature(metric).toString().
+										substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
+								finalHourForecastsList.get(7).getWeatherCondition().getIconAddress());
+						hoursList.add(hourForecast1);
+						hoursList.add(hourForecast2);
+						hoursList.add(hourForecast3);
+						hoursList.add(hourForecast4);
+						hoursList.add(hourForecast5);
+						hoursList.add(hourForecast6);
 
-							List<HourDayForecast> hoursList = new ArrayList<>();
-							List<MoreInfo> list = new ArrayList<>();
-							if (finalHourForecastsList.size() > 0) {
-								HourDayForecast hourForecast1 = new HourDayForecast(
-										finalHourForecastsList.get(2).getDate().toString().substring(11, 16),
-										finalHourForecastsList.get(2).getAvgTemperature(metric).toString().
-												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-										finalHourForecastsList.get(2).getWeatherCondition().getIconAddress());
-								HourDayForecast hourForecast2 = new HourDayForecast(
-										finalHourForecastsList.get(3).getDate().toString().substring(11, 16),
-										finalHourForecastsList.get(3).getAvgTemperature(metric).toString().
-												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-										finalHourForecastsList.get(3).getWeatherCondition().getIconAddress());
-								HourDayForecast hourForecast3 = new HourDayForecast(
-										finalHourForecastsList.get(4).getDate().toString().substring(11, 16),
-										finalHourForecastsList.get(4).getAvgTemperature(metric).toString().
-												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-										finalHourForecastsList.get(4).getWeatherCondition().getIconAddress());
-								HourDayForecast hourForecast4 = new HourDayForecast(
-										finalHourForecastsList.get(5).getDate().toString().substring(11, 16),
-										finalHourForecastsList.get(5).getAvgTemperature(metric).toString().
-												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-										finalHourForecastsList.get(5).getWeatherCondition().getIconAddress());
-								HourDayForecast hourForecast5 = new HourDayForecast(
-										finalHourForecastsList.get(6).getDate().toString().substring(11, 16),
-										finalHourForecastsList.get(6).getAvgTemperature(metric).toString().
-												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-										finalHourForecastsList.get(6).getWeatherCondition().getIconAddress());
-								HourDayForecast hourForecast6 = new HourDayForecast(
-										finalHourForecastsList.get(7).getDate().toString().substring(11, 16),
-										finalHourForecastsList.get(7).getAvgTemperature(metric).toString().
-												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-										finalHourForecastsList.get(7).getWeatherCondition().getIconAddress());
-								hoursList.add(hourForecast1);
-								hoursList.add(hourForecast2);
-								hoursList.add(hourForecast3);
-								hoursList.add(hourForecast4);
-								hoursList.add(hourForecast5);
-								hoursList.add(hourForecast6);
-
-								CustomRecyclerAdapterHourDayForecast adapterHourDay = new CustomRecyclerAdapterHourDayForecast(
-										hoursList);
-								rvHourDayPrediction.setAdapter(adapterHourDay);
-								MoreInfo moreInfoFeelsLike = new MoreInfo(getString(R.string.feels_like),
-										finalHourForecastsList.get(1).getRealFeel(metric).toString().
-												substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-										R.drawable.temperature);
-								MoreInfo moreInfoPressure = null;
-								if (finalDayForecastsList.get(1).getPressure_millibars() != null) {
-									moreInfoPressure = new MoreInfo(getString(R.string.pressure),
-											finalHourForecastsList.get(1).getPressure_millibars().toString().
-													substring(0, 4) + getString(R.string.milibar_pressureUnit),
-											R.drawable.ic_pressure);
-								}
-								int uvIndex = finalHourForecastsList.get(1).getUvIndex().intValue();
-								String uvIndexText = "";
-								if (uvIndex < 3) {
-									uvIndexText = finalHourForecastsList.get(1)
-											.getUvIndex()
-											.toString()
-											.substring(0, 1) + ", " + getString(R.string.low);
-								} else if (uvIndex < 6) {
-									uvIndexText = finalHourForecastsList.get(1)
-											.getUvIndex()
-											.toString()
-											.substring(0, 1) + ", " + getString(R.string.mid);
-								} else if (uvIndex < 8) {
-									uvIndexText = finalHourForecastsList.get(1)
-											.getUvIndex()
-											.toString()
-											.substring(0, 1) + ", " + getString(R.string.high);
-								} else if (uvIndex < 11) {
-									uvIndexText = finalHourForecastsList.get(1)
-											.getUvIndex()
-											.toString()
-											.substring(0, 1) + ", " + getString(R.string.veryHigh);
-								} else {
-									uvIndexText = finalHourForecastsList.get(1)
-											.getUvIndex()
-											.toString()
-											.substring(0, 1) + ", " + getString(R.string.extreme);
-								}
-								MoreInfo moreInfoUVIndex = new MoreInfo(getString(R.string.UVIndex),
-										uvIndexText,
-										R.drawable.ic_uv_index);
-								ZoneId zoneId = ZoneId.of(currentPlace.getTimeZoneId());
-								Date sunrise = finalDayForecastsList.get(0).getSunrise();
-								Date sunset = finalDayForecastsList.get(0).getSunset();
-								LocalDateTime localDateTimeSunrise = LocalDateTime.ofInstant(sunrise.toInstant(),
-										zoneId);
-								LocalDateTime localDateTimeSunset = LocalDateTime.ofInstant(sunset.toInstant(), zoneId);
-								MoreInfo moreInfoSunrise = new MoreInfo(getString(R.string.sunrise),
-										localDateTimeSunrise.toString().substring(11, 16),
-										R.drawable.ic_sunrise);
-								MoreInfo moreInfoSunset = new MoreInfo(getString(R.string.sunset),
-										localDateTimeSunset.toString().substring(11, 16),
-										R.drawable.ic_sunset);
-								list.add(moreInfoFeelsLike);
-								if (moreInfoPressure != null) {
-									list.add(moreInfoPressure);
-								}
-								list.add(moreInfoUVIndex);
-								list.add(moreInfoSunrise);
-								list.add(moreInfoSunset);
-							}
-							CustomRecyclerAdapterMoreInfo adapter = new CustomRecyclerAdapterMoreInfo(list);
-							rvMoreInfo.setAdapter(adapter);
+						CustomRecyclerAdapterHourDayForecast adapterHourDay = new CustomRecyclerAdapterHourDayForecast(
+								hoursList);
+						rvHourDayPrediction.setAdapter(adapterHourDay);
+						MoreInfo moreInfoFeelsLike = new MoreInfo(getString(R.string.feels_like),
+								finalHourForecastsList.get(1).getRealFeel(metric).toString().
+										substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
+								R.drawable.temperature);
+						MoreInfo moreInfoPressure = null;
+						if (finalDayForecastsList.get(1).getPressure_millibars() != null) {
+							moreInfoPressure = new MoreInfo(getString(R.string.pressure),
+									finalHourForecastsList.get(1).getPressure_millibars().toString().
+											substring(0, 4) + getString(R.string.milibar_pressureUnit),
+									R.drawable.ic_pressure);
 						}
-					});
+						int uvIndex = finalHourForecastsList.get(1).getUvIndex().intValue();
+						String uvIndexText = "";
+						if (uvIndex < 3) {
+							uvIndexText = finalHourForecastsList.get(1)
+									.getUvIndex()
+									.toString()
+									.substring(0, 1) + ", " + getString(R.string.low);
+						} else if (uvIndex < 6) {
+							uvIndexText = finalHourForecastsList.get(1)
+									.getUvIndex()
+									.toString()
+									.substring(0, 1) + ", " + getString(R.string.mid);
+						} else if (uvIndex < 8) {
+							uvIndexText = finalHourForecastsList.get(1)
+									.getUvIndex()
+									.toString()
+									.substring(0, 1) + ", " + getString(R.string.high);
+						} else if (uvIndex < 11) {
+							uvIndexText = finalHourForecastsList.get(1)
+									.getUvIndex()
+									.toString()
+									.substring(0, 1) + ", " + getString(R.string.veryHigh);
+						} else {
+							uvIndexText = finalHourForecastsList.get(1)
+									.getUvIndex()
+									.toString()
+									.substring(0, 1) + ", " + getString(R.string.extreme);
+						}
+						MoreInfo moreInfoUVIndex = new MoreInfo(getString(R.string.UVIndex),
+								uvIndexText,
+								R.drawable.ic_uv_index);
 
-					if (getActivity() == null) {
-						return;
+						ZoneId zoneId = ZoneId.of(currentPlace.getTimeZoneId());
+						Date sunrise = finalDayForecastsList.get(0).getSunrise();
+						Date sunset = finalDayForecastsList.get(0).getSunset();
+						LocalDateTime localDateTimeSunrise = LocalDateTime.ofInstant(sunrise.toInstant(),
+								zoneId);
+						LocalDateTime localDateTimeSunset = LocalDateTime.ofInstant(sunset.toInstant(), zoneId);
+						MoreInfo moreInfoSunrise = new MoreInfo(getString(R.string.sunrise),
+								localDateTimeSunrise.toString().substring(11, 16),
+								R.drawable.ic_sunrise);
+						MoreInfo moreInfoSunset = new MoreInfo(getString(R.string.sunset),
+								localDateTimeSunset.toString().substring(11, 16),
+								R.drawable.ic_sunset);
+						list.add(moreInfoFeelsLike);
+						if (moreInfoPressure != null) {
+							list.add(moreInfoPressure);
+						}
+						list.add(moreInfoUVIndex);
+						list.add(moreInfoSunrise);
+						list.add(moreInfoSunset);
 					}
+					CustomRecyclerAdapterMoreInfo adapter = new CustomRecyclerAdapterMoreInfo(list);
+					rvMoreInfo.setAdapter(adapter);
+				}
+			});
 
-					LineChartView chartView = getActivity().findViewById(R.id.chart);
-					bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-						@Override
-						public void onStateChanged(@NonNull View bottomSheet, int newState) {
-							if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
-								chartView.setVisibility(View.INVISIBLE);
-								tvToday.setText(R.string.tvToday);
-								List<HourDayForecast> hoursList = new ArrayList<>();
-								if (finalHourForecastsList.size() > 0) {
-									HourDayForecast hourForecast1 = new HourDayForecast(
-											finalHourForecastsList.get(2).getDate().toString().substring(11, 16),
-											finalHourForecastsList.get(2).getAvgTemperature(metric).toString().
-													substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-											finalHourForecastsList.get(2).getWeatherCondition().getIconAddress());
-									HourDayForecast hourForecast2 = new HourDayForecast(
-											finalHourForecastsList.get(3).getDate().toString().substring(11, 16),
-											finalHourForecastsList.get(3).getAvgTemperature(metric).toString().
-													substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-											finalHourForecastsList.get(3).getWeatherCondition().getIconAddress());
-									HourDayForecast hourForecast3 = new HourDayForecast(
-											finalHourForecastsList.get(4).getDate().toString().substring(11, 16),
-											finalHourForecastsList.get(4).getAvgTemperature(metric).toString().
-													substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-											finalHourForecastsList.get(4).getWeatherCondition().getIconAddress());
-									HourDayForecast hourForecast4 = new HourDayForecast(
-											finalHourForecastsList.get(5).getDate().toString().substring(11, 16),
-											finalHourForecastsList.get(5).getAvgTemperature(metric).toString().
-													substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-											finalHourForecastsList.get(5).getWeatherCondition().getIconAddress());
-									HourDayForecast hourForecast5 = new HourDayForecast(
-											finalHourForecastsList.get(6).getDate().toString().substring(11, 16),
-											finalHourForecastsList.get(6).getAvgTemperature(metric).toString().
-													substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-											finalHourForecastsList.get(6).getWeatherCondition().getIconAddress());
-									HourDayForecast hourForecast6 = new HourDayForecast(
-											finalHourForecastsList.get(7).getDate().toString().substring(11, 16),
-											finalHourForecastsList.get(7).getAvgTemperature(metric).toString().
-													substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
-											finalHourForecastsList.get(7).getWeatherCondition().getIconAddress());
-									hoursList.add(hourForecast1);
-									hoursList.add(hourForecast2);
-									hoursList.add(hourForecast3);
-									hoursList.add(hourForecast4);
-									hoursList.add(hourForecast5);
-									hoursList.add(hourForecast6);
-								}
-								CustomRecyclerAdapterHourDayForecast adapterHourDay = new CustomRecyclerAdapterHourDayForecast(
-										hoursList);
-								rvHourDayPrediction.setAdapter(adapterHourDay);
-							} else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
-								tvToday.setText(R.string.tvToday_daily);
-								List<HourDayForecast> daysList = new ArrayList<>();
-								HourDayForecast dayForecast1 = new HourDayForecast(finalDayForecastsList.get(0)
-										.getDate()
-										.toString()
-										.substring(0, 4),
-										"",
-										finalDayForecastsList.get(0).getWeatherCondition().getIconAddress());
-								HourDayForecast dayForecast2 = new HourDayForecast(finalDayForecastsList.get(1)
-										.getDate()
-										.toString()
-										.substring(0, 4),
-										"",
-										finalDayForecastsList.get(1).getWeatherCondition().getIconAddress());
-								HourDayForecast dayForecast3 = new HourDayForecast(finalDayForecastsList.get(2)
-										.getDate()
-										.toString()
-										.substring(0, 4),
-										"",
-										finalDayForecastsList.get(2).getWeatherCondition().getIconAddress());
-								HourDayForecast dayForecast4 = new HourDayForecast(finalDayForecastsList.get(3)
-										.getDate()
-										.toString()
-										.substring(0, 4),
-										"",
-										finalDayForecastsList.get(3).getWeatherCondition().getIconAddress());
-								daysList.add(dayForecast1);
-								daysList.add(dayForecast2);
-								daysList.add(dayForecast3);
-								daysList.add(dayForecast4);
-								CustomRecyclerAdapterHourDayForecast adapterHourDay = new CustomRecyclerAdapterHourDayForecast(
-										daysList);
-								rvHourDayPrediction.setAdapter(adapterHourDay);
-							} else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
-								chartView.setVisibility(View.VISIBLE);
-								if (!chartConfigured) {
-									List<AxisValue> axisXValues = null;
-									List<PointValue> pointValuesAverage = null;
-									List<PointValue> pointValuesOpenWeather = null;
-									List<PointValue> pointValuesAccuWeather = null;
+			if (getActivity() == null) {
+				return;
+			}
+
+			LineChartView chartView = getActivity().findViewById(R.id.chart);
+			bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+				@Override
+				public void onStateChanged(@NonNull View bottomSheet, int newState) {
+					if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
+						chartView.setVisibility(View.INVISIBLE);
+						tvToday.setText(R.string.tvToday);
+						List<HourDayForecast> hoursList = new ArrayList<>();
+						if (finalHourForecastsList.size() > 0) {
+							HourDayForecast hourForecast1 = new HourDayForecast(
+									finalHourForecastsList.get(2).getDate().toString().substring(11, 16),
+									finalHourForecastsList.get(2).getAvgTemperature(metric).toString().
+											substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
+									finalHourForecastsList.get(2).getWeatherCondition().getIconAddress());
+							HourDayForecast hourForecast2 = new HourDayForecast(
+									finalHourForecastsList.get(3).getDate().toString().substring(11, 16),
+									finalHourForecastsList.get(3).getAvgTemperature(metric).toString().
+											substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
+									finalHourForecastsList.get(3).getWeatherCondition().getIconAddress());
+							HourDayForecast hourForecast3 = new HourDayForecast(
+									finalHourForecastsList.get(4).getDate().toString().substring(11, 16),
+									finalHourForecastsList.get(4).getAvgTemperature(metric).toString().
+											substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
+									finalHourForecastsList.get(4).getWeatherCondition().getIconAddress());
+							HourDayForecast hourForecast4 = new HourDayForecast(
+									finalHourForecastsList.get(5).getDate().toString().substring(11, 16),
+									finalHourForecastsList.get(5).getAvgTemperature(metric).toString().
+											substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
+									finalHourForecastsList.get(5).getWeatherCondition().getIconAddress());
+							HourDayForecast hourForecast5 = new HourDayForecast(
+									finalHourForecastsList.get(6).getDate().toString().substring(11, 16),
+									finalHourForecastsList.get(6).getAvgTemperature(metric).toString().
+											substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
+									finalHourForecastsList.get(6).getWeatherCondition().getIconAddress());
+							HourDayForecast hourForecast6 = new HourDayForecast(
+									finalHourForecastsList.get(7).getDate().toString().substring(11, 16),
+									finalHourForecastsList.get(7).getAvgTemperature(metric).toString().
+											substring(0, 4) + UnitsGetter.getTemperatureUnits(metric),
+									finalHourForecastsList.get(7).getWeatherCondition().getIconAddress());
+							hoursList.add(hourForecast1);
+							hoursList.add(hourForecast2);
+							hoursList.add(hourForecast3);
+							hoursList.add(hourForecast4);
+							hoursList.add(hourForecast5);
+							hoursList.add(hourForecast6);
+						}
+						CustomRecyclerAdapterHourDayForecast adapterHourDay = new CustomRecyclerAdapterHourDayForecast(
+								hoursList);
+						rvHourDayPrediction.setAdapter(adapterHourDay);
+					} else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
+						tvToday.setText(R.string.tvToday_daily);
+						List<HourDayForecast> daysList = new ArrayList<>();
+						HourDayForecast dayForecast1 = new HourDayForecast(finalDayForecastsList.get(0)
+								.getDate()
+								.toString()
+								.substring(0, 4),
+								"",
+								finalDayForecastsList.get(0).getWeatherCondition().getIconAddress());
+						HourDayForecast dayForecast2 = new HourDayForecast(finalDayForecastsList.get(1)
+								.getDate()
+								.toString()
+								.substring(0, 4),
+								"",
+								finalDayForecastsList.get(1).getWeatherCondition().getIconAddress());
+						HourDayForecast dayForecast3 = new HourDayForecast(finalDayForecastsList.get(2)
+								.getDate()
+								.toString()
+								.substring(0, 4),
+								"",
+								finalDayForecastsList.get(2).getWeatherCondition().getIconAddress());
+						HourDayForecast dayForecast4 = new HourDayForecast(finalDayForecastsList.get(3)
+								.getDate()
+								.toString()
+								.substring(0, 4),
+								"",
+								finalDayForecastsList.get(3).getWeatherCondition().getIconAddress());
+						daysList.add(dayForecast1);
+						daysList.add(dayForecast2);
+						daysList.add(dayForecast3);
+						daysList.add(dayForecast4);
+						CustomRecyclerAdapterHourDayForecast adapterHourDay = new CustomRecyclerAdapterHourDayForecast(
+								daysList);
+						rvHourDayPrediction.setAdapter(adapterHourDay);
+					} else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
+						chartView.setVisibility(View.VISIBLE);
+						if (!chartConfigured) {
+							List<AxisValue> axisXValues = null;
+							List<PointValue> pointValuesAverage = null;
+							List<PointValue> pointValuesOpenWeather = null;
+							List<PointValue> pointValuesAccuWeather = null;
                                             /* The function to obtain the HourForecast of
                                             WeatherBit is now premium, so we can not use it */
-									/* List<PointValue> pointValuesWeatherBit = null; */
-									if (finalDayForecastsList.size() != 0) {
-										axisXValues = getAxisXLables(finalHourForecastsList);
-										pointValuesAverage = getAxisPoints(finalHourForecastsList);
-									}
-									if (finalHourForecastsListOpenWeather.size() != 0) {
-										pointValuesOpenWeather = getAxisPoints(finalHourForecastsListOpenWeather);
-									}
-									if (finalHourForecastsAccuWeather.size() != 0) {
-										pointValuesAccuWeather = getAxisPoints(finalHourForecastsAccuWeather);
-									}
+							/* List<PointValue> pointValuesWeatherBit = null; */
+							if (finalDayForecastsList.size() != 0) {
+								axisXValues = getAxisXLables(finalHourForecastsList);
+								pointValuesAverage = getAxisPoints(finalHourForecastsList);
+							}
+							if (finalHourForecastsListOpenWeather.size() != 0) {
+								pointValuesOpenWeather = getAxisPoints(finalHourForecastsListOpenWeather);
+							}
+							if (finalHourForecastsAccuWeather.size() != 0) {
+								pointValuesAccuWeather = getAxisPoints(finalHourForecastsAccuWeather);
+							}
                                             /* The function to obtain the HourForecast of
                                             WeatherBit is now premium, so we can not use it */
                                     /* if(finalHourForecastsWeatherBit.size() != 0) {
                                         pointValuesWeatherBit = getAxisPoints
                                         (hourForecastsWeatherBit);
                                     } */
-									initLineChart(chartView,
-											axisXValues,
-											pointValuesAverage,
-											pointValuesOpenWeather,
-											pointValuesAccuWeather/*,
+							initLineChart(chartView,
+									axisXValues,
+									pointValuesAverage,
+									pointValuesOpenWeather,
+									pointValuesAccuWeather/*,
                                                     pointValuesWeatherBit*/);
-									chartConfigured = true;
-								}
-							}
+							chartConfigured = true;
 						}
-
-						@Override
-						public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
-						}
-					});
-				} catch (Exception e) {
-					Log.e("", e.toString());
+					}
 				}
-			}
-		}.start();
+
+				@Override
+				public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+				}
+			});
+		} catch (Exception e) {
+			Log.e("", e.toString());
+		}
 	}
 
 	private double roundToOneDecimal(double d) {
