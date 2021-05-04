@@ -182,7 +182,9 @@ public class ForecastFragment extends Fragment {
 
 			setCurrentForecastData(latitude, longitude);
 
-			//configureBottomSheet(latitude, longitude, true);
+			binding.setLocationPermissionGranted(true);
+
+			configureBottomSheet(latitude, longitude, true);
 
 			new Thread(() -> {
 				new GooglePlaces(getContext()).getDetails(id, detailsResponse -> {
