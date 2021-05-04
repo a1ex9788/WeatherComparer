@@ -451,6 +451,7 @@ public class BottomSheetConfigurer {
                                             /* The function to obtain the HourForecast of
                                             WeatherBit is now premium, so we can not use it */
 							/* List<PointValue> pointValuesWeatherBit = null; */
+							// TODO: Change the chart data in function of the temperature units.
 							if (finalDayForecastsList.size() != 0) {
 								axisXValues = getAxisXLables(finalHourForecastsList);
 								pointValuesAverage = getAxisPoints(finalHourForecastsList);
