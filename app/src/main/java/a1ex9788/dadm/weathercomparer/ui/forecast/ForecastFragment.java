@@ -234,8 +234,7 @@ public class ForecastFragment extends Fragment {
 								Place placeFounded = ((FetchPlaceResponse) detailsResponse).getPlace();
 								currentPlace = new MapPlace(placeFounded);
 
-								if (getActivity() == null)
-								{
+								if (getActivity() == null) {
 									return;
 								}
 
@@ -248,6 +247,7 @@ public class ForecastFragment extends Fragment {
 								});
 							});
 						} catch (Exception e) {
+							Log.e("", e.toString());
 						}
 					}).start();
 					super.onLocationResult(locationResult);
@@ -282,8 +282,7 @@ public class ForecastFragment extends Fragment {
 							roundToOneDecimal(hourForecast.getPrecipitationProbability()) + "",
 							"%");
 
-					if (getActivity() == null)
-					{
+					if (getActivity() == null) {
 						return;
 					}
 
@@ -292,8 +291,7 @@ public class ForecastFragment extends Fragment {
 						setWeatherConditionAnimation(hourForecast.getWeatherCondition());
 					});
 				} catch (Exception e) {
-					if (getActivity() == null)
-					{
+					if (getActivity() == null) {
 						return;
 					}
 
@@ -314,12 +312,17 @@ public class ForecastFragment extends Fragment {
 			public void run() {
 
 				try {
-					if (getActivity() == null)
-					{
+					if (getActivity() == null) {
 						return;
 					}
 
-					ConstraintLayout clBottomSheet = getActivity().findViewById(R.id.clBottomSheet);
+					ConstraintLayout clBottomSheetFake = getActivity().findViewById(R.id.clBottomSheet);
+					while (clBottomSheetFake == null) {
+						clBottomSheetFake = getActivity().findViewById(R.id.clBottomSheet);
+					}
+
+					ConstraintLayout clBottomSheet = clBottomSheetFake;
+
 					BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(clBottomSheet);
 					DisplayMetrics metrics = new DisplayMetrics();
 
@@ -386,8 +389,7 @@ public class ForecastFragment extends Fragment {
 					List<HourForecast> finalHourForecastsAccuWeather = hourForecastsAccuWeather;
 					List<HourForecast> finalHourForecastsListOpenWeather = hourForecastsOpenWeather;
 
-					if (getActivity() == null)
-					{
+					if (getActivity() == null) {
 						return;
 					}
 
@@ -513,8 +515,7 @@ public class ForecastFragment extends Fragment {
 						}
 					});
 
-					if (getActivity() == null)
-					{
+					if (getActivity() == null) {
 						return;
 					}
 
@@ -644,7 +645,7 @@ public class ForecastFragment extends Fragment {
 						}
 					});
 				} catch (Exception e) {
-					e.printStackTrace();
+					Log.e("", e.toString());
 				}
 			}
 		}.start();
