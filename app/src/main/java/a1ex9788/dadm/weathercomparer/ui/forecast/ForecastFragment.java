@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -43,6 +44,7 @@ public class ForecastFragment extends Fragment {
 
 	private ForecastViewModel forecastViewModel;
 	private BottomSheetConfigurer bottomSheetConfigurer;
+	private ConstraintLayout bottomSheet;
 
 	private FragmentForecastBinding binding;
 	private SharedPreferences prefs;
@@ -61,6 +63,7 @@ public class ForecastFragment extends Fragment {
 		metric = prefs.getString("units", getString(R.string.valueUnits0));
 		bottomSheetConfigurer = new BottomSheetConfigurer(forecastViewModel, getContext(), metric);
 		animationView = root.findViewById(R.id.animationViewWeather);
+		bottomSheet = root.findViewById(R.id.clBottomSheet);
 
 		setNavigationDrawerButtonOnClickListener(root);
 
@@ -102,18 +105,22 @@ public class ForecastFragment extends Fragment {
 		if (this.weatherProvider != weatherProvider) {
 			this.weatherProvider = weatherProvider;
 
-			setCurrentForecastData();
+			new Thread(() -> {
+				setCurrentForecastData();
 
-			bottomSheetConfigurer.configureBottomSheet(getActivity(),
-					currentPlace,
-					weatherProvider,
-					latitude,
-					longitude,
-					false);
+				bottomSheetConfigurer.configureBottomSheet(getActivity(),
+						currentPlace,
+						weatherProvider,
+						latitude,
+						longitude,
+						false);
+			}).start();
 
 			binding.setWeatherOptions(false);
 
 			floatingActionButton.setImageDrawable(getResources().getDrawable(imageResourceId));
+
+			bottomSheet.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -297,6 +304,10 @@ public class ForecastFragment extends Fragment {
 								R.string.toast_forecastError,
 								Toast.LENGTH_LONG)
 								.show();
+
+						bottomSheet.setVisibility(View.INVISIBLE);
+						binding.setCurrentWeather(new CurrentWeather("", "", "", "", "", "", ""));
+						setWeatherConditionAnimation(WeatherCondition.Unknown);
 					});
 				}
 			}
